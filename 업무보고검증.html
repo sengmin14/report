@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>업무보고 자동검증기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.css">
+  <style>
+    body { background: #f7f7fa; }
+    .CodeMirror { height: 400px; font-size: 1.08rem; line-height: 1.6; }
+    .container { max-width: 900px; margin: 36px auto; background: #fff; border-radius: 12px; box-shadow: 0 3px 16px #0001; padding: 28px 32px; }
+    button { margin: 12px 0; font-size: 1.1rem; background: #3654ff; color: #fff; border: none; border-radius: 6px; padding: 8px 26px; cursor: pointer; }
+    .result { margin-top: 18px; }
+    .pass { color: #1ca043; font-weight: bold; }
+    .fail { color: #c72c2c; font-weight: bold; }
+    ul { line-height: 1.75; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>업무보고 자동검증기</h2>
+    <textarea id="code" name="code">여기에 붙여넣으세요</textarea>
+    <button id="checkBtn">검증</button>
+    <div id="result" class="result"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/markdown/markdown.js"></script>
+  <script>
+    // CodeMirror 에디터 세팅
+    var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+      lineNumbers: true,
+      mode: "markdown",
+      lineWrapping: true
+    });
+
+    // ▶️ 포커스 시 플레이스홀더 자동 삭제
+    let clearedPlaceholder = false;
+    editor.on('focus', function() {
+      if (!clearedPlaceholder && editor.getValue().trim() === "여기에 붙여넣으세요") {
+        editor.setValue('');
+        clearedPlaceholder = true;
+      }
+    });
+
+    function checkReportFormatting(text) {
+      const lines = text.replace(/\r\n/g, '\n').split('\n');
+      let errors = [];
+
+      // 날짜 표기 금지 패턴들
+      const forbiddenZeroOrUntilDate = /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
+
+      // 날짜 표기 검증
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let matches = line.match(forbiddenZeroOrUntilDate);
+        if (matches) {
+          for (let m of matches) {
+            const dateContent = m.replace(/[()~]/g, '').replace(/\s/g, '');
+            const [month, rest] = dateContent.split('/');
+            const untilIncluded = m.includes('까지');
+            if (
+              (month.length === 2 && month.startsWith('0')) ||          // 월 0시작
+              (rest.length > 1 && rest.startsWith('0')) ||              // 일 0시작
+              untilIncluded
+            ) {
+              errors.push(`[${i+1}행] 허용되지 않는 날짜 표기: ${m} (날짜는 (8/23), (~7/30) 형태만 허용, 월/일 0으로 시작·"까지" 포함은 금지)`);
+            }
+          }
+        }
+      }
+
+      // 마지막 내용이 있는 줄 index
+      let lastContentIdx = -1;
+      for (let i = lines.length - 1; i >= 0; i--) {
+        if (lines[i].trim() !== '') {
+          lastContentIdx = i;
+          break;
+        }
+      }
+
+      function getLine(idx, offset) { return lines[idx + offset] !== undefined ? lines[idx + offset] : ''; }
+      function isBlank(line) { return line.trim() === ''; }
+      function isMid(line) { return /^ *- /.test(line); }
+      function isLow(line) { return /^ *․/.test(line); }
+      function isSection(line) { return /^(\d+\.\s|\(\d+\))/.test(line); }
+      function isMonth(line) { return /^\[[가-힣]+\]$/.test(line); }
+      function isSeparator(line) { return /^-{5,}$/.test(line); }
+      function nextNonBlank(idx) { let i = idx + 1; while (i < lines.length && isBlank(lines[i])) i++; return { line: lines[i] || '', idx: i }; }
+
+      // 소분류(․) 묶음 탐색 시 빈줄도 포함하여 묶음 처리
+      let i = 0;
+      while (i < lines.length) {
+        const line = lines[i];
+        if (isMid(line)) {
+          // 중분류 상태 추출
+          const midStateMatch = line.match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
+          const midState = midStateMatch ? midStateMatch[2] : null;
+
+          // 연속된 소분류(․) 블록 탐색 (중간에 빈 줄 허용)
+          let lowList = [];
+          let j = i + 1;
+          while (j < lines.length && (isLow(lines[j]) || isBlank(lines[j]))) {
+            if (isLow(lines[j])) {
+              let m = lines[j].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
+              let state = m ? m[2] : null;
+              lowList.push({ idx: j, state });
+            }
+            j++;
+          }
+
+          if (lowList.length > 1) {
+            const allStates = lowList.map(x => x.state);
+            const uniqueStates = [...new Set(allStates.filter(Boolean))];
+            // [수정] 모두 같은 상태 && 모두 상태 있음(빈 값/null 없음)만 에러
+            if (
+              uniqueStates.length === 1 &&
+              uniqueStates[0] !== null &&
+              allStates.every(x => x) // 모두 상태가 있어야만!
+            ) {
+              for (const low of lowList) {
+                if (low.state) {
+                  errors.push(`[${low.idx+1}행] 소분류가 모두 같은 상태(${uniqueStates[0]})일 때는, 소분류에는 상태를 입력하지 마시고 중분류에만 상태를 입력하세요.`);
+                }
+              }
+            }
+          }
+          i = j;
+          continue;
+        }
+        i++;
+      }
+
+      // 기존 줄바꿈/공백 체크
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        if (!isBlank(line)) {
+          if (/^\s{2,}/.test(line))
+            errors.push(`[${i+1}행] 들여쓰기는 1칸 이상 금지(불필요한 앞공백).`);
+        }
+
+        const isTarget =
+          isSection(line) || isMid(line) || isLow(line) || isMonth(line) || isSeparator(line);
+        if (!isTarget) continue;
+
+        if (isSection(line) && !/^1\./.test(line) && !/^\(1\)/.test(line)) {
+          if (!(isBlank(getLine(i, -1)) && isBlank(getLine(i, -2)) && isBlank(getLine(i, -3)) && !isBlank(getLine(i, -4)))) {
+            errors.push(`[${i+1}행] '${line.trim()}' 위에는 반드시 줄바꿈 3줄만 있어야 합니다.`);
+          }
+        }
+
+        if (isMid(line)) {
+          if (!(isBlank(getLine(i, -1)) && !isBlank(getLine(i, -2)))) {
+            errors.push(`[${i+1}행] 중분류(-) 앞에는 반드시 줄바꿈 1줄만 있어야 합니다.`);
+          }
+          const next = nextNonBlank(i);
+          if (isLow(next.line) || isMid(next.line)) {
+            if (i !== lastContentIdx) {
+              if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
+                errors.push(`[${i+1}행] 중분류(-) 뒤에는 줄바꿈 1줄만 있어야 합니다.`);
+              }
+            }
+          } else if (i !== lastContentIdx) {
+            if (!(isBlank(getLine(i, +1)) && isBlank(getLine(i, +2)) && isBlank(getLine(i, +3)) && !isBlank(getLine(i, +4)))) {
+              errors.push(`[${i+1}행] 중분류(-) 뒤에는 블록 전환 시 줄바꿈 3줄만 있어야 합니다.`);
+            }
+          }
+        }
+
+        if (isLow(line)) {
+          if (!(isBlank(getLine(i, -1)) && !isBlank(getLine(i, -2)))) {
+            errors.push(`[${i+1}행] 소분류(․) 앞에는 반드시 줄바꿈 1줄만 있어야 합니다.`);
+          }
+          const next = nextNonBlank(i);
+          if ((isSection(next.line) || isSeparator(next.line) || next.line === '') && i !== lastContentIdx) {
+            if (!(isBlank(getLine(i, +1)) && isBlank(getLine(i, +2)) && isBlank(getLine(i, +3)) && !isBlank(getLine(i, +4)))) {
+              errors.push(`[${i+1}행] 소분류(․) 뒤에는 블록 전환 시 줄바꿈 3줄만 있어야 합니다.`);
+            }
+          } else if (i !== lastContentIdx) {
+            if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
+              errors.push(`[${i+1}행] 소분류(․) 뒤에는 반드시 줄바꿈 1줄만 있어야 합니다.`);
+            }
+          }
+        }
+
+        if (isMonth(line)) {
+          if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
+            errors.push(`[${i+1}행] '${line.trim()}' 아래에는 반드시 줄바꿈 1줄만 있어야 합니다.`);
+          }
+        }
+
+        if (isSeparator(line)) {
+          if (!(isBlank(getLine(i, -1)) && isBlank(getLine(i, -2)) && isBlank(getLine(i, -3)) && !isBlank(getLine(i, -4)))) {
+            errors.push(`[${i+1}행] 구분선(------) 위에는 반드시 줄바꿈 3줄만 있어야 합니다.`);
+          }
+          if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
+            errors.push(`[${i+1}행] 구분선(------) 아래에는 반드시 줄바꿈 1줄만 있어야 합니다.`);
+          }
+        }
+      }
+      return errors;
+    }
+
+    document.getElementById('checkBtn').onclick = function() {
+      const input = editor.getValue();
+      const resultDiv = document.getElementById('result');
+      const errors = checkReportFormatting(input);
+
+      if (errors.length === 0) {
+        resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 줄바꿈/들여쓰기/공백 규칙에 맞습니다.</div>`;
+      } else {
+        resultDiv.innerHTML = `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul><li>` + errors.join('</li><li>') + '</li></ul></div>';
+      }
+    };
+  </script>
+</body>
+</html>
