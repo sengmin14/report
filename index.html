@@ -86,10 +86,10 @@
           return /^ *- /.test(line);
         }
         function isLow(line) {
-          return /^ *․/.test(line);
+          return /^ *․ /.test(line);
         }
         function isSection(line) {
-          return /^(\d+\.\s|\(\d+\))/.test(line);
+          return /^([1-9]\d*\.\s|\(\d+\)\s)/.test(line);
         }
         function isMonth(line) {
           return /^\[[가-힣]+\]$/.test(line);
@@ -97,16 +97,11 @@
         function isSeparator(line) {
           return /^-{5,}$/.test(line);
         }
-        function nextNonBlank(idx) {
-          let i = idx + 1;
-          while (i < lines.length && isBlank(lines[i])) i++;
-          return { line: lines[i] || "", idx: i };
-        }
 
         // 소분류(․) 묶음 탐색 시 빈줄도 포함하여 묶음 처리
-        let i = 0;
-        while (i < lines.length) {
-          const line = lines[i];
+        let idx = 0;
+        while (idx < lines.length) {
+          const line = lines[idx];
           if (isMid(line)) {
             // 중분류 상태 추출
             const midStateMatch = line.match(
@@ -116,7 +111,7 @@
 
             // 연속된 소분류(․) 블록 탐색 (중간에 빈 줄 허용)
             let lowList = [];
-            let j = i + 1;
+            let j = idx + 1;
             while (j < lines.length && (isLow(lines[j]) || isBlank(lines[j]))) {
               if (isLow(lines[j])) {
                 let m = lines[j].match(
@@ -147,10 +142,10 @@
                 }
               }
             }
-            i = j;
+            idx = j;
             continue;
           }
-          i++;
+          idx++;
         }
 
         // [룰변경] 줄바꿈/공백 체크 + 괄호, 대괄호, :, >, + 룰 추가
@@ -164,11 +159,31 @@
               );
           }
 
-          // ( ) 또는 [ ] 대괄호/괄호 양쪽 공백 체크: 단, 중대분류(1), (2)는 예외
-          if (!isSection(line) && /( \(|\(\s| \)|\)\s|\[ |\[\s| \]|\]\s)/.test(line)) {
-            errors.push(
-              `[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`
-            );
+          // ( ) 또는 [ ] 괄호/대괄호 양쪽 공백 체크: 단, 중대분류(1), (2)는 예외 + 분류 표기 뒤 ( [ 예외
+          let skipLeftBracketSpace = false;
+          // 중/소분류 + 한 칸 띄우고 ( 또는 [ 일 때 예외
+          if (
+            (isMid(line) || isLow(line)) &&
+            (line.match(/^ *- \(/) || line.match(/^ *- \[/) || line.match(/^ *․ \(/) || line.match(/^ *․ \[/))
+          ) {
+            skipLeftBracketSpace = true;
+          }
+
+          if (!isSection(line)) {
+            // 좌측 공백+괄호 예외처리
+            if (/( \(|\[ )/.test(line)) {
+              if (!(skipLeftBracketSpace && (/( \(|\[ )/.test(line)))) {
+                errors.push(
+                  `[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`
+                );
+              }
+            }
+            // 나머지 괄호 공백(오른쪽)
+            if (/(\(\s| \)|\)\s|\[\s| \]|\]\s)/.test(line)) {
+              errors.push(
+                `[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`
+              );
+            }
           }
 
           // > 또는 : 기호 앞뒤 공백 체크
@@ -184,7 +199,6 @@
               `[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`
             );
           }
-          // 만약 +가 있는데 앞뒤로 공백이 아니면 에러
           if (/\+/.test(line)) {
             if (!/ (\+) /.test(line) && !/(^|\s)\+(\s|$)/.test(line)) {
               errors.push(
@@ -196,10 +210,46 @@
           // 상태표기 괄호 앞뒤 공백 체크 (중분류/소분류)
           if (isMid(line) || isLow(line)) {
             if (/(\s\(|\(\s| \)|\)\s)/.test(line)) {
-              errors.push(`[${i + 1}행] 괄호 ( 또는 ) 양쪽에 공백이 있으면 안 됩니다.`);
+              if (!(skipLeftBracketSpace && (/( \(|\[ )/.test(line)))) {
+                errors.push(`[${i + 1}행] 괄호 ( 또는 ) 양쪽에 공백이 있으면 안 됩니다.`);
+              }
             }
           }
 
+          // 중분류(-) 아래 줄바꿈 불가 (단, blank 뒤에 남은 내용이 없으면 허용)
+          if (isMid(line)) {
+            if (isBlank(getLine(i, +1))) {
+              let b = i + 1;
+              while (b < lines.length && isBlank(lines[b])) b++;
+              if (b < lines.length) {
+                errors.push(
+                  `[${i + 1}행] 중분류 바로 아래에는 줄바꿈이 있으면 안 됩니다.`
+                );
+              }
+            }
+          }
+
+          // 소분류(․) 아래 줄바꿈 불가 (단, blank 뒤에 남은 내용이 없으면 허용)
+          if (isLow(line)) {
+            if (isBlank(getLine(i, +1))) {
+              let b = i + 1;
+              while (b < lines.length && isBlank(lines[b])) b++;
+              if (b < lines.length) {
+                errors.push(
+                  `[${i + 1}행] 소분류 바로 아래에는 줄바꿈이 있으면 안 됩니다.`
+                );
+              }
+            }
+          }
+
+          // 월 제목, 구분선 등은 기존대로
+          if (isMonth(line)) {
+            if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
+              errors.push(
+                `[${i + 1}행] '${line.trim()}' 아래에는 반드시 줄바꿈 1줄만 있어야 합니다.`
+              );
+            }
+          }
           if (isSeparator(line)) {
             if (
               !(
@@ -246,10 +296,6 @@
           if (/^․/.test(line) && !/^․ /.test(line)) {
             errors.push(`[${i + 1}행] 소분류(․) 뒤에는 반드시 공백 1칸이어야 합니다.`);
           }
-          // [NEW] 온점(.) 시작 에러
-          if (/^\./.test(line)) {
-            errors.push(`[${i + 1}행] 소분류는 반드시 '․'로 시작해야 하며, '.'(온점)으로 시작하면 안 됩니다.`);
-          }
           // 중/소분류 뒤에 공백 2칸 이상도 체크
           if (/^-  /.test(line) || /^․  /.test(line)) {
             errors.push(`[${i + 1}행] 중/소분류 뒤에는 반드시 공백 1칸만 허용합니다.`);
@@ -264,7 +310,7 @@
         const errors = checkReportFormatting(input);
 
         if (errors.length === 0) {
-          resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 규칙에 맞습니다. </div>`;
+          resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 줄바꿈/들여쓰기/공백 규칙에 맞습니다. </div>`;
         } else {
           resultDiv.innerHTML =
             `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul><li>` +
