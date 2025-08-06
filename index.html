@@ -423,7 +423,7 @@
         const errors = checkReportFormatting(input);
 
         if (errors.length === 0) {
-          resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 줄바꿈/들여쓰기/공백 규칙에 맞습니다.</div>`;
+          resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 줄바꿈/들여쓰기/공백 규칙에 맞습니다. </div>`;
         } else {
           resultDiv.innerHTML =
             `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul><li>` +
