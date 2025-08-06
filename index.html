@@ -200,40 +200,6 @@
             }
           }
 
-          // 중분류(-) 아래 줄바꿈 불가 (단, blank 뒤에 남은 내용이 없으면 허용)
-          if (isMid(line)) {
-            if (isBlank(getLine(i, +1))) {
-              let b = i + 1;
-              while (b < lines.length && isBlank(lines[b])) b++;
-              if (b < lines.length) {
-                errors.push(
-                  `[${i + 1}행] 중분류 바로 아래에는 줄바꿈이 있으면 안 됩니다.`
-                );
-              }
-            }
-          }
-
-          // 소분류(․) 아래 줄바꿈 불가 (단, blank 뒤에 남은 내용이 없으면 허용)
-          if (isLow(line)) {
-            if (isBlank(getLine(i, +1))) {
-              let b = i + 1;
-              while (b < lines.length && isBlank(lines[b])) b++;
-              if (b < lines.length) {
-                errors.push(
-                  `[${i + 1}행] 소분류 바로 아래에는 줄바꿈이 있으면 안 됩니다.`
-                );
-              }
-            }
-          }
-
-          // 월 제목, 구분선 등은 기존대로
-          if (isMonth(line)) {
-            if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
-              errors.push(
-                `[${i + 1}행] '${line.trim()}' 아래에는 반드시 줄바꿈 1줄만 있어야 합니다.`
-              );
-            }
-          }
           if (isSeparator(line)) {
             if (
               !(
