@@ -20,6 +20,7 @@
         padding: 36px 30px 30px 30px;
         transition: box-shadow 0.2s;
         border: 1.5px solid #e6e8f0;
+        position: relative;
       }
       h2 {
         text-align: left;
@@ -126,15 +127,173 @@
         transform: translateX(4px);
         box-shadow: 0 2px 8px rgba(255, 83, 83, 0.15);
       }
+      /* 모달 스타일 */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+
+      .modal-content {
+        position: relative;
+        background: white;
+        margin: 50px auto;
+        padding: 25px;
+        width: 80%;
+        max-width: 700px;
+        border-radius: 15px;
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .close {
+        position: absolute;
+        right: 25px;
+        top: 20px;
+        font-size: 28px;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .rule-list {
+        margin-top: 20px;
+      }
+
+      .rule-list h4 {
+        color: #3654ff;
+        margin: 20px 0 10px 0;
+      }
+
+      .rule-list ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+
+      .rule-list li {
+        margin: 8px 0;
+        color: #444;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .button-group.help-group {
+        position: absolute;
+        top: 38px;
+        right: 30px;
+      }
+
+      .help-btn {
+        padding: 8px 16px;
+        font-size: 0.95rem;
+        color: #3654ff !important;
+        background: #fff !important;
+        border: 1.5px solid #3654ff !important;
+        border-radius: 20px !important;
+        width: auto !important;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .help-btn:hover {
+        background: #f4f8ff !important;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(54, 84, 255, 0.15) !important;
+      }
+
+      .help-btn::before {
+        content: "?";
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        background: #3654ff;
+        color: white;
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .check-btn {
+        width: 100%;
+        margin: 22px 0 0 0;
+        font-size: 1.18rem;
+        font-weight: 600;
+        background: linear-gradient(90deg, #3654ff 75%, #1c97e7 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        cursor: pointer;
+        box-shadow: 0 2px 12px #3654ff24;
+        transition: background 0.14s, box-shadow 0.17s, transform 0.14s;
+        letter-spacing: 0.2px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h2>업무보고 자동검증기</h2>
+      <div class="button-group help-group">
+        <button id="helpBtn" class="help-btn">검증 규칙</button>
+      </div>
       <textarea id="code" name="code">여기에 붙여넣으세요</textarea>
-      <button id="checkBtn">검증</button>
+      <button id="checkBtn" class="check-btn">검증</button>
       <div id="result" class="result"></div>
     </div>
+
+    <!-- 규칙 안내 모달 -->
+    <div id="ruleModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>검증 규칙 안내</h3>
+        <div class="rule-list">
+          <h4>1. 공백 규칙</h4>
+          <ul>
+            <li>들여쓰기는 1칸 이상 금지</li>
+            <li>콜론(:) 앞뒤 공백 금지</li>
+            <li>꺾쇠(>) 앞뒤 공백 금지</li>
+            <li>더하기(+) 앞뒤 반드시 공백 1칸</li>
+            <li>콤마(,) 앞 공백 금지, 뒤 공백 1칸</li>
+          </ul>
+          <h4>2. 괄호 규칙</h4>
+          <ul>
+            <li>일반 괄호() 앞뒤/안쪽 공백 금지</li>
+            <li>대괄호[] 앞뒤/안쪽 공백 금지</li>
+            <li>날짜 표기는 (8/23), (~7/30) 형식만 허용</li>
+          </ul>
+          <h4>3. 분류 표기 규칙</h4>
+          <ul>
+            <li>대분류(1.) 뒤 공백 1칸</li>
+            <li>대중분류((1)) 뒤 공백 1칸</li>
+            <li>중분류(-) 뒤 공백 1칸</li>
+            <li>소분류(․) 뒤 공백 1칸</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/markdown/markdown.js"></script>
     <script>
@@ -154,16 +313,49 @@
         }
       });
 
-      // 업무보고 포맷 검증 함수
+      // --- 업무보고 포맷 검증 메인 함수 ---
       function checkReportFormatting(text) {
+        // 줄바꿈 통일 (\r\n -> \n) 후 라인별로 분리
         const lines = text.replace(/\r\n/g, "\n").split("\n");
         let errors = [];
 
-        // 날짜 표기 금지 패턴 (월/일 0으로 시작, "까지" 포함 금지)
-        const forbiddenZeroOrUntilDate =
-          /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
+        // --- 날짜 표기 검증 ---
+        // 금지되는 날짜 패턴:
+        // 1. 월/일이 0으로 시작 (예: 08/23, 8/05)
+        // 2. "까지" 포함된 경우 (예: ~8/30까지)
+        const forbiddenZeroOrUntilDate = /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
 
-        // 날짜 표기 검증
+        // --- 유틸리티 함수 정의 ---
+        // 특정 위치의 라인 반환 (존재하지 않으면 빈 문자열)
+        function getLine(idx, offset) {
+          return lines[idx + offset] !== undefined ? lines[idx + offset] : "";
+        }
+        // 빈 줄 체크 (공백/탭만 있는 줄도 빈 줄로 처리)
+        function isBlank(line) {
+          return line.trim() === "";
+        }
+        // 중분류 라인 체크 (- 로 시작)
+        function isMid(line) {
+          return /^ *- /.test(line);
+        }
+        // 소분류 라인 체크 (․ 로 시작)
+        function isLow(line) {
+          return /^ *․ /.test(line);
+        }
+        // 대분류/대중분류 체크 (1. 또는 (1) 형태)
+        function isSection(line) {
+          return /^([1-9]\d*\.\s|\(\d+\)\s)/.test(line);
+        }
+        // 월 제목 체크 ([8월] 형태)
+        function isMonth(line) {
+          return /^\[[가-힣]+\]$/.test(line);
+        }
+        // 구분선 체크 (5개 이상의 -)
+        function isSeparator(line) {
+          return /^-{5,}$/.test(line);
+        }
+
+        // --- 날짜 표기 검증 로직 ---
         for (let i = 0; i < lines.length; i++) {
           let line = lines[i];
           let matches = line.match(forbiddenZeroOrUntilDate);
@@ -172,11 +364,11 @@
               const dateContent = m.replace(/[()~]/g, "").replace(/\s/g, "");
               const [month, rest] = dateContent.split("/");
               const untilIncluded = m.includes("까지");
-              if (
-                (month.length === 2 && month.startsWith("0")) || // 월 0시작
-                (rest.length > 1 && rest.startsWith("0")) || // 일 0시작
-                untilIncluded
-              ) {
+              
+              // 날짜 형식 체크
+              if ((month.length === 2 && month.startsWith("0")) || // 월이 0으로 시작
+                  (rest.length > 1 && rest.startsWith("0")) ||     // 일이 0으로 시작
+                  untilIncluded) {                                 // "까지" 포함
                 errors.push(
                   `[${i + 1}행] 허용되지 않는 날짜 표기: ${m} (날짜는 (8/23), (~7/30) 형태만 허용, 월/일 0으로 시작·"까지" 포함은 금지)`
                 );
@@ -185,63 +377,33 @@
           }
         }
 
-        // 유틸 함수들
-        function getLine(idx, offset) {
-          return lines[idx + offset] !== undefined ? lines[idx + offset] : "";
-        }
-        function isBlank(line) {
-          return line.trim() === "";
-        }
-        function isMid(line) {
-          return /^ *- /.test(line);
-        }
-        function isLow(line) {
-          return /^ *․ /.test(line);
-        }
-        function isSection(line) {
-          return /^([1-9]\d*\.\s|\(\d+\)\s)/.test(line);
-        }
-        function isMonth(line) {
-          return /^\[[가-힣]+\]$/.test(line);
-        }
-        function isSeparator(line) {
-          return /^-{5,}$/.test(line);
-        }
-
-        // 소분류(․) 묶음 탐색 및 상태 중복 체크
+        // --- 소분류(․) 상태 중복 체크 ---
         let idx = 0;
         while (idx < lines.length) {
           const line = lines[idx];
           if (isMid(line)) {
-            // 중분류 상태 추출
-            const midStateMatch = line.match(
-              /(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/
-            );
+            // 중분류의 상태 추출 (완료/진행중/보류/취소/날짜)
+            const midStateMatch = line.match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
             const midState = midStateMatch ? midStateMatch[2] : null;
 
-            // 연속된 소분류(․) 블록 탐색 (중간에 빈 줄 허용)
+            // 연속된 소분류 블록 탐색 (빈 줄 허용)
             let lowList = [];
             let j = idx + 1;
             while (j < lines.length && (isLow(lines[j]) || isBlank(lines[j]))) {
               if (isLow(lines[j])) {
-                let m = lines[j].match(
-                  /(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/
-                );
+                let m = lines[j].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
                 let state = m ? m[2] : null;
                 lowList.push({ idx: j, state });
               }
               j++;
             }
 
-            // 소분류가 모두 같은 상태면 중분류에만 상태 입력
+            // 소분류들의 상태가 모두 동일한 경우 체크
             if (lowList.length > 1) {
-              const allStates = lowList.map((x) => x.state);
+              const allStates = lowList.map(x => x.state);
               const uniqueStates = [...new Set(allStates.filter(Boolean))];
-              if (
-                uniqueStates.length === 1 &&
-                uniqueStates[0] !== null &&
-                allStates.every((x) => x)
-              ) {
+              // 모든 소분류가 같은 상태면 중분류에만 상태 표시해야 함
+              if (uniqueStates.length === 1 && uniqueStates[0] !== null && allStates.every(x => x)) {
                 for (const low of lowList) {
                   if (low.state) {
                     errors.push(
@@ -257,24 +419,23 @@
           idx++;
         }
 
-        // [룰변경] 줄바꿈/공백 체크 + 괄호, 대괄호, :, >, + 룰 추가
+        // --- 공백 및 특수문자 규칙 검증 ---
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
 
-          // 1. 들여쓰기(앞 공백 2칸 이상) 금지
+          // 1. 들여쓰기 검증 (2칸 이상 금지)
           if (!isBlank(line)) {
-            if (/^\s{2,}/.test(line))
-              errors.push(
-                `[${i + 1}행] 들여쓰기는 1칸 이상 금지(불필요한 앞공백).`
-              );
+            if (/^\s{2,}/.test(line)) {
+              errors.push(`[${i + 1}행] 들여쓰기는 1칸 이상 금지(불필요한 앞공백).`);
+            }
           }
 
-          // 2. 괄호/대괄호 양쪽 공백 체크 (중/소분류 예외)
+          // 2. 괄호/대괄호 공백 규칙
           let skipLeftBracketSpace = false;
-          if (
-            (isMid(line) || isLow(line)) &&
-            (line.match(/^ *- \(/) || line.match(/^ *- \[/) || line.match(/^ *․ \(/) || line.match(/^ *․ \[/))
-          ) {
+          // 중분류/소분류의 시작 부분 괄호는 예외 처리
+          if ((isMid(line) || isLow(line)) &&
+              (line.match(/^ *- \(/) || line.match(/^ *- \[/) || 
+               line.match(/^ *․ \(/) || line.match(/^ *․ \[/))) {
             skipLeftBracketSpace = true;
           }
 
@@ -282,110 +443,36 @@
             // 좌측 공백+괄호 예외처리
             if (/( \(|\[ )/.test(line)) {
               if (!(skipLeftBracketSpace && (/( \(|\[ )/.test(line)))) {
-                errors.push(
-                  `[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`
-                );
+                errors.push(`[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`);
               }
             }
-            // 나머지 괄호 공백(오른쪽)
+            // 나머지 괄호 공백(오른쪽) 체크
             if (/(\(\s| \)|\)\s|\[\s| \]|\]\s)/.test(line)) {
-              errors.push(
-                `[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`
-              );
+              errors.push(`[${i + 1}행] ( ) 또는 [ ] 괄호/대괄호 양쪽에 공백이 있으면 안 됩니다.`);
             }
           }
 
-          // 3. > 또는 : 기호 앞뒤 공백 체크
+          // 3. 특수문자 공백 규칙
+          // >와 : 앞뒤 공백 금지
           if (/( [>:])|([>:] )/.test(line)) {
-            errors.push(
-              `[${i + 1}행] '>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.`
-            );
+            errors.push(`[${i + 1}행] '>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.`);
           }
 
-          // 4. + 기호 앞뒤 공백 체크: 반드시 앞뒤로 한 칸 있어야 함
+          // 4. + 기호는 반드시 앞뒤 공백 1칸씩 필요
           if (/\S\+\S/.test(line) || /\+\+/.test(line)) {
-            errors.push(
-              `[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`
-            );
+            errors.push(`[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`);
           }
           if (/\+/.test(line)) {
             if (!/ (\+) /.test(line) && !/(^|\s)\+(\s|$)/.test(line)) {
-              errors.push(
-                `[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`
-              );
+              errors.push(`[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`);
             }
           }
 
-          // 5. 상태표기 괄호 앞뒤 공백 체크 (중분류/소분류)
-          if (isMid(line) || isLow(line)) {
-            if (/(\s\(|\(\s| \)|\)\s)/.test(line)) {
-              if (!(skipLeftBracketSpace && (/( \(|\[ )/.test(line)))) {
-                errors.push(`[${i + 1}행] 괄호 ( 또는 ) 양쪽에 공백이 있으면 안 됩니다.`);
-              }
-            }
-          }
-
-          // 6. 구분선 위아래 줄바꿈 체크
-          if (isSeparator(line)) {
-            if (
-              !(
-                isBlank(getLine(i, -1)) &&
-                isBlank(getLine(i, -2)) &&
-                isBlank(getLine(i, -3)) &&
-                !isBlank(getLine(i, -4))
-              )
-            ) {
-              errors.push(
-                `[${i + 1}행] 구분선(------) 위에는 반드시 줄바꿈 3줄만 있어야 합니다.`
-              );
-            }
-            if (!(isBlank(getLine(i, +1)) && !isBlank(getLine(i, +2)))) {
-              errors.push(
-                `[${i + 1}행] 구분선(------) 아래에는 반드시 줄바꿈 1줄만 있어야 합니다.`
-              );
-            }
-          }
-        }
-
-        // 7. 분류 표기 뒤에 반드시 공백 1칸만 허용
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          // 대분류: 1. 또는 2. 등 (공백 1칸만 허용)
-          if (/^([1-9]\d*)\. ?/.test(line)) {
-            const m = line.match(/^([1-9]\d*)\.(\s*)/);
-            if (!m || m[2].length !== 1) {
-              errors.push(`[${i + 1}행] 대분류(1. 2. 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.`);
-            }
-          }
-          // 대중분류: (1) (2) 등 (공백 1칸만 허용)
-          if (/^\(\d+\)\s*/.test(line)) {
-            const m = line.match(/^\(\d+\)(\s*)/);
-            if (!m || m[1].length !== 1) {
-              errors.push(`[${i + 1}행] 대중분류((1) (2) 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.`);
-            }
-          }
-          // 중분류: - 내용 (공백 1칸만 허용)
-          if (/^-/.test(line) && !/^- /.test(line)) {
-            errors.push(`[${i + 1}행] 중분류(-) 뒤에는 반드시 공백 1칸이어야 합니다.`);
-          }
-          // 소분류: ․ 내용 (공백 1칸만 허용)
-          if (/^․/.test(line) && !/^․ /.test(line)) {
-            errors.push(`[${i + 1}행] 소분류(․) 뒤에는 반드시 공백 1칸이어야 합니다.`);
-          }
-          // 중/소분류 뒤에 공백 2칸 이상 금지
-          if (/^-  /.test(line) || /^․  /.test(line)) {
-            errors.push(`[${i + 1}행] 중/소분류 뒤에는 반드시 공백 1칸만 허용합니다.`);
-          }
-        }
-        // 8. ,(콤마) 공백 규칙 추가
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          // 1. 콤마(,) 앞에 공백이 있으면 안 됨
+          // 5. 콤마(,) 공백 규칙
+          // 앞에 공백 금지, 뒤에 반드시 공백 1칸
           if (/\s,/.test(line)) {
             errors.push(`[${i + 1}행] ','의 앞에는 공백이 있으면 안 됩니다.`);
           }
-          // 2. 콤마(,) 뒤에 반드시 공백 1칸만 있어야 함
-          //    - 공백이 없거나 여러 칸이면 오류
           if (/,[^ ]/.test(line)) {
             errors.push(`[${i + 1}행] ','의 뒤에는 반드시 공백이 1칸 있어야 합니다.`);
           }
@@ -437,6 +524,36 @@
           });
         }
       };
+
+      // 모달 관련 코드
+      const modal = document.getElementById("ruleModal");
+      const helpBtn = document.getElementById("helpBtn");
+      const closeBtn = document.getElementsByClassName("close")[0];
+
+      helpBtn.onclick = function () {
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden"; // 배경 스크롤 방지
+      };
+
+      closeBtn.onclick = function () {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      };
+
+      // ESC 키로 모달 닫기
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && modal.style.display === "block") {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      });
     </script>
   </body>
 </html>
