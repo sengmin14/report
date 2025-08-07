@@ -5,19 +5,116 @@
     <title>업무보고 자동검증기</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.css" />
     <style>
-      body { background: linear-gradient(120deg, #e8edff 0%, #f7f7fa 100%); font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; margin: 0; min-height: 100vh; }
-      .container { max-width: 850px; margin: 48px auto; background: #fff; border-radius: 22px; box-shadow: 0 6px 32px #5165ff20, 0 2px 8px #0001; padding: 36px 30px 30px 30px; transition: box-shadow 0.2s; border: 1.5px solid #e6e8f0; }
-      h2 { text-align: left; font-weight: 700; font-size: 1.4rem; margin-bottom: 26px; color: #3049ff; letter-spacing: -1px; }
-      .CodeMirror { border-radius: 13px; border: 1.5px solid #b5c6fa; box-shadow: 0 2px 8px #3049ff0d; background: #fafdff; font-size: 1.07rem; line-height: 1.75; min-height: 220px; width: 100%; margin-bottom: 22px; transition: border 0.16s; }
-      .CodeMirror-focused { border: 1.8px solid #3654ff; background: #f4f8ff; outline: none; }
-      button { width: 100%; margin: 10px 0 0 0; font-size: 1.18rem; font-weight: 600; background: linear-gradient(90deg, #3654ff 75%, #1c97e7 100%); color: #fff; border: none; border-radius: 8px; padding: 12px 0; cursor: pointer; box-shadow: 0 2px 12px #3654ff24; transition: background 0.14s, box-shadow 0.17s, transform 0.14s; letter-spacing: 0.2px; }
-      button:hover, button:focus { background: linear-gradient(90deg, #1c97e7 70%, #3654ff 100%); box-shadow: 0 3px 20px #1c97e74c; transform: translateY(-1px) scale(1.01); }
-      .result { margin-top: 30px; min-height: 46px; animation: fadein 0.7s; padding: 22px 18px 15px 18px; border-radius: 12px; box-shadow: 0 2px 12px #3049ff10; font-size: 1.07rem; }
-      .pass { color: #218938; background: #eaffed; border-left: 6px solid #36d173; font-weight: 700; padding-left: 7px; }
-      .fail { color: #e02e2e; background: #fff3f3; border-left: 6px solid #ff5353; font-weight: 700; padding-left: 7px; }
-      ul { line-height: 1.78; margin-top: 10px; margin-bottom: 0; padding-left: 20px; }
-      @media (max-width: 1000px) { .container { max-width: 98vw; padding: 18px 3vw 30px 3vw; } }
-      @keyframes fadein { 0% { opacity: 0; transform: translateY(12px);} 80% { opacity: 0.7;} 100% { opacity: 1; transform: translateY(0);} }
+      body {
+        background: linear-gradient(120deg, #e8edff 0%, #f7f7fa 100%);
+        font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+        margin: 0;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 850px;
+        margin: 48px auto;
+        background: #fff;
+        border-radius: 22px;
+        box-shadow: 0 6px 32px #5165ff20, 0 2px 8px #0001;
+        padding: 36px 30px 30px 30px;
+        transition: box-shadow 0.2s;
+        border: 1.5px solid #e6e8f0;
+      }
+      h2 {
+        text-align: left;
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin-bottom: 26px;
+        color: #3049ff;
+        letter-spacing: -1px;
+      }
+      .CodeMirror {
+        border-radius: 13px;
+        border: 1.5px solid #b5c6fa;
+        box-shadow: 0 2px 8px #3049ff0d;
+        background: #fafdff;
+        font-size: 1.07rem;
+        line-height: 1.75;
+        min-height: 220px;
+        width: 100%;
+        margin-bottom: 22px;
+        transition: border 0.16s;
+      }
+      .CodeMirror-focused {
+        border: 1.8px solid #3654ff;
+        background: #f4f8ff;
+        outline: none;
+      }
+      button {
+        width: 100%;
+        margin: 10px 0 0 0;
+        font-size: 1.18rem;
+        font-weight: 600;
+        background: linear-gradient(90deg, #3654ff 75%, #1c97e7 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        cursor: pointer;
+        box-shadow: 0 2px 12px #3654ff24;
+        transition: background 0.14s, box-shadow 0.17s, transform 0.14s;
+        letter-spacing: 0.2px;
+      }
+      button:hover,
+      button:focus {
+        background: linear-gradient(90deg, #1c97e7 70%, #3654ff 100%);
+        box-shadow: 0 3px 20px #1c97e74c;
+        transform: translateY(-1px) scale(1.01);
+      }
+      .result {
+        margin-top: 30px;
+        min-height: 46px;
+        animation: fadein 0.7s;
+        padding: 22px 18px 15px 18px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px #3049ff10;
+        font-size: 1.07rem;
+      }
+      .pass {
+        color: #218938;
+        background: #eaffed;
+        border-left: 6px solid #36d173;
+        font-weight: 700;
+        padding-left: 7px;
+      }
+      .fail {
+        color: #e02e2e;
+        background: #fff3f3;
+        border-left: 6px solid #ff5353;
+        font-weight: 700;
+        padding-left: 7px;
+      }
+      ul {
+        line-height: 1.78;
+        margin-top: 10px;
+        margin-bottom: 0;
+        padding-left: 20px;
+      }
+      @media (max-width: 1000px) {
+        .container {
+          max-width: 98vw;
+          padding: 18px 3vw 30px 3vw;
+        }
+      }
+      @keyframes fadein {
+        0% {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        80% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
   </head>
   <body>
@@ -46,11 +143,12 @@
         }
       });
 
+      // 업무보고 포맷 검증 함수
       function checkReportFormatting(text) {
         const lines = text.replace(/\r\n/g, "\n").split("\n");
         let errors = [];
 
-        // 날짜 표기 금지 패턴들
+        // 날짜 표기 금지 패턴 (월/일 0으로 시작, "까지" 포함 금지)
         const forbiddenZeroOrUntilDate =
           /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
 
@@ -76,6 +174,7 @@
           }
         }
 
+        // 유틸 함수들
         function getLine(idx, offset) {
           return lines[idx + offset] !== undefined ? lines[idx + offset] : "";
         }
@@ -98,7 +197,7 @@
           return /^-{5,}$/.test(line);
         }
 
-        // 소분류(․) 묶음 탐색 시 빈줄도 포함하여 묶음 처리
+        // 소분류(․) 묶음 탐색 및 상태 중복 체크
         let idx = 0;
         while (idx < lines.length) {
           const line = lines[idx];
@@ -123,6 +222,7 @@
               j++;
             }
 
+            // 소분류가 모두 같은 상태면 중분류에만 상태 입력
             if (lowList.length > 1) {
               const allStates = lowList.map((x) => x.state);
               const uniqueStates = [...new Set(allStates.filter(Boolean))];
@@ -134,9 +234,7 @@
                 for (const low of lowList) {
                   if (low.state) {
                     errors.push(
-                      `[${low.idx + 1}행] 소분류가 모두 같은 상태(${
-                        uniqueStates[0]
-                      })일 때는, 소분류에는 상태를 입력하지 마시고 중분류에만 상태를 입력하세요.`
+                      `[${low.idx + 1}행] 소분류가 모두 같은 상태(${uniqueStates[0]})일 때는, 소분류에는 상태를 입력하지 마시고 중분류에만 상태를 입력하세요.`
                     );
                   }
                 }
@@ -152,6 +250,7 @@
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
 
+          // 1. 들여쓰기(앞 공백 2칸 이상) 금지
           if (!isBlank(line)) {
             if (/^\s{2,}/.test(line))
               errors.push(
@@ -159,9 +258,8 @@
               );
           }
 
-          // ( ) 또는 [ ] 괄호/대괄호 양쪽 공백 체크: 단, 중대분류(1), (2)는 예외 + 분류 표기 뒤 ( [ 예외
+          // 2. 괄호/대괄호 양쪽 공백 체크 (중/소분류 예외)
           let skipLeftBracketSpace = false;
-          // 중/소분류 + 한 칸 띄우고 ( 또는 [ 일 때 예외
           if (
             (isMid(line) || isLow(line)) &&
             (line.match(/^ *- \(/) || line.match(/^ *- \[/) || line.match(/^ *․ \(/) || line.match(/^ *․ \[/))
@@ -186,14 +284,14 @@
             }
           }
 
-          // > 또는 : 기호 앞뒤 공백 체크
+          // 3. > 또는 : 기호 앞뒤 공백 체크
           if (/( [>:])|([>:] )/.test(line)) {
             errors.push(
               `[${i + 1}행] '>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.`
             );
           }
 
-          // + 기호 앞뒤 공백 체크: 반드시 앞뒤로 한 칸 있어야 함
+          // 4. + 기호 앞뒤 공백 체크: 반드시 앞뒤로 한 칸 있어야 함
           if (/\S\+\S/.test(line) || /\+\+/.test(line)) {
             errors.push(
               `[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`
@@ -207,7 +305,7 @@
             }
           }
 
-          // 상태표기 괄호 앞뒤 공백 체크 (중분류/소분류)
+          // 5. 상태표기 괄호 앞뒤 공백 체크 (중분류/소분류)
           if (isMid(line) || isLow(line)) {
             if (/(\s\(|\(\s| \)|\)\s)/.test(line)) {
               if (!(skipLeftBracketSpace && (/( \(|\[ )/.test(line)))) {
@@ -216,6 +314,7 @@
             }
           }
 
+          // 6. 구분선 위아래 줄바꿈 체크
           if (isSeparator(line)) {
             if (
               !(
@@ -237,43 +336,45 @@
           }
         }
 
-        // 분류 표기 뒤에 반드시 공백 1칸만 허용
+        // 7. 분류 표기 뒤에 반드시 공백 1칸만 허용
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          // 대분류: 1. 또는 2. 등
+          // 대분류: 1. 또는 2. 등 (공백 1칸만 허용)
           if (/^([1-9]\d*)\. ?/.test(line)) {
             const m = line.match(/^([1-9]\d*)\.(\s*)/);
             if (!m || m[2].length !== 1) {
               errors.push(`[${i + 1}행] 대분류(1. 2. 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.`);
             }
           }
-          // 대중분류: (1) (2) 등
+          // 대중분류: (1) (2) 등 (공백 1칸만 허용)
           if (/^\(\d+\)\s*/.test(line)) {
             const m = line.match(/^\(\d+\)(\s*)/);
             if (!m || m[1].length !== 1) {
               errors.push(`[${i + 1}행] 대중분류((1) (2) 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.`);
             }
           }
-          // 중분류: - 내용
+          // 중분류: - 내용 (공백 1칸만 허용)
           if (/^-/.test(line) && !/^- /.test(line)) {
             errors.push(`[${i + 1}행] 중분류(-) 뒤에는 반드시 공백 1칸이어야 합니다.`);
           }
-          // 소분류: ․ 내용
+          // 소분류: ․ 내용 (공백 1칸만 허용)
           if (/^․/.test(line) && !/^․ /.test(line)) {
             errors.push(`[${i + 1}행] 소분류(․) 뒤에는 반드시 공백 1칸이어야 합니다.`);
           }
-          // 중/소분류 뒤에 공백 2칸 이상도 체크
+          // 중/소분류 뒤에 공백 2칸 이상 금지
           if (/^-  /.test(line) || /^․  /.test(line)) {
             errors.push(`[${i + 1}행] 중/소분류 뒤에는 반드시 공백 1칸만 허용합니다.`);
           }
         }
-        // ,(콤마) 공백 규칙 추가
+        // 8. ,(콤마) 공백 규칙 추가
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-
+          // 1. 콤마(,) 앞에 공백이 있으면 안 됨
           if (/\s,/.test(line)) {
             errors.push(`[${i + 1}행] ','의 앞에는 공백이 있으면 안 됩니다.`);
           }
+          // 2. 콤마(,) 뒤에 반드시 공백 1칸만 있어야 함
+          //    - 공백이 없거나 여러 칸이면 오류
           if (/,[^ ]/.test(line)) {
             errors.push(`[${i + 1}행] ','의 뒤에는 반드시 공백이 1칸 있어야 합니다.`);
           }
