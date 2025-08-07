@@ -539,11 +539,9 @@
               }
               
               // 2. 특수문자 공백 규칙
-              else if (msg.includes("콜론(:)")) {
-                pattern = /\s+:|:\s+/g;
-              }
-              else if (msg.includes(">'")) {
-                pattern = /\s+>|>\s+/g;
+              else if (msg.includes(">") || msg.includes(":")) {
+                // >와 : 앞뒤 공백 모두 체크하도록 패턴 수정
+                pattern = /(?:\s+[>:]|[>:]\s+|>\s+:|:\s+>)/g;
               }
               else if (msg.includes("+")) {
                 pattern = /(?<!\s)\+|\+(?!\s)|(?<=\s)\+(?!\s)|(?<!\s)\+(?=\s)/g;
@@ -563,10 +561,35 @@
               
               // 4. 날짜 표기 규칙
               else if (msg.includes("날짜")) {
+                // "까지"가 포함된 날짜만 하이라이트
                 if (msg.includes("까지")) {
-                  pattern = /\([^)]*까지[^)]*\)/g;
+                  // (7/9까지) 등 "까지" 포함된 날짜만
+                  const dateMatches = [...lineContent.matchAll(/\([^)]*?까지[^)]*\)/g)];
+                  dateMatches.forEach(match => {
+                    editor.markText(
+                      {line: line, ch: match.index},
+                      {line: line, ch: match.index + match[0].length},
+                      {
+                        className: "error-highlight",
+                        css: "background-color: #ffd7d7; border-radius: 3px;"
+                      }
+                    );
+                  });
+                  pattern = null; // 아래 패턴 실행 방지
                 } else if (msg.includes("0")) {
-                  pattern = /\(\~?(?:0\d{1}|\d{1}|1[0-2])\/(?:0\d{1}|\d{1,2})\)/g;
+                  // (08/23), (8/05) 등 월/일이 0으로 시작하는 날짜만
+                  const dateMatches = [...lineContent.matchAll(/\(\~?(0\d{1})\/(\d{1,2})\)|\(\~?(\d{1,2})\/(0\d{1})\)/g)];
+                  dateMatches.forEach(match => {
+                    editor.markText(
+                      {line: line, ch: match.index},
+                      {line: line, ch: match.index + match[0].length},
+                      {
+                        className: "error-highlight",
+                        css: "background-color: #ffd7d7; border-radius: 3px;"
+                      }
+                    );
+                  });
+                  pattern = null;
                 }
               }
               
