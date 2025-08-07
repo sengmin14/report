@@ -250,6 +250,11 @@
         transition: background 0.14s, box-shadow 0.17s, transform 0.14s;
         letter-spacing: 0.2px;
       }
+
+      .error-highlight {
+        background-color: #ffd7d7 !important;
+        border-radius: 3px !important;
+      }
     </style>
   </head>
   <body>
@@ -487,6 +492,9 @@
         const input = editor.getValue();
         const resultDiv = document.getElementById("result");
         const errors = checkReportFormatting(input);
+        
+        // 기존 마커 모두 제거
+        editor.getAllMarks().forEach(marker => marker.clear());
 
         if (errors.length === 0) {
           resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 규칙에 맞습니다. </div>`;
@@ -505,21 +513,96 @@
                 const match = msg.match(/^\[(\d+)행\]/);
                 const lineNum = match ? parseInt(match[1], 10) : 1;
                 return `<li class="error-msg" data-line="${lineNum}">
-                    <span style="color: #ff5353; margin-right: 4px;">▶</span>
-                    ${msg}
-                  </li>`;
+                <span style="color: #ff5353; margin-right: 4px;">▶</span>
+                ${msg}
+              </li>`;
               })
               .join("") +
             "</ul></div>";
 
-          // 오류 메시지 클릭 시 해당 행으로 이동
+          // 오류 메시지 클릭 시 해당 행으로 이동 및 하이라이트
           document.querySelectorAll(".error-msg").forEach((el) => {
             el.style.cursor = "pointer";
+            // 오류 메시지 클릭 이벤트 핸들러 부분 수정
             el.onclick = function () {
+              // 기존 마커 모두 제거
+              editor.getAllMarks().forEach(marker => marker.clear());
+              
               const line = parseInt(this.getAttribute("data-line"), 10) - 1;
+              const lineContent = editor.getLine(line);
+              let pattern;
+              const msg = this.textContent;
+
+              // 1. 들여쓰기 규칙
+              if (msg.includes("들여쓰기")) {
+                pattern = /^\s{2,}/;
+              }
+              
+              // 2. 특수문자 공백 규칙
+              else if (msg.includes("콜론(:)")) {
+                pattern = /\s+:|:\s+/g;
+              }
+              else if (msg.includes(">'")) {
+                pattern = /\s+>|>\s+/g;
+              }
+              else if (msg.includes("+")) {
+                pattern = /(?<!\s)\+|\+(?!\s)|(?<=\s)\+(?!\s)|(?<!\s)\+(?=\s)/g;
+              }
+              else if (msg.includes(",'")) {
+                pattern = /\s+,|,\s{2,}|,[^\s]/g;
+              }
+              
+              // 3. 괄호 규칙
+              else if (msg.includes("괄호") || msg.includes("대괄호")) {
+                if (msg.includes("양쪽에")) {
+                  pattern = /\s+[\(\[\]\)]|[\(\[\]\)]\s+/g;
+                } else if (msg.includes("앞뒤에")) {
+                  pattern = /(\s+\(|\)\s+)/g;
+                }
+              }
+              
+              // 4. 날짜 표기 규칙
+              else if (msg.includes("날짜")) {
+                if (msg.includes("까지")) {
+                  pattern = /\([^)]*까지[^)]*\)/g;
+                } else if (msg.includes("0")) {
+                  pattern = /\(\~?(?:0\d{1}|\d{1}|1[0-2])\/(?:0\d{1}|\d{1,2})\)/g;
+                }
+              }
+              
+              // 5. 분류 표기 규칙
+              else if (msg.includes("대분류")) {
+                pattern = /^[1-9]\d*\.\s{2,}/;
+              }
+              else if (msg.includes("대중분류")) {
+                pattern = /^\(\d+\)\s{2,}/;
+              }
+              else if (msg.includes("중분류")) {
+                pattern = /^-\s{2,}/;
+              }
+              else if (msg.includes("소분류")) {
+                pattern = /^․\s{2,}/;
+              }
+
+              // 패턴이 매칭되는 부분 하이라이트
+              if (pattern) {
+                let match;
+                while ((match = pattern.exec(lineContent)) !== null) {
+                  editor.markText(
+                    {line: line, ch: match.index},
+                    {line: line, ch: match.index + match[0].length},
+                    {
+                      className: "error-highlight",
+                      css: "background-color: #ffd7d7; border-radius: 3px;"
+                    }
+                  );
+                }
+              }
+
+              // 항상 해당 라인으로 이동 및 포커스
               editor.focus();
-              editor.setCursor({ line, ch: 0 });
-              editor.scrollIntoView({ line, ch: 0 }, 100);
+              editor.setCursor({line, ch: 0});
+              editor.scrollIntoView({line, ch: 0}, 100);
             };
           });
         }
