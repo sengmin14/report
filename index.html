@@ -262,6 +262,7 @@
       <h2>업무보고 자동검증기</h2>
       <div class="button-group help-group">
         <button id="helpBtn" class="help-btn">검증 규칙</button>
+        <button id="changelogBtn" class="help-btn" style="margin-left:4px;">기능 추가 이력</button>
       </div>
       <textarea id="code" name="code">여기에 붙여넣으세요</textarea>
       <button id="checkBtn" class="check-btn">검증</button>
@@ -294,6 +295,23 @@
             <li>대중분류((1)) 뒤 공백 1칸</li>
             <li>중분류(-) 뒤 공백 1칸</li>
             <li>소분류(․) 뒤 공백 1칸</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 기능 추가 이력 모달 -->
+    <div id="changelogModal" class="modal">
+      <div class="modal-content">
+        <span class="close changelog-close">&times;</span>
+        <h3>기능 추가 이력</h3>
+        <div class="rule-list">
+          <ul>
+            <li><b>v1.0.0</b> - 기본 UI, 규칙 안내, 자동 검증 기능</li>
+            <li><b>v1.1.0</b> - 오류 클릭 시 행 이동 및 하이라이트</li>
+            <li><b>v1.2.0</b> - 날짜/괄호/특수문자 하이라이트 개선</li>
+            <li><b>v1.3.0</b> - 규칙 모달 ESC/배경 클릭 닫기, 반응형 UI</li>
+            <li><b>v1.4.0</b> - 소분류 상태 중복 체크, 코드 리팩토링</li>
           </ul>
         </div>
       </div>
@@ -655,6 +673,32 @@
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && modal.style.display === "block") {
           modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      });
+
+      // 기능 추가 이력 모달 관련 코드
+      const changelogModal = document.getElementById("changelogModal");
+      const changelogBtn = document.getElementById("changelogBtn");
+      const changelogCloseBtn = document.querySelector(".changelog-close");
+
+      changelogBtn.onclick = function () {
+        changelogModal.style.display = "block";
+        document.body.style.overflow = "hidden";
+      };
+      changelogCloseBtn.onclick = function () {
+        changelogModal.style.display = "none";
+        document.body.style.overflow = "auto";
+      };
+      window.addEventListener("click", function (event) {
+        if (event.target == changelogModal) {
+          changelogModal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && changelogModal.style.display === "block") {
+          changelogModal.style.display = "none";
           document.body.style.overflow = "auto";
         }
       });
