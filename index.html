@@ -393,10 +393,30 @@
         if (errors.length === 0) {
           resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 규칙에 맞습니다. </div>`;
         } else {
+          // 각 오류 메시지에 data-line 속성 추가
           resultDiv.innerHTML =
-            `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul><li>` +
-            errors.join("</li><li>") +
-            "</li></ul></div>";
+            `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul>` +
+            errors
+              .map((msg) => {
+                // [n행] 패턴에서 행 번호 추출
+                const match = msg.match(/^\[(\d+)행\]/);
+                const lineNum = match ? parseInt(match[1], 10) : 1;
+                // 오류 메시지에 클릭 이벤트용 data-line 속성 추가
+                return `<li class="error-msg" data-line="${lineNum}">${msg}</li>`;
+              })
+              .join("") +
+            "</ul></div>";
+
+          // 오류 메시지 클릭 시 해당 행으로 이동
+          document.querySelectorAll(".error-msg").forEach((el) => {
+            el.style.cursor = "pointer";
+            el.onclick = function () {
+              const line = parseInt(this.getAttribute("data-line"), 10) - 1;
+              editor.focus();
+              editor.setCursor({ line, ch: 0 });
+              editor.scrollIntoView({ line, ch: 0 }, 100);
+            };
+          });
         }
       };
     </script>
