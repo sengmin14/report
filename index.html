@@ -115,6 +115,17 @@
           transform: translateY(0);
         }
       }
+      .error-msg {
+        padding: 8px 12px;
+        margin: 4px 0;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+      .error-msg:hover {
+        background-color: #fff0f0;
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(255, 83, 83, 0.15);
+      }
     </style>
   </head>
   <body>
@@ -393,16 +404,16 @@
         if (errors.length === 0) {
           resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 규칙에 맞습니다. </div>`;
         } else {
-          // 각 오류 메시지에 data-line 속성 추가
           resultDiv.innerHTML =
-            `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul>` +
+            `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul style="list-style-type: none; padding-left: 0;">` +
             errors
               .map((msg) => {
-                // [n행] 패턴에서 행 번호 추출
                 const match = msg.match(/^\[(\d+)행\]/);
                 const lineNum = match ? parseInt(match[1], 10) : 1;
-                // 오류 메시지에 클릭 이벤트용 data-line 속성 추가
-                return `<li class="error-msg" data-line="${lineNum}">${msg}</li>`;
+                return `<li class="error-msg" data-line="${lineNum}">
+                    <span style="color: #ff5353; margin-right: 4px;">▶</span>
+                    ${msg}
+                  </li>`;
               })
               .join("") +
             "</ul></div>";
