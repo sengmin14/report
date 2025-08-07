@@ -401,9 +401,16 @@ function performRealTimeValidation() {
       return lineA - lineB;
     });
 
+    // 오류가 너무 많은 경우 요약 표시
+    const maxDisplayErrors = 50; // 최대 표시할 오류 개수
+    const displayErrors = sortedErrors.slice(0, maxDisplayErrors);
+    const hiddenCount = errors.length - displayErrors.length;
+
     resultDiv.innerHTML =
-      `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.<br><ul style="list-style-type: none; padding-left: 0;">` +
-      sortedErrors
+      `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.` +
+      (hiddenCount > 0 ? ` (${maxDisplayErrors}개만 표시, ${hiddenCount}개 숨김)` : '') +
+      `<br><ul style="list-style-type: none; padding-left: 0;">` +
+      displayErrors
         .map((msg) => {
           const match = msg.match(/^\[(\d+)행\]/);
           const lineNum = match ? parseInt(match[1], 10) : 1;
@@ -415,8 +422,11 @@ function performRealTimeValidation() {
         .join("") +
       "</ul></div>";
 
-    // 오류 메시지 클릭 이벤트 핸들러 재등록 (하이라이트 기능 포함)
+    // 오류 메시지 클릭 이벤트 핸들러 재등록
     attachErrorClickHandlers();
+    
+    // 스크롤을 맨 위로 이동
+    resultDiv.scrollTop = 0;
   }
 }
 

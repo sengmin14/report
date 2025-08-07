@@ -64,12 +64,56 @@ button:focus {
 .result {
   margin-top: 20px;
   min-height: 46px;
+  max-height: 300px; /* 최대 높이 제한 */
+  overflow-y: auto; /* 세로 스크롤 추가 */
   animation: fadein 0.7s;
   padding: 22px 18px 15px 18px;
   border-radius: 12px;
   box-shadow: 0 2px 12px #3049ff10;
   font-size: 1.07rem;
   display: none;
+}
+
+/* 스크롤바 스타일링 (웹킷 브라우저) */
+.result::-webkit-scrollbar {
+  width: 8px;
+}
+
+.result::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.result::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.result::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 오류 목록 내부 스타일 개선 */
+.result ul {
+  margin: 10px 0 0 0;
+  padding-left: 0;
+  max-height: 220px; /* 오류 목록 자체도 높이 제한 */
+  overflow-y: auto;
+}
+
+/* 오류 메시지 항목 간격 조정 */
+.error-msg {
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  word-wrap: break-word; /* 긴 메시지 줄바꿈 */
+}
+
+.error-msg:hover {
+  background-color: #fff0f0;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(255, 83, 83, 0.15);
 }
 .pass {
   color: #218938;
@@ -109,17 +153,6 @@ ul {
     opacity: 1;
     transform: translateY(0);
   }
-}
-.error-msg {
-  padding: 8px 12px;
-  margin: 4px 0;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-.error-msg:hover {
-  background-color: #fff0f0;
-  transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(255, 83, 83, 0.15);
 }
 /* 모달 스타일 */
 .modal {
