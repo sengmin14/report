@@ -62,13 +62,14 @@ button:focus {
   transform: translateY(-1px) scale(1.01);
 }
 .result {
-  margin-top: 30px;
+  margin-top: 20px;
   min-height: 46px;
   animation: fadein 0.7s;
   padding: 22px 18px 15px 18px;
   border-radius: 12px;
   box-shadow: 0 2px 12px #3049ff10;
   font-size: 1.07rem;
+  display: none;
 }
 .pass {
   color: #218938;
@@ -214,21 +215,6 @@ ul {
   border-radius: 50%;
   font-size: 0.8rem;
   font-weight: bold;
-}
-.check-btn {
-  width: 100%;
-  margin: 22px 0 0 0;
-  font-size: 1.18rem;
-  font-weight: 600;
-  background: linear-gradient(90deg, #3654ff 75%, #1c97e7 100%);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 0;
-  cursor: pointer;
-  box-shadow: 0 2px 12px #3654ff24;
-  transition: background 0.14s, box-shadow 0.17s, transform 0.14s;
-  letter-spacing: 0.2px;
 }
 .error-highlight {
   background-color: #ffd7d7 !important;

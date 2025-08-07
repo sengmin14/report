@@ -184,16 +184,215 @@ function checkReportFormatting(text) {
   return errors;
 }
 
-document.getElementById("checkBtn").onclick = function () {
+// 디바운스 함수 추가 (너무 자주 검증하지 않도록)
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// 오류 메시지 클릭 핸들러 함수 (수정됨)
+function attachErrorClickHandlers() {
+  document.querySelectorAll(".error-msg").forEach((el) => {
+    el.style.cursor = "pointer";
+    // 기존 이벤트 제거 후 새로 등록
+    el.onclick = null;
+    el.onclick = function () {
+      // 기존 마커 모두 제거
+      editor.getAllMarks().forEach(marker => marker.clear());
+      
+      const line = parseInt(this.getAttribute("data-line"), 10) - 1;
+      const lineContent = editor.getLine(line);
+      const msg = this.textContent;
+
+      // 1. 들여쓰기 규칙
+      if (msg.includes("들여쓰기")) {
+        const match = lineContent.match(/^\s{2,}/);
+        if (match) {
+          editor.markText(
+            {line: line, ch: 0},
+            {line: line, ch: match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        }
+      }
+      
+      // 2. 특수문자 공백 규칙 (수정됨)
+      else if (msg.includes(">") || msg.includes(":")) {
+        const matches = [...lineContent.matchAll(/\s+[>:]|[>:]\s+/g)];
+        matches.forEach(match => {
+          editor.markText(
+            {line: line, ch: match.index},
+            {line: line, ch: match.index + match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        });
+      }
+      else if (msg.includes("+")) {
+        const matches = [...lineContent.matchAll(/\S\+\S|\+\+/g)];
+        matches.forEach(match => {
+          editor.markText(
+            {line: line, ch: match.index},
+            {line: line, ch: match.index + match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        });
+      }
+      else if (msg.includes(",")) {
+        const matches = [...lineContent.matchAll(/\s+,|,\s{2,}|,[^\s]/g)];
+        matches.forEach(match => {
+          editor.markText(
+            {line: line, ch: match.index},
+            {line: line, ch: match.index + match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        });
+      }
+      
+      // 3. 괄호 규칙
+      else if (msg.includes("괄호") || msg.includes("대괄호")) {
+        const matches = [...lineContent.matchAll(/\s+[\(\[\]\)]|[\(\[\]\)]\s+/g)];
+        matches.forEach(match => {
+          editor.markText(
+            {line: line, ch: match.index},
+            {line: line, ch: match.index + match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        });
+      }
+      
+      // 4. 날짜 표기 규칙
+      else if (msg.includes("날짜")) {
+        // "까지"가 포함된 날짜
+        const dateUntilMatches = [...lineContent.matchAll(/\([^)]*?까지[^)]*\)/g)];
+        dateUntilMatches.forEach(match => {
+          editor.markText(
+            {line: line, ch: match.index},
+            {line: line, ch: match.index + match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        });
+
+        // 월/일이 0으로 시작하는 날짜
+        const zeroDateMatches = [...lineContent.matchAll(/\(~?\s*0\d{1}\s*\/\s*\d{1,2}\s*\)|\(~?\s*\d{1,2}\s*\/\s*0\d{1}\s*\)/g)];
+        zeroDateMatches.forEach(match => {
+          editor.markText(
+            {line: line, ch: match.index},
+            {line: line, ch: match.index + match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        });
+      }
+      
+      // 5. 분류 표기 규칙
+      else if (msg.includes("대분류")) {
+        const match = lineContent.match(/^[1-9]\d*\.\s{2,}/);
+        if (match) {
+          editor.markText(
+            {line: line, ch: 0},
+            {line: line, ch: match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        }
+      }
+      else if (msg.includes("대중분류")) {
+        const match = lineContent.match(/^\(\d+\)\s{2,}/);
+        if (match) {
+          editor.markText(
+            {line: line, ch: 0},
+            {line: line, ch: match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        }
+      }
+      else if (msg.includes("중분류")) {
+        const match = lineContent.match(/^-\s{2,}/);
+        if (match) {
+          editor.markText(
+            {line: line, ch: 0},
+            {line: line, ch: match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        }
+      }
+      else if (msg.includes("소분류")) {
+        const match = lineContent.match(/^․\s{2,}/);
+        if (match) {
+          editor.markText(
+            {line: line, ch: 0},
+            {line: line, ch: match[0].length},
+            {
+              className: "error-highlight",
+              css: "background-color: #ffd7d7; border-radius: 3px;"
+            }
+          );
+        }
+      }
+
+      // 항상 해당 라인으로 이동 및 포커스
+      editor.focus();
+      editor.setCursor({line, ch: 0});
+      editor.scrollIntoView({line, ch: 0}, 100);
+    };
+  });
+}
+
+// 실시간 검증 함수
+function performRealTimeValidation() {
   const input = editor.getValue();
   const resultDiv = document.getElementById("result");
+  
+  // 빈 내용이거나 플레이스홀더면 결과 숨기기
+  if (!input.trim() || input.trim() === "여기에 붙여넣으세요") {
+    resultDiv.innerHTML = "";
+    resultDiv.style.display = "none";
+    return;
+  }
+  
+  resultDiv.style.display = "block";
   const errors = checkReportFormatting(input);
   
   // 기존 마커 모두 제거
   editor.getAllMarks().forEach(marker => marker.clear());
 
   if (errors.length === 0) {
-    resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 규칙에 맞습니다. </div>`;
+    resultDiv.innerHTML = `<div class="pass">✅ 모든 항목이 규칙에 맞습니다.</div>`;
   } else {
     // 오류 메시지를 행 번호 순서대로 정렬
     const sortedErrors = errors.sort((a, b) => {
@@ -216,114 +415,27 @@ document.getElementById("checkBtn").onclick = function () {
         .join("") +
       "</ul></div>";
 
-    // 오류 메시지 클릭 시 해당 행으로 이동 및 하이라이트
-    document.querySelectorAll(".error-msg").forEach((el) => {
-      el.style.cursor = "pointer";
-      // 오류 메시지 클릭 이벤트 핸들러 부분 수정
-      el.onclick = function () {
-        // 기존 마커 모두 제거
-        editor.getAllMarks().forEach(marker => marker.clear());
-        
-        const line = parseInt(this.getAttribute("data-line"), 10) - 1;
-        const lineContent = editor.getLine(line);
-        let pattern;
-        const msg = this.textContent;
-
-        // 1. 들여쓰기 규칙
-        if (msg.includes("들여쓰기")) {
-          pattern = /^\s{2,}/;
-        }
-        
-        // 2. 특수문자 공백 규칙
-        else if (msg.includes(">") || msg.includes(":")) {
-          // >와 : 앞뒤 공백 모두 체크하도록 패턴 수정
-          pattern = /(?:\s+[>:]|[>:]\s+|>\s+:|:\s+>)/g;
-        }
-        else if (msg.includes("+")) {
-          pattern = /(?<!\s)\+|\+(?!\s)|(?<=\s)\+(?!\s)|(?<!\s)\+(?=\s)/g;
-        }
-        else if (msg.includes(",'")) {
-          pattern = /\s+,|,\s{2,}|,[^\s]/g;
-        }
-        
-        // 3. 괄호 규칙
-        else if (msg.includes("괄호") || msg.includes("대괄호")) {
-          if (msg.includes("양쪽에")) {
-            pattern = /\s+[\(\[\]\)]|[\(\[\]\)]\s+/g;
-          } else if (msg.includes("앞뒤에")) {
-            pattern = /(\s+\(|\)\s+)/g;
-          }
-        }
-        
-        // 4. 날짜 표기 규칙
-        else if (msg.includes("날짜")) {
-          // 1. "까지"가 포함된 날짜 (예: (7/9까지), (07/31까지), (~7/30까지))
-          const dateUntilMatches = [...lineContent.matchAll(/\([^)]*?까지[^)]*\)/g)];
-          dateUntilMatches.forEach(match => {
-            editor.markText(
-              {line: line, ch: match.index},
-              {line: line, ch: match.index + match[0].length},
-              {
-                className: "error-highlight",
-                css: "background-color: #ffd7d7; border-radius: 3px;"
-              }
-            );
-          });
-
-          // 2. 월/일이 0으로 시작하는 날짜 (예: (07/31), (7/01), (~07/31), (~7/01))
-          // 괄호 안에 공백이 있어도 허용
-          const zeroDateMatches = [...lineContent.matchAll(/\(~?\s*0\d{1}\s*\/\s*\d{1,2}\s*\)|\(~?\s*\d{1,2}\s*\/\s*0\d{1}\s*\)/g)];
-          zeroDateMatches.forEach(match => {
-            editor.markText(
-              {line: line, ch: match.index},
-              {line: line, ch: match.index + match[0].length},
-              {
-                className: "error-highlight",
-                css: "background-color: #ffd7d7; border-radius: 3px;"
-              }
-            );
-          });
-
-          pattern = null; // 아래 패턴 실행 방지
-        }
-        
-        // 5. 분류 표기 규칙
-        else if (msg.includes("대분류")) {
-          pattern = /^[1-9]\d*\.\s{2,}/;
-        }
-        else if (msg.includes("대중분류")) {
-          pattern = /^\(\d+\)\s{2,}/;
-        }
-        else if (msg.includes("중분류")) {
-          pattern = /^-\s{2,}/;
-        }
-        else if (msg.includes("소분류")) {
-          pattern = /^․\s{2,}/;
-        }
-
-        // 패턴이 매칭되는 부분 하이라이트
-        if (pattern) {
-          let match;
-          while ((match = pattern.exec(lineContent)) !== null) {
-            editor.markText(
-              {line: line, ch: match.index},
-              {line: line, ch: match.index + match[0].length},
-              {
-                className: "error-highlight",
-                css: "background-color: #ffd7d7; border-radius: 3px;"
-              }
-            );
-          }
-        }
-
-        // 항상 해당 라인으로 이동 및 포커스
-        editor.focus();
-        editor.setCursor({line, ch: 0});
-        editor.scrollIntoView({line, ch: 0}, 100);
-      };
-    });
+    // 오류 메시지 클릭 이벤트 핸들러 재등록 (하이라이트 기능 포함)
+    attachErrorClickHandlers();
   }
-};
+}
+
+// 에디터 변경 시 실시간 검증 (500ms 디바운스)
+const debouncedValidation = debounce(performRealTimeValidation, 500);
+
+editor.on("change", function() {
+  debouncedValidation();
+});
+
+// 초기 로드 시에도 검증 실행
+editor.on("focus", function () {
+  if (!clearedPlaceholder && editor.getValue().trim() === "여기에 붙여넣으세요") {
+    editor.setValue("");
+    clearedPlaceholder = true;
+  }
+  // 포커스 시에도 검증 실행
+  setTimeout(performRealTimeValidation, 100);
+});
 
 // 모달 관련 코드
 const modal = document.getElementById("ruleModal");
@@ -332,7 +444,7 @@ const closeBtn = document.getElementsByClassName("close")[0];
 
 helpBtn.onclick = function () {
   modal.style.display = "block";
-  document.body.style.overflow = "hidden"; // 배경 스크롤 방지
+  document.body.style.overflow = "hidden";
 };
 
 closeBtn.onclick = function () {
@@ -340,7 +452,7 @@ closeBtn.onclick = function () {
   document.body.style.overflow = "auto";
 };
 
-// 기능 추가 이력 모달 관련 코드 추가
+// 기능 추가 이력 모달 관련 코드
 const changelogModal = document.getElementById("changelogModal");
 const changelogBtn = document.getElementById("changelogBtn");
 const changelogCloseBtn = document.querySelector(".changelog-close");
@@ -355,7 +467,7 @@ changelogCloseBtn.onclick = function () {
   document.body.style.overflow = "auto";
 };
 
-// 배경 클릭 시 모달 닫기 (기존 코드에 changelogModal 추가)
+// 배경 클릭 시 모달 닫기
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -367,7 +479,7 @@ window.onclick = function (event) {
   }
 };
 
-// ESC 키로 모달 닫기 (기존 코드 수정)
+// ESC 키로 모달 닫기
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     if (modal.style.display === "block") {
