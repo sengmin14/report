@@ -231,3 +231,18 @@ button:focus {
   background-color: #ffd7d7 !important;
   border-radius: 3px !important;
 }
+.pass {
+  color: #218938;
+  background: #eaffed;
+  border-left: 6px solid #36d173;
+  font-weight: 700;
+  padding-left: 7px;
+}
+
+.fail {
+  color: #e02e2e;
+  background: #fff3f3; /* 이 부분이 누락되었을 수 있음 */
+  border-left: 6px solid #ff5353;
+  font-weight: 700;
+  padding-left: 7px;
+}
