@@ -30,330 +30,216 @@
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/markdown/markdown.js"></script>
     <script>
-      // CodeMirror 에디터 세팅
-      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        mode: "markdown",
-        lineWrapping: true,
-      });
-
-      // ▶️ 포커스 시 플레이스홀더 자동 삭제
-      let clearedPlaceholder = false;
-      editor.on("focus", function () {
-        if (!clearedPlaceholder && editor.getValue().trim() === "여기에 붙여넣으세요") {
-          editor.setValue("");
-          clearedPlaceholder = true;
-        }
-      });
-
-      function checkReportFormatting(text) {
-  const lines = text.replace(/\r\n/g, "\n").split("\n");
-  let errors = [];
-
-  // 유틸리티 함수들
-  function getLine(idx, offset) {
+const utils = {
+  getLine(lines, idx, offset) {
     return lines[idx + offset] !== undefined ? lines[idx + offset] : "";
+  },
+  isBlank(line) { 
+    return line.trim() === ""; 
+  },
+  isMid(line) { 
+    return /^ *- /.test(line); 
+  },
+  isLow(line) { 
+    return /^ *․ /.test(line); 
+  },
+  isSection(line) { 
+    return /^([1-9]\d*\.\s|\(\d+\)\s)/.test(line); 
+  },
+  isSeparator(line) { 
+    return /^-{5,}$/.test(line); 
+  },
+  // 에러 메시지 생성 헬퍼
+  formatError(lineNum, message) {
+    return `[${lineNum}행] ${message}`;
   }
-  function isBlank(line) { return line.trim() === ""; }
-  function isMid(line) { return /^ *- /.test(line); }
-  function isLow(line) { return /^ *․ /.test(line); }
-  function isSection(line) { return /^([1-9]\d*\.\s|\(\d+\)\s)/.test(line); }
-  function isSeparator(line) { return /^-{5,}$/.test(line); }
-  function addError(lineNum, message) {
-    errors.push(`[${lineNum}행] ${message}`);
-  }
+};
 
-  // 날짜 형식 검증
-  function checkDateFormat(line, lineNum) {
-    const forbiddenZeroOrUntilDate = /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
-    let matches = line.match(forbiddenZeroOrUntilDate);
-    if (matches) {
-      matches.forEach(m => {
-        const dateContent = m.replace(/[()~]/g, "").replace(/\s/g, "");
-        const [month, rest] = dateContent.split("/");
-        const untilIncluded = m.includes("까지");        function checkReportFormatting(text) {
-          // 줄바꿈 통일 후 라인별로 분리
-          const lines = text.replace(/\r\n/g, "\n").split("\n");
-          let errors = [];
-        
-          /**
-           * 유틸리티 함수들
-           * ------------------
-           */
-          // 지정된 라인(+offset)의 내용을 반환. 범위를 벗어나면 빈 문자열 반환
-          function getLine(idx, offset) {
-            return lines[idx + offset] !== undefined ? lines[idx + offset] : "";
-          }
-        
-          // 빈 줄 여부 확인 (공백만 있는 경우도 빈 줄로 간주)
-          function isBlank(line) { return line.trim() === ""; }
-        
-          // 중분류(-) 시작 여부 확인
-          function isMid(line) { return /^ *- /.test(line); }
-        
-          // 소분류(․) 시작 여부 확인 
-          function isLow(line) { return /^ *․ /.test(line); }
-        
-          // 대분류(1. 또는 (1)) 시작 여부 확인
-          function isSection(line) { return /^([1-9]\d*\.\s|\(\d+\)\s)/.test(line); }
-        
-          // 구분선(-----) 여부 확인
-          function isSeparator(line) { return /^-{5,}$/.test(line); }
-        
-          // 에러 메시지 추가 (행번호 포함)
-          function addError(lineNum, message) {
-            errors.push(`[${lineNum}행] ${message}`);
-          }
-        
-          /**
-           * 날짜 형식 검증
-           * ------------------
-           * 허용 형식: (8/23), (~7/30)
-           * 금지 형식: (08/23), (8/03), (8/23까지), (~8/23까지)
-           */
-          function checkDateFormat(line, lineNum) {
-            // 날짜 패턴 매칭을 위한 정규식
-            const forbiddenZeroOrUntilDate = /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
-            let matches = line.match(forbiddenZeroOrUntilDate);
-            
-            if (matches) {
-              matches.forEach(m => {
-                const dateContent = m.replace(/[()~]/g, "").replace(/\s/g, "");
-                const [month, rest] = dateContent.split("/");
-                const untilIncluded = m.includes("까지");
-        
-                // 날짜 형식 검증 조건
-                if ((month.length === 2 && month.startsWith("0")) || // 월이 0으로 시작
-                    (rest.length > 1 && rest.startsWith("0")) ||     // 일이 0으로 시작
-                    untilIncluded) {                                 // "까지" 포함
-                  addError(lineNum, `허용되지 않는 날짜 표기: ${m} (날짜는 (8/23), (~7/30) 형태만 허용, 월/일 0으로 시작·"까지" 포함은 금지)`);
-                }
-              });
-            }
-          }
-        
-          /**
-           * 소분류 상태 검증
-           * ------------------
-           * 모든 소분류가 동일한 상태를 가질 경우, 
-           * 소분류에는 상태를 표시하지 않고 중분류에만 상태를 표시해야 함
-           */
-          function checkLowClassStatus(lines, startIdx) {
-            if (!isMid(lines[startIdx])) return startIdx + 1;
-        
-            // 중분류의 상태 확인
-            const midStateMatch = lines[startIdx].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
-            const midState = midStateMatch ? midStateMatch[2] : null;
-        
-            // 소분류 목록 수집
-            let lowList = [];
-            let j = startIdx + 1;
-            while (j < lines.length && (isLow(lines[j]) || isBlank(lines[j]))) {
-              if (isLow(lines[j])) {
-                let m = lines[j].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
-                let state = m ? m[2] : null;
-                lowList.push({ idx: j, state });
-              }
-              j++;
-            }
-        
-            // 소분류 상태 검증
-            if (lowList.length > 1) {
-              const allStates = lowList.map(x => x.state);
-              const uniqueStates = [...new Set(allStates.filter(Boolean))];
-              
-              // 모든 소분류가 동일한 상태를 가질 경우
-              if (uniqueStates.length === 1 && uniqueStates[0] !== null && allStates.every(x => x)) {
-                lowList.forEach(low => {
-                  if (low.state) {
-                    addError(low.idx + 1, `소분류가 모두 같은 상태(${uniqueStates[0]})일 때는, 소분류에는 상태를 입력하지 마시고 중분류에만 상태를 입력하세요.`);
-                  }
-                });
-              }
-            }
-            return j;
-          }
-        
-          /**
-           * 공백 및 특수문자 검증
-           * ------------------
-           * 1. 들여쓰기는 1칸까지만 허용
-           * 2. '>', ':' 기호 앞뒤 공백 금지
-           * 3. '+' 기호는 반드시 앞뒤 공백 1칸씩 필요
-           */
-          function checkSpacingAndSymbols(line, lineNum) {
-            if (!isBlank(line)) {
-              // 2칸 이상 들여쓰기 검증
-              if (/^\s{2,}/.test(line)) {
-                addError(lineNum, "들여쓰기는 1칸 이상 금지(불필요한 앞공백).");
-              }
-        
-              // '>', ':' 기호 주변 공백 검증
-              if (/( [>:])|([>:] )/.test(line)) {
-                addError(lineNum, "'>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.");
-              }
-        
-              // '+' 기호 공백 규칙 검증
-              // \S\+\S: 기호 앞뒤에 공백이 없는 경우
-              // \+\+: 연속된 + 기호
-              // 그 외: 정확히 앞뒤 공백이 한 칸씩 있지 않은 경우
-              if (/\S\+\S/.test(line) || /\+\+/.test(line) || 
-                  (/\+/.test(line) && !/ (\+) /.test(line) && !/(^|\s)\+(\s|$)/.test(line))) {
-                addError(lineNum, "'+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.");
-              }
-            }
-          }
-        
-          /**
-           * 분류 표기 공백 검증
-           * ------------------
-           * 각 분류 기호 뒤에는 반드시 공백 1칸이 있어야 함
-           * - 대분류(1. 2. 등)
-           * - 대중분류((1) (2) 등)
-           * - 중분류(-)
-           * - 소분류(․)
-           */
-          function checkClassificationSpacing(line, lineNum) {
-            // 대분류 공백 검증
-            if (/^([1-9]\d*)\. ?/.test(line)) {
-              const m = line.match(/^([1-9]\d*)\.(\s*)/);
-              if (!m || m[2].length !== 1) {
-                addError(lineNum, "대분류(1. 2. 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.");
-              }
-            }
-        
-            // 대중분류 공백 검증
-            if (/^\(\d+\)\s*/.test(line)) {
-              const m = line.match(/^\(\d+\)(\s*)/);
-              if (!m || m[1].length !== 1) {
-                addError(lineNum, "대중분류((1) (2) 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.");
-              }
-            }
-        
-            // 중분류 공백 검증
-            if ((/^-/.test(line) && !/^- /.test(line)) || /^-  /.test(line)) {
-              addError(lineNum, "중분류(-) 뒤에는 반드시 공백 1칸이어야 합니다.");
-            }
-        
-            // 소분류 공백 검증
-            if ((/^․/.test(line) && !/^․ /.test(line)) || /^․  /.test(line)) {
-              addError(lineNum, "소분류(․) 뒤에는 반드시 공백 1칸이어야 합니다.");
-            }
-          }
-        
-          // 메인 검증 로직 실행
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            checkDateFormat(line, i + 1);
-            checkSpacingAndSymbols(line, i + 1);
-            checkClassificationSpacing(line, i + 1);
-            
-            // 중분류 라인일 경우 소분류 상태도 검증
-            if (isMid(line)) {
-              i = checkLowClassStatus(lines, i) - 1;
-            }
-          }
-        
-          return errors;
-        }
-        if ((month.length === 2 && month.startsWith("0")) || 
-            (rest.length > 1 && rest.startsWith("0")) || 
-            untilIncluded) {
-          addError(lineNum, `허용되지 않는 날짜 표기: ${m} (날짜는 (8/23), (~7/30) 형태만 허용, 월/일 0으로 시작·"까지" 포함은 금지)`);
-        }
-      });
+  // CodeMirror 에디터 세팅
+  var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    lineNumbers: true,
+    mode: "markdown",
+    lineWrapping: true,
+  });
+
+  // ▶️ 포커스 시 플레이스홀더 자동 삭제
+  let clearedPlaceholder = false;
+  editor.on("focus", function () {
+    if (!clearedPlaceholder && editor.getValue().trim() === "여기에 붙여넣으세요") {
+      editor.setValue("");
+      clearedPlaceholder = true;
     }
-  }
+  });
 
-  // 소분류 상태 검증
-  function checkLowClassStatus(lines, startIdx) {
-    if (!isMid(lines[startIdx])) return startIdx + 1;
+  function checkReportFormatting(text) {
+    const lines = text.replace(/\r\n/g, "\n").split("\n");
+    let errors = [];
 
-    const midStateMatch = lines[startIdx].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
-    const midState = midStateMatch ? midStateMatch[2] : null;
-
-    let lowList = [];
-    let j = startIdx + 1;
-    while (j < lines.length && (isLow(lines[j]) || isBlank(lines[j]))) {
-      if (isLow(lines[j])) {
-        let m = lines[j].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
-        let state = m ? m[2] : null;
-        lowList.push({ idx: j, state });
-      }
-      j++;
+    function addError(lineNum, message) {
+      errors.push(utils.formatError(lineNum, message));
     }
 
-    if (lowList.length > 1) {
-      const allStates = lowList.map(x => x.state);
-      const uniqueStates = [...new Set(allStates.filter(Boolean))];
-      if (uniqueStates.length === 1 && uniqueStates[0] !== null && allStates.every(x => x)) {
-        lowList.forEach(low => {
-          if (low.state) {
-            addError(low.idx + 1, `소분류가 모두 같은 상태(${uniqueStates[0]})일 때는, 소분류에는 상태를 입력하지 마시고 중분류에만 상태를 입력하세요.`);
+    // 날짜 형식 검증
+    function checkDateFormat(line, lineNum) {
+      // 1. 날짜 형식 정규식 - (8/7), (~8/7) 형식만 허용, "까지" 포함 체크
+      const dateRegex = /\(~?(\d{1,2})\/(\d{1,2})(까지)?\)/g;
+      let matches = line.match(dateRegex);
+      
+      if (matches) {
+        matches.forEach(m => {
+          // 2. "까지" 포함 여부 체크 - 먼저 검사
+          if (m.includes("까지")) {
+            addError(lineNum, `허용되지 않는 날짜 표기: ${m} ("까지" 포함은 금지)`);
+            return; // 다음 검증은 건너뜀
+          }
+
+          const dateContent = m.replace(/[()~]/g, "");
+          const [month, day] = dateContent.split("/");
+
+          // 3. 월/일이 0으로 시작하는지 체크
+          if (month.startsWith("0") || day.startsWith("0")) {
+            addError(lineNum, `허용되지 않는 날짜 표기: ${m} (08/9, 8/09 같이 0으로 시작하는 월/일 표기는 금지)`);
+          }
+
+          // 4. 월/일 범위 체크
+          const monthNum = parseInt(month);
+          const dayNum = parseInt(day);
+          
+          if (monthNum < 1 || monthNum > 12) {
+            addError(lineNum, `허용되지 않는 날짜 표기: ${m} (월은 1~12 사이여야 함)`);
+          }
+          
+          if (dayNum < 1 || dayNum > 31) {
+            addError(lineNum, `허용되지 않는 날짜 표기: ${m} (일은 1~31 사이여야 함)`);
           }
         });
       }
     }
-    return j;
+
+    // 소분류 상태 검증
+    function checkLowClassStatus(lines, startIdx) {
+      if (!utils.isMid(lines[startIdx])) return startIdx + 1;
+
+      const midStateMatch = lines[startIdx].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
+      const midState = midStateMatch ? midStateMatch[2] : null;
+
+      let lowList = [];
+      let j = startIdx + 1;
+      while (j < lines.length && (utils.isLow(lines[j]) || utils.isBlank(lines[j]))) {
+        if (utils.isLow(lines[j])) {
+          let m = lines[j].match(/(.+)\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)$/);
+          let state = m ? m[2] : null;
+          lowList.push({ idx: j, state });
+        }
+        j++;
+      }
+
+      if (lowList.length > 1) {
+        const allStates = lowList.map(x => x.state);
+        const uniqueStates = [...new Set(allStates.filter(Boolean))];
+        if (uniqueStates.length === 1 && uniqueStates[0] !== null && allStates.every(x => x)) {
+          lowList.forEach(low => {
+            if (low.state) {
+              addError(low.idx + 1, `소분류가 모두 같은 상태(${uniqueStates[0]})일 때는, 소분류에는 상태를 입력하지 마시고 중분류에만 상태를 입력하세요.`);
+            }
+          });
+        }
+      }
+      return j;
+    }
+
+    // 공백 및 특수문자 검증 함수 추가
+    function checkSpacingAndSymbols(line, lineNum) {
+      if (!utils.isBlank(line)) {
+        // 들여쓰기 검증
+        if (/^\s{2,}/.test(line)) {
+          addError(lineNum, "들여쓰기는 1칸 이상 금지(불필요한 앞공백).");
+        }
+
+        // 특수문자 공백 검증
+        if ((/\s:/.test(line) || /:\s/.test(line)) || 
+            (/ >/.test(line) || /> /.test(line))) {
+          addError(lineNum, "'>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.");
+        }
+
+        // + 기호 공백 검증
+        if (/\S\+\S/.test(line) || /\+\+/.test(line) || 
+            (/\+/.test(line) && !/ (\+) /.test(line) && !/(^|\s)\+(\s|$)/.test(line))) {
+          addError(lineNum, "'+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.");
+        }
+
+        // 괄호() 공백 검증
+        if (/\s\(/.test(line) || /\)\s/.test(line) || /\(\s/.test(line) || /\s\)/.test(line)) {
+          addError(lineNum, "'()', '[]' 기호의 앞뒤/안쪽에 공백이 있으면 안 됩니다.");
+        }
+
+        // [] 괄호 공백 검증
+        if (/\s\[/.test(line) || /\]\s/.test(line) || /\[\s/.test(line) || /\s\]/.test(line)) {
+          addError(lineNum, "'()', '[]' 기호의 앞뒤/안쪽에 공백이 있으면 안 됩니다.");
+        }
+
+        // 연속된 공백 검증
+        if (/[^\n]\s{2,}[^\n]/.test(line)) {
+          addError(lineNum, "연속된 공백은 허용되지 않습니다.");
+        }
+
+        // 문장 끝 공백 검증
+        if (/\s$/.test(line)) {
+          addError(lineNum, "문장 끝에 공백이 있으면 안 됩니다.");
+        }
+
+        // 콤마(,) 공백 검증
+        if (/\s,/.test(line)) {
+          addError(lineNum, "','의 앞에는 공백이 있으면 안 됩니다.");
+        }
+        if (/,[^ ]/.test(line)) {
+          addError(lineNum, "','의 뒤에는 반드시 공백이 1칸 있어야 합니다.");
+        }
+        if (/,\s{2,}/.test(line)) {
+          addError(lineNum, "','의 뒤에는 공백이 1칸만 있어야 합니다.");
+        }
+      }
+    }
+
+    // 분류 표기 공백 검증 함수 추가
+    function checkClassificationSpacing(line, lineNum) {
+      if (/^([1-9]\d*)\. ?/.test(line)) {
+        const m = line.match(/^([1-9]\d*)\.(\s*)/);
+        if (!m || m[2].length !== 1) {
+          addError(lineNum, "대분류(1. 2. 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.");
+        }
+      }
+
+      if (/^\(\d+\)\s*/.test(line)) {
+        const m = line.match(/^\(\d+\)(\s*)/);
+        if (!m || m[1].length !== 1) {
+          addError(lineNum, "대중분류((1) (2) 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.");
+        }
+      }
+
+      if ((/^-/.test(line) && !/^- /.test(line)) || /^-  /.test(line)) {
+        addError(lineNum, "중분류(-) 뒤에는 반드시 공백 1칸이어야 합니다.");
+      }
+
+      if ((/^․/.test(line) && !/^․ /.test(line)) || /^․  /.test(line)) {
+        addError(lineNum, "소분류(․) 뒤에는 반드시 공백 1칸이어야 합니다.");
+      }
+    }
+
+    // 메인 검증 로직
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      checkDateFormat(line, i + 1);
+      checkSpacingAndSymbols(line, i + 1);
+      checkClassificationSpacing(line, i + 1);
+      
+      if (utils.isMid(line)) {  // utils.isMid 사용
+        i = checkLowClassStatus(lines, i) - 1;
+      }
+    }
+
+    return errors;
   }
-
-  // 공백 및 특수문자 검증
-  function checkSpacingAndSymbols(line, lineNum) {
-    if (!isBlank(line)) {
-      // 들여쓰기 검증
-      if (/^\s{2,}/.test(line)) {
-        addError(lineNum, "들여쓰기는 1칸 이상 금지(불필요한 앞공백).");
-      }
-
-      // 특수문자 공백 검증
-      if (/( [>:])|([>:] )/.test(line)) {
-        addError(lineNum, "'>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.");
-      }
-
-      // + 기호 공백 검증
-      if (/\S\+\S/.test(line) || /\+\+/.test(line) || 
-          (/\+/.test(line) && !/ (\+) /.test(line) && !/(^|\s)\+(\s|$)/.test(line))) {
-        addError(lineNum, "'+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.");
-      }
-    }
-  }
-
-  // 분류 표기 공백 검증
-  function checkClassificationSpacing(line, lineNum) {
-    if (/^([1-9]\d*)\. ?/.test(line)) {
-      const m = line.match(/^([1-9]\d*)\.(\s*)/);
-      if (!m || m[2].length !== 1) {
-        addError(lineNum, "대분류(1. 2. 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.");
-      }
-    }
-    if (/^\(\d+\)\s*/.test(line)) {
-      const m = line.match(/^\(\d+\)(\s*)/);
-      if (!m || m[1].length !== 1) {
-        addError(lineNum, "대중분류((1) (2) 등) 뒤에는 반드시 공백 1칸만 있어야 합니다.");
-      }
-    }
-    if ((/^-/.test(line) && !/^- /.test(line)) || /^-  /.test(line)) {
-      addError(lineNum, "중분류(-) 뒤에는 반드시 공백 1칸이어야 합니다.");
-    }
-    if ((/^․/.test(line) && !/^․ /.test(line)) || /^․  /.test(line)) {
-      addError(lineNum, "소분류(․) 뒤에는 반드시 공백 1칸이어야 합니다.");
-    }
-  }
-
-  // 메인 검증 로직
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    checkDateFormat(line, i + 1);
-    checkSpacingAndSymbols(line, i + 1);
-    checkClassificationSpacing(line, i + 1);
-    
-    if (isMid(line)) {
-      i = checkLowClassStatus(lines, i) - 1;
-    }
-  }
-
-  return errors;
-}
 
       document.getElementById("checkBtn").onclick = function () {
         const input = editor.getValue();
