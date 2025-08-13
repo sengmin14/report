@@ -555,6 +555,69 @@ button:focus-visible {
   transform: translateY(-1px);
 }
 
+/* === Remove full-line gradient; use slim left bar ======================= */
+/* 1) 기존 cat-* 배경 제거 */
+.theme-dark .CodeMirror .cat-top,
+.theme-dark .CodeMirror .cat-midtop,
+.theme-dark .CodeMirror .cat-mid,
+.theme-dark .CodeMirror .cat-low,
+.CodeMirror .cat-top,
+.CodeMirror .cat-midtop,
+.CodeMirror .cat-mid,
+.CodeMirror .cat-low {
+  background: none !important;
+  color: inherit;            /* 기본 텍스트 컬러 사용 */
+  padding-left: 4px;         /* 최소 패딩 */
+  border-left: none;
+  transition: none;          /* 테마 토글 시 깜빡임 방지 */
+}
+
+/* 2) 좌측 얇은 구분선만 pseudo-element 로 */
+.CodeMirror .cat-top::before,
+.CodeMirror .cat-midtop::before,
+.CodeMirror .cat-mid::before,
+.CodeMirror .cat-low::before {
+  content:"";
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:3px;
+  border-radius:2px;
+  background: var(--c-primary);
+  opacity:.55;
+}
+.CodeMirror .cat-midtop::before { background: #4a7cff; opacity:.5; }
+.CodeMirror .cat-mid::before    { background: #2f9bd9; opacity:.55; }
+.CodeMirror .cat-low::before    { background: #3aa9ef; opacity:.55; }
+
+.theme-dark .CodeMirror .cat-top::before  { background:#5a8dff; opacity:.7; }
+.theme-dark .CodeMirror .cat-midtop::before{ background:#4d7fe6; }
+.theme-dark .CodeMirror .cat-mid::before  { background:#3c96d9; }
+.theme-dark .CodeMirror .cat-low::before  { background:#4bb5ff; }
+
+/* 3) hover 배경 제거 */
+.CodeMirror .cat-top:hover,
+.CodeMirror .cat-midtop:hover,
+.CodeMirror .cat-mid:hover,
+.CodeMirror .cat-low:hover,
+.theme-dark .CodeMirror .cat-top:hover,
+.theme-dark .CodeMirror .cat-midtop:hover,
+.theme-dark .CodeMirror .cat-mid:hover,
+.theme-dark .CodeMirror .cat-low:hover {
+  background: none !important;
+}
+
+/* 4) 단색 강제 블록(라인 가독성 떨어뜨림) 비활성화 -> 필요 시 .mono-text 클래스에 한정
+   기존 단색 블록 앞에 주석 처리 또는 아래로 대체 */
+.mono-text .CodeMirror,
+.mono-text .CodeMirror * {
+  color: inherit !important;
+}
+
+/* 5) 테마 토글 순간 재계산 시 잔상 줄이기 */
+html.theme-dark .CodeMirror * {
+  transition: color .15s ease;
+}
+
 /* 카테고리 라인 가독성 (라이트/다크 공통 기본) */
 .CodeMirror .cat-top    { font-weight:700; }
 .CodeMirror .cat-midtop { font-weight:600; }
