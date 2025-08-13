@@ -226,15 +226,20 @@ function checkReportFormatting(text) {
         );
       }
     }
-    // 4-1. 하이픈(-) 공백 규칙 (목록 기호 예외)
-    // 라인 시작의 목록 기호 패턴(선행공백 + '-' + 공백)은 제거한 임시 문자열에서 검사
+    // 4-1. 하이픈(-) 공백 규칙 (목록 기호 예외, '->' 연산자 예외)
     {
-      const strippedForHyphen = line.replace(/^[ \t]*-\s/, ""); // 중분류 기호 제거
-      // 허용: 단어-단어 / 숫자-숫자 / 식별자-식별자 (양옆 공백 없음)
-      // 오류: ' -' 또는 '- ' (양쪽 어느 한쪽이라도 공백)
-      const hyphenSpaceMatches = [...strippedForHyphen.matchAll(/ (?=-)|-(?= )/g)];
-      if (hyphenSpaceMatches.length > 0) {
-        errors.push(`[${i + 1}행] '-' 하이픈은 앞뒤에 공백 없이 붙여 써야 합니다 (예: A-B).`);
+      // 중분류 시작 기호 "- " 제거
+      let strippedForHyphen = line.replace(/^[ \t]*-\s+/, "");
+      // '->' 또는 ' -> ' / ' ->' / '-> ' 형태 모두 토큰으로 간주하여 검사에서 제외
+      // (양끝 선택적 1칸 공백 허용)
+      const ARROW_PLACEHOLDER = "¤";
+      const hyphenScanBase = strippedForHyphen.replace(/ ?-> ?/g, ARROW_PLACEHOLDER);
+
+      // 공백 앞/뒤 하이픈 패턴 탐지
+      const rawMatches = [...hyphenScanBase.matchAll(/ (?=-)|-(?= )/g)];
+
+      if (rawMatches.length > 0) {
+        errors.push(`[${i + 1}행] '-' 하이픈은 앞뒤에 공백 없이 붙여 써야 합니다 (예: A-B, 단 '->' 연산자는 예외).`);
       }
     }
   }
@@ -363,14 +368,16 @@ function highlightError(lineIndex, type) {
       break;
     }
     case "hyphen": {
-      // 목록 기호 제외, 공백이 붙은 하이픈만 표시
-      const work = text.replace(/^[ \t]*-\s/, "¤"); // 앞 목록 하이픈 무력화
-      [...work.matchAll(/ (?=-)|-(?= )/g)].forEach(m => {
-        // 실제 원본 인덱스 (목록 기호 치환 영향 없거나 동일)
+      // 목록 기호 무력화 + '->' 토큰 제외 후 공백과 붙은 하이픈만 표시
+      const base = text
+        .replace(/^[ \t]*-\s+/, "¤")      // 리스트 기호 제거
+        .replace(/ ?-> ?/g, "¤");         // 화살표 연산자 예외 처리
+      [...base.matchAll(/ (?=-)|-(?= )/g)].forEach(m => {
         const idx = m.index;
-        if (text[idx] === ' ') { // 공백 뒤 하이픈
-          addMark(idx + 1, idx + 2);
-        } else if (text[idx] === '-') { // 하이픈 뒤 공백
+        if (text[idx] === ' ') {
+          // 공백 뒤 실제 하이픈 위치
+            if (text[idx + 1] === '-') addMark(idx + 1, idx + 2);
+        } else if (text[idx] === '-') {
           addMark(idx, idx + 1);
         }
       });
