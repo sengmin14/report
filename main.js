@@ -465,14 +465,13 @@ function performRealTimeValidation() {
       return lineA - lineB;
     });
 
-    // 오류가 너무 많은 경우 요약 표시
-    const maxDisplayErrors = 50; // 최대 표시할 오류 개수
-    const displayErrors = sortedErrors.slice(0, maxDisplayErrors);
-    const hiddenCount = errors.length - displayErrors.length;
+    // (기존) 최대 50개 제한 제거: 전부 표기
+    const displayErrors = errors;          // 전체
+    const hiddenCount = 0;                 // 숨김 없음
+    const maxDisplayErrors = errors.length;
 
     resultDiv.innerHTML =
-      `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.` +
-      (hiddenCount > 0 ? ` (${maxDisplayErrors}개만 표시, ${hiddenCount}개 숨김)` : '') +
+      `<div class="fail">❌ 총 ${errors.length}건의 오류가 발견되었습니다.` +
       `<br><ul class="error-list" style="list-style:none; padding-left:0; margin:10px 0 0;">` +
       displayErrors.map((msg) => {
         const match = msg.match(/^\[(\d+)행\]/);
