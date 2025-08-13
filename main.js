@@ -154,9 +154,15 @@ function checkReportFormatting(text) {
     }
 
     // 3. 특수문자 공백 규칙
-    // >와 : 앞뒤 공백 금지
-    if (/( [>:])|([>:] )/.test(line)) {
-      errors.push(`[${i + 1}행] '>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.`);
+    // >와 : 앞뒤 공백 금지 (단, 화살표 연산자 패턴 -[공백]*>[공백]* 는 예외)
+    {
+      // 화살표( - > / -> / - > / -> ) 패턴을 보호용 플레이스홀더로 치환
+      // 허용 형태: - >, ->, -    > (중간 다중 공백도 허용하려면 \s* 로)
+      const ARROW_PLACEHOLDER = "¤";
+      const lineAngleCheck = line.replace(/-\s*>/g, ARROW_PLACEHOLDER); // 하이픈 뒤 임의 공백 후 >
+      if (/( [>:])|([>:] )/.test(lineAngleCheck)) {
+        errors.push(`[${i + 1}행] '>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다 (단 '->' 패턴 예외).`);
+      }
     }
 
     // 4. + 기호는 반드시 앞뒤 공백 1칸씩 필요 (정확히 1칸 강제, 여러 칸/없음 모두 오류)
@@ -195,10 +201,12 @@ function checkReportFormatting(text) {
     }
 
     // 6. 혼동/유사 문자 검사 (소분류 기호 / 전각 기호 / 유사 dash / wave dash)
-    // 소분류 기호: 반드시 U+2024(․) 사용. ('.' U+002E, '·' U+00B7, '•' U+2022 는 오류)
+    // 소분류 기호: 반드시 '․'(여가부 전용 점, U+2024) 1글자만 허용
     if (/^ *[.\u00B7\u2022] /.test(line)) {
       const wrong = line.match(/^ *(.) /)[1];
-      errors.push(`[${i + 1}행] 소분류 기호는 '․'(여가부 전용 점)만 허용합니다. 유사제품인 '${wrong}' 문자 대신 '․'(여가부 전용 점) 사용.`);
+      errors.push(
+        `[${i + 1}행] 소분류 기호는 '․'(여가부 전용 점, U+2024) 1글자만 허용합니다. 유사품 '${wrong}' 대신 '․'(여가부 전용 점) 사용.` 
+      );
     }
     // 중분류 기호: en/em dash 등 금지 (허용: - U+002D)
     if (/^ *[‐–—]\s/.test(line)) { // U+2010 ‐, U+2013 –, U+2014 —
@@ -305,8 +313,21 @@ function highlightError(lineIndex, type) {
       break;
     }
     case "anglecolon": {
-      [...text.matchAll(/\s+[>:]|[>:]\s+/g)]
-        .forEach(m => addMark(m.index, m.index + m[0].length));
+      // 화살표 패턴 제외 후 공백이 붙은 > 또는 : 만 하이라이트
+      const ARROW_PLACEHOLDER = "¤";
+      // 원본 텍스트에서 치환하여 검사용 문자열 생성
+      const check = text.replace(/-\s*>/g, ARROW_PLACEHOLDER);
+      const regex = /\s+[>:]|[>:]\s+/g;
+      let m;
+      while ((m = regex.exec(check)) !== null) {
+        const frag = m[0];
+        // 실제 원본 인덱스
+        const start = m.index;
+        // 화살표 치환 영역은 건너뜀
+        if (frag.includes(ARROW_PLACEHOLDER)) continue;
+        // 매칭 구간 내 실제 기호 위치 계산 후 마킹
+        addMark(start, start + frag.length);
+      }
       break;
     }
     case "plus": {
