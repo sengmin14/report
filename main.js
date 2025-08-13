@@ -159,13 +159,26 @@ function checkReportFormatting(text) {
       errors.push(`[${i + 1}행] '>', ':' 기호의 앞뒤에 공백이 있으면 안 됩니다.`);
     }
 
-    // 4. + 기호는 반드시 앞뒤 공백 1칸씩 필요
-    if (/\S\+\S/.test(line) || /\+\+/.test(line)) {
-      errors.push(`[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`);
-    }
-    if (/\+/.test(line)) {
-      if (!/ (\+) /.test(line) && !/(^|\s)\+(\s|$)/.test(line)) {
-        errors.push(`[${i + 1}행] '+' 기호는 반드시 앞뒤로 공백이 1칸씩 있어야 합니다.`);
+    // 4. + 기호는 반드시 앞뒤 공백 1칸씩 필요 (정확히 1칸 강제, 여러 칸/없음 모두 오류)
+    if (line.includes('+')) {
+      const plusPositions = [...line.matchAll(/\+/g)];
+      for (const p of plusPositions) {
+        const pos = p.index;
+        const prev = line[pos - 1];
+        const next = line[pos + 1];
+        const prev2 = line[pos - 2];
+        const next2 = line[pos + 2];
+
+        const ok =
+          prev === ' ' &&
+          next === ' ' &&
+          prev2 !== ' ' && prev2 !== undefined &&
+          next2 !== ' ' && next2 !== undefined;
+
+        if (!ok) {
+          errors.push(`[${i + 1}행] '+' 기호는 앞뒤에 정확히 1칸 공백이어야 합니다 (예: A + B).`);
+          break; // 한 줄에 여러 개라도 한 번만 보고
+        }
       }
     }
 
@@ -213,6 +226,17 @@ function checkReportFormatting(text) {
         );
       }
     }
+    // 4-1. 하이픈(-) 공백 규칙 (목록 기호 예외)
+    // 라인 시작의 목록 기호 패턴(선행공백 + '-' + 공백)은 제거한 임시 문자열에서 검사
+    {
+      const strippedForHyphen = line.replace(/^[ \t]*-\s/, ""); // 중분류 기호 제거
+      // 허용: 단어-단어 / 숫자-숫자 / 식별자-식별자 (양옆 공백 없음)
+      // 오류: ' -' 또는 '- ' (양쪽 어느 한쪽이라도 공백)
+      const hyphenSpaceMatches = [...strippedForHyphen.matchAll(/ (?=-)|-(?= )/g)];
+      if (hyphenSpaceMatches.length > 0) {
+        errors.push(`[${i + 1}행] '-' 하이픈은 앞뒤에 공백 없이 붙여 써야 합니다 (예: A-B).`);
+      }
+    }
   }
   return errors;
 }
@@ -238,14 +262,14 @@ function debounce(func, wait) {
 //    - 최소한의 정규식 / 순서 기반 매칭
 function determineErrorType(msg) {
   if (/들여쓰기.*2칸 이상/.test(msg)) return "indent";
-  if (/괄호\/대괄호/.test(msg)) return "bracket";
-  if (/'?>'?,? ':'?/.test(msg) || />', ':'/.test(msg) || /기호의 앞뒤/.test(msg)) return "anglecolon";
+  if (/괄호/.test(msg) && /대괄호|괄호/.test(msg)) return "bracket";
+  if (/['>] 기호|기호의 앞뒤.*공백|':'/.test(msg)) return "anglecolon";
   if (/\+.*공백/.test(msg)) return "plus";
-  if (/','의/.test(msg) || /콤마/.test(msg)) return "comma";
-  if (/허용되지 않는 날짜|날짜.*금지/.test(msg)) return "date";
+  if (/콤마|','의/.test(msg)) return "comma";
+  if (/날짜.*금지|허용되지 않는 날짜/.test(msg)) return "date";
   if (/소분류가 모두 같은 상태/.test(msg)) return "low-dup-state";
-  if (/소분류 기호는/.test(msg) || /전각 .* 사용됨/.test(msg) || /wave|ASCII/.test(msg)) return "confusable";
-  if (/중분류 기호는/.test(msg)) return "confusable";
+  if (/소분류 기호는|전각|틸드|dash|유사/.test(msg)) return "confusable";
+  if (/하이픈은 앞뒤에 공백 없이/.test(msg)) return "hyphen";
   return "generic";
 }
 
@@ -336,6 +360,20 @@ function highlightError(lineIndex, type) {
       [...text.matchAll(/[～∼]/g)].forEach(m => addMark(m.index, m.index + 1));
       // 4) 전각 기호들
       [...text.matchAll(/[（）：＞＋，]/g)].forEach(m => addMark(m.index, m.index + 1));
+      break;
+    }
+    case "hyphen": {
+      // 목록 기호 제외, 공백이 붙은 하이픈만 표시
+      const work = text.replace(/^[ \t]*-\s/, "¤"); // 앞 목록 하이픈 무력화
+      [...work.matchAll(/ (?=-)|-(?= )/g)].forEach(m => {
+        // 실제 원본 인덱스 (목록 기호 치환 영향 없거나 동일)
+        const idx = m.index;
+        if (text[idx] === ' ') { // 공백 뒤 하이픈
+          addMark(idx + 1, idx + 2);
+        } else if (text[idx] === '-') { // 하이픈 뒤 공백
+          addMark(idx, idx + 1);
+        }
+      });
       break;
     }
     default: {
