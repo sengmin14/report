@@ -185,7 +185,7 @@ function checkReportFormatting(text) {
     // 소분류 기호: 반드시 U+2024(․) 사용. ('.' U+002E, '·' U+00B7, '•' U+2022 는 오류)
     if (/^ *[.\u00B7\u2022] /.test(line)) {
       const wrong = line.match(/^ *(.) /)[1];
-      errors.push(`[${i + 1}행] 소분류 기호는 '․'(U+2024)만 허용합니다. '${wrong}' 문자 대신 '․' 사용.`);
+      errors.push(`[${i + 1}행] 소분류 기호는 '․'(여가부 전용 점)만 허용합니다. 유사제품인 '${wrong}' 문자 대신 '․'(여가부 전용 점) 사용.`);
     }
     // 중분류 기호: en/em dash 등 금지 (허용: - U+002D)
     if (/^ *[‐–—]\s/.test(line)) { // U+2010 ‐, U+2013 –, U+2014 —
