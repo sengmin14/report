@@ -127,7 +127,7 @@ function checkReportFormatting(text) {
     // 1. 들여쓰기 검증 (2칸 이상 금지)
     if (!isBlank(line)) {
       if (/^\s{2,}/.test(line)) {
-        errors.push(`[${i + 1}행] 들여쓰기는 1칸 이상 금지(불필요한 앞공백).`);
+        errors.push(`[${i + 1}행] 들여쓰기는 2칸 이상 금지(불필요한 앞공백).`);
       }
     }
 
