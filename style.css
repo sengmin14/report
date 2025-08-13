@@ -99,6 +99,7 @@ button:focus {
   text-overflow: ellipsis; /* 말줄임표 (한 줄일 때만) */
   max-width: 100%; /* 최대 너비 제한 */
   box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  cursor: pointer; /* 추가된 부분 */
 }
 
 .error-msg:hover {

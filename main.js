@@ -180,6 +180,39 @@ function checkReportFormatting(text) {
     if (/,\s{2,}/.test(line)) {
       errors.push(`[${i + 1}행] ','의 뒤에는 공백이 1칸만 있어야 합니다.`);
     }
+
+    // 6. 혼동/유사 문자 검사 (소분류 기호 / 전각 기호 / 유사 dash / wave dash)
+    // 소분류 기호: 반드시 U+2024(․) 사용. ('.' U+002E, '·' U+00B7, '•' U+2022 는 오류)
+    if (/^ *[.\u00B7\u2022] /.test(line)) {
+      const wrong = line.match(/^ *(.) /)[1];
+      errors.push(`[${i + 1}행] 소분류 기호는 '․'(U+2024)만 허용합니다. '${wrong}' 문자 대신 '․' 사용.`);
+    }
+    // 중분류 기호: en/em dash 등 금지 (허용: - U+002D)
+    if (/^ *[‐–—]\s/.test(line)) { // U+2010 ‐, U+2013 –, U+2014 —
+      const wrong = line.match(/^ *([‐–—])\s/)[1];
+      errors.push(`[${i + 1}행] 중분류 기호는 '-'(ASCII)만 허용합니다. '${wrong}' → '-' 로 수정.`);
+    }
+    // 날짜 범위 등에서 wave dash / 풀각 틸드 사용 금지 (허용: '~' U+007E)
+    if (/[～∼]/.test(line)) { // U+FF5E, U+223C
+      errors.push(`[${i + 1}행] 날짜/범위 표기는 '~'(ASCII)만 허용합니다. '～' 또는 '∼' 발견.`);
+    }
+    // 전각 괄호 / 콜론 / 부등호 / 플러스 / 콤마 사용 금지
+    const fullWidthMap = [
+      { re: /[（）]/g, desc: "괄호", suggest: "()" },
+      { re: /[：]/g, desc: "콜론", suggest: ":" },
+      { re: /[＞]/g, desc: ">'", suggest: ">" },
+      { re: /[＋]/g, desc: "플러스", suggest: "+" },
+      { re: /[，]/g, desc: "콤마", suggest: "," }
+    ];
+    for (const item of fullWidthMap) {
+      const m = line.match(item.re);
+      if (m) {
+        const unique = [...new Set(m)];
+        errors.push(
+          `[${i + 1}행] 전각 ${item.desc} ${unique.map(c=>`'${c}'`).join(", ")} 사용됨. ASCII '${item.suggest}' 로 교체하세요.`
+        );
+      }
+    }
   }
   return errors;
 }
@@ -197,181 +230,146 @@ function debounce(func, wait) {
   };
 }
 
-// 오류 메시지 클릭 핸들러 함수 (수정됨)
-function attachErrorClickHandlers() {
-  document.querySelectorAll(".error-msg").forEach((el) => {
-    el.style.cursor = "pointer";
-    // 기존 이벤트 제거 후 새로 등록
-    el.onclick = null;
-    el.onclick = function () {
-      // 기존 마커 모두 제거
-      editor.getAllMarks().forEach(marker => marker.clear());
-      
-      const line = parseInt(this.getAttribute("data-line"), 10) - 1;
-      const lineContent = editor.getLine(line);
-      const msg = this.textContent;
+/* ------------------------------ Highlight Util ------------------------------ */
 
-      // 1. 들여쓰기 규칙
-      if (msg.includes("들여쓰기")) {
-        const match = lineContent.match(/^\s{2,}/);
-        if (match) {
-          editor.markText(
-            {line: line, ch: 0},
-            {line: line, ch: match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        }
-      }
-      
-      // 2. 특수문자 공백 규칙 (수정됨)
-      else if (msg.includes(">") || msg.includes(":")) {
-        const matches = [...lineContent.matchAll(/\s+[>:]|[>:]\s+/g)];
-        matches.forEach(match => {
-          editor.markText(
-            {line: line, ch: match.index},
-            {line: line, ch: match.index + match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        });
-      }
-      else if (msg.includes("+")) {
-        const matches = [...lineContent.matchAll(/\S\+\S|\+\+/g)];
-        matches.forEach(match => {
-          editor.markText(
-            {line: line, ch: match.index},
-            {line: line, ch: match.index + match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        });
-      }
-      else if (msg.includes(",")) {
-        const matches = [...lineContent.matchAll(/\s+,|,\s{2,}|,[^\s]/g)];
-        matches.forEach(match => {
-          editor.markText(
-            {line: line, ch: match.index},
-            {line: line, ch: match.index + match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        });
-      }
-      
-      // 3. 괄호 규칙
-      else if (msg.includes("괄호") || msg.includes("대괄호")) {
-        const matches = [...lineContent.matchAll(/\s+[\(\[\]\)]|[\(\[\]\)]\s+/g)];
-        matches.forEach(match => {
-          editor.markText(
-            {line: line, ch: match.index},
-            {line: line, ch: match.index + match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        });
-      }
-      
-      // 4. 날짜 표기 규칙
-      else if (msg.includes("날짜")) {
-        // "까지"가 포함된 날짜
-        const dateUntilMatches = [...lineContent.matchAll(/\([^)]*?까지[^)]*\)/g)];
-        dateUntilMatches.forEach(match => {
-          editor.markText(
-            {line: line, ch: match.index},
-            {line: line, ch: match.index + match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        });
+// === 하이라이트 로직 개선 패치 시작 ======================================
 
-        // 월/일이 0으로 시작하는 날짜
-        const zeroDateMatches = [...lineContent.matchAll(/\(~?\s*0\d{1}\s*\/\s*\d{1,2}\s*\)|\(~?\s*\d{1,2}\s*\/\s*0\d{1}\s*\)/g)];
-        zeroDateMatches.forEach(match => {
-          editor.markText(
-            {line: line, ch: match.index},
-            {line: line, ch: match.index + match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        });
-      }
-      
-      // 5. 분류 표기 규칙
-      else if (msg.includes("대분류")) {
-        const match = lineContent.match(/^[1-9]\d*\.\s{2,}/);
-        if (match) {
-          editor.markText(
-            {line: line, ch: 0},
-            {line: line, ch: match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        }
-      }
-      else if (msg.includes("대중분류")) {
-        const match = lineContent.match(/^\(\d+\)\s{2,}/);
-        if (match) {
-          editor.markText(
-            {line: line, ch: 0},
-            {line: line, ch: match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        }
-      }
-      else if (msg.includes("중분류")) {
-        const match = lineContent.match(/^-\s{2,}/);
-        if (match) {
-          editor.markText(
-            {line: line, ch: 0},
-            {line: line, ch: match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        }
-      }
-      else if (msg.includes("소분류")) {
-        const match = lineContent.match(/^․\s{2,}/);
-        if (match) {
-          editor.markText(
-            {line: line, ch: 0},
-            {line: line, ch: match[0].length},
-            {
-              className: "error-highlight",
-              css: "background-color: #ffd7d7; border-radius: 3px;"
-            }
-          );
-        }
-      }
-
-      // 항상 해당 라인으로 이동 및 포커스
-      editor.focus();
-      editor.setCursor({line, ch: 0});
-      editor.scrollIntoView({line, ch: 0}, 100);
-    };
-  });
+// 1) 오류 유형 식별 개선 (문구 변경에도 안정적)
+//    - 최소한의 정규식 / 순서 기반 매칭
+function determineErrorType(msg) {
+  if (/들여쓰기.*2칸 이상/.test(msg)) return "indent";
+  if (/괄호\/대괄호/.test(msg)) return "bracket";
+  if (/'?>'?,? ':'?/.test(msg) || />', ':'/.test(msg) || /기호의 앞뒤/.test(msg)) return "anglecolon";
+  if (/\+.*공백/.test(msg)) return "plus";
+  if (/','의/.test(msg) || /콤마/.test(msg)) return "comma";
+  if (/허용되지 않는 날짜|날짜.*금지/.test(msg)) return "date";
+  if (/소분류가 모두 같은 상태/.test(msg)) return "low-dup-state";
+  if (/소분류 기호는/.test(msg) || /전각 .* 사용됨/.test(msg) || /wave|ASCII/.test(msg)) return "confusable";
+  if (/중분류 기호는/.test(msg)) return "confusable";
+  return "generic";
 }
+
+// 2) 공통 마킹 유틸
+function highlightError(lineIndex, type) {
+  editor.getAllMarks().forEach(m => m.clear());
+  const text = editor.getLine(lineIndex);
+
+  const addMark = (start, end) => {
+    if (start < 0 || end <= start) return;
+    editor.markText(
+      { line: lineIndex, ch: start },
+      { line: lineIndex, ch: end },
+      { className: "error-highlight", css: "background:#ffd7d7; border-radius:3px;" }
+    );
+  };
+
+  switch (type) {
+    case "indent": {
+      const m = text.match(/^\s{2,}/);
+      if (m) addMark(0, m[0].length);
+      break;
+    }
+    case "bracket": {
+      // 괄호 주변 불필요 공백
+      [...text.matchAll(/\s+[\(\[\]\)]|[\(\[\]\)]\s+/g)]
+        .forEach(m => addMark(m.index, m.index + m[0].length));
+      break;
+    }
+    case "anglecolon": {
+      [...text.matchAll(/\s+[>:]|[>:]\s+/g)]
+        .forEach(m => addMark(m.index, m.index + m[0].length));
+      break;
+    }
+    case "plus": {
+      // lookbehind 미사용 버전: '+' 스캔 후 적합 패턴(앞뒤 정확히 한 칸) 아니면 마킹
+      for (let i = 0; i < text.length; i++) {
+        if (text[i] !== '+') continue;
+        const prev = text[i - 1];
+        const next = text[i + 1];
+        const prev2 = text[i - 2];
+        const next2 = text[i + 2];
+        const ok =
+          prev === ' ' &&
+          next === ' ' &&
+          prev2 !== ' ' && // 앞쪽 한 칸만
+          next2 !== ' ';   // 뒤쪽 한 칸만
+        if (!ok) addMark(i, i + 1);
+      }
+      break;
+    }
+    case "comma": {
+      // 앞 공백 / 뒤 없음 / 뒤 2칸 이상
+      [...text.matchAll(/\s+,|,[^\s]|,\s{2,}/g)]
+        .forEach(m => addMark(m.index, m.index + m[0].length));
+      break;
+    }
+    case "date": {
+      [...text.matchAll(/\([^)]*?까지[^)]*\)/g)]
+        .forEach(m => addMark(m.index, m.index + m[0].length));
+      [...text.matchAll(/\(~?\s*0\d\s*\/\s*\d{1,2}\s*\)|\(~?\s*\d{1,2}\s*\/\s*0\d\s*\)/g)]
+        .forEach(m => addMark(m.index, m.index + m[0].length));
+      break;
+    }
+    case "low-dup-state": {
+      // 마지막 상태 토큰만
+      const m = text.match(/\((완료|진행중|보류|취소|~?\d{1,2}\/\d{1,2})\)\s*$/);
+      if (m) {
+        const start = text.lastIndexOf(m[0]);
+        addMark(start, start + m[0].length);
+      }
+      break;
+    }
+    case "confusable": {
+      // 1) 잘못된 소분류 기호 (행 시작 한정)
+      const wrongBullet = text.match(/^( *?)([.\u00B7\u2022]) (?=\S)/);
+      if (wrongBullet) {
+        const start = wrongBullet[1].length;
+        addMark(start, start + 1);
+      }
+      // 2) 잘못된 중분류 dash
+      const wrongDash = text.match(/^( *?)([‐–—])\s/);
+      if (wrongDash) {
+        const start = wrongDash[1].length;
+        addMark(start, start + wrongDash[2].length);
+      }
+      // 3) 틸드 변종
+      [...text.matchAll(/[～∼]/g)].forEach(m => addMark(m.index, m.index + 1));
+      // 4) 전각 기호들
+      [...text.matchAll(/[（）：＞＋，]/g)].forEach(m => addMark(m.index, m.index + 1));
+      break;
+    }
+    default: {
+      // 안전 기본: 처음 120자 정도만 (성능 보호)
+      addMark(0, Math.min(text.length, 120));
+    }
+  }
+
+  editor.focus();
+  editor.setCursor({ line: lineIndex, ch: 0 });
+  editor.scrollIntoView({ line: lineIndex, ch: 0 }, 100);
+}
+
+// 3) 이벤트 위임 (이미 존재할 경우 중복 등록되지 않도록 1회만)
+// 이전 attachErrorClickHandlers 기반 개별 바인딩 제거 권장
+(function initErrorClickDelegation() {
+  const resultDiv = document.getElementById("result");
+  if (!resultDiv || resultDiv.__errorDelegated) return;
+  resultDiv.__errorDelegated = true;
+  resultDiv.addEventListener("click", (e) => {
+    const li = e.target.closest(".error-msg");
+    if (!li) return;
+    const line = parseInt(li.dataset.line, 10) - 1;
+    const type = li.dataset.type || "generic";
+    if (Number.isInteger(line) && line >= 0) {
+      highlightError(line, type);
+    }
+  });
+})();
+
+// 4) 미사용(구식) 함수 제거 권장: attachErrorClickHandlers
+// 기존 attachErrorClickHandlers 정의가 아래에 남아있다면 완전히 삭제하세요.
+
+// === 하이라이트 로직 개선 패치 끝 =========================================
 
 // 실시간 검증 함수
 function performRealTimeValidation() {
@@ -409,24 +407,19 @@ function performRealTimeValidation() {
     resultDiv.innerHTML =
       `<div class="fail">❌ ${errors.length}건의 오류가 발견되었습니다.` +
       (hiddenCount > 0 ? ` (${maxDisplayErrors}개만 표시, ${hiddenCount}개 숨김)` : '') +
-      `<br><ul style="list-style-type: none; padding-left: 0;">` +
-      displayErrors
-        .map((msg) => {
-          const match = msg.match(/^\[(\d+)행\]/);
-          const lineNum = match ? parseInt(match[1], 10) : 1;
-          return `<li class="error-msg" data-line="${lineNum}">
-          <span style="color: #ff5353; margin-right: 4px;">▶</span>
-          ${msg}
+      `<br><ul class="error-list" style="list-style:none; padding-left:0; margin:10px 0 0;">` +
+      displayErrors.map((msg) => {
+        const match = msg.match(/^\[(\d+)행\]/);
+        const lineNum = match ? parseInt(match[1], 10) : 1;
+        const type = determineErrorType(msg);
+        return `<li class="error-msg" data-line="${lineNum}" data-type="${type}">
+          <span style="color:#ff5353; margin-right:4px;">▶</span>${msg}
         </li>`;
-        })
-        .join("") +
+      }).join("") +
       "</ul></div>";
 
-    // 오류 메시지 클릭 이벤트 핸들러 재등록
-    attachErrorClickHandlers();
-    
-    // 스크롤을 맨 위로 이동
-    resultDiv.scrollTop = 0;
+    // (삭제) 항상 맨 위로 스크롤 초기화하던 코드 제거
+    // resultDiv.scrollTop = 0;
   }
 }
 
