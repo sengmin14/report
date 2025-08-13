@@ -153,6 +153,12 @@ button:focus {
   max-width: 700px;
   border-radius: 15px;
   animation: slideDown 0.3s ease-out;
+  /* 세로 스크롤 추가 */
+  max-height: 82vh;          /* 화면 높이 대비 여유 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch; /* 모바일 부드러운 스크롤 */
 }
 @keyframes slideDown {
   from {
@@ -246,4 +252,19 @@ button:focus {
   border-left: 6px solid #ff5353;
   font-weight: 700;
   padding-left: 7px;
+}
+/* (선택) 스크롤바 스타일 (지원 브라우저에서만) */
+.modal-content::-webkit-scrollbar {
+  width: 10px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: #f3f5f9;
+  border-radius: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: #c9d2e2;
+  border-radius: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #b2bccd;
 }
