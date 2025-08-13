@@ -1,270 +1,679 @@
+/* ===================== 디자인 리팩터링 (세련/일관/접근성) ===================== */
+/* 1. 컬러·스타일 토큰 */
+:root {
+  --c-bg-page: #f4f6fb;
+  --c-bg-panel: #ffffff;
+  --c-bg-panel-alt: #f9fbff;
+  --c-border: #d9dfec;
+  --c-border-strong: #b9c4db;
+  --c-primary: #3553ff;
+  --c-primary-accent: #1b95e6;
+  --c-primary-soft: #e2e9ff;
+  --c-danger: #ff4b55;
+  --c-danger-bg: #fff4f4;
+  --c-success: #21a365;
+  --c-success-bg: #e9fff4;
+  --c-text: #2a2f3a;
+  --c-text-soft: #5b657a;
+  --c-focus: #ffbf2f;
+  --c-highlight: #ffe1d9;
+  --radius-xs: 4px;
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 22px;
+  --shadow-s: 0 1px 3px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.03);
+  --shadow-m: 0 4px 16px -2px rgba(0,40,120,.15), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-focus: 0 0 0 3px var(--c-primary-soft);
+  --gradient-btn: linear-gradient(90deg,var(--c-primary) 70%,var(--c-primary-accent) 100%);
+  --transition: .18s cubic-bezier(.4,.14,.3,1);
+  --font-stack: "Segoe UI","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 2. 다크 테마 (선택) */
+.theme-dark {
+  --c-bg-page: #151922;
+  --c-bg-panel: #1f2530;
+  --c-bg-panel-alt: #272f3c;
+  --c-border: #384253;
+  --c-border-strong: #4b576b;
+  --c-primary: #5a7dff;
+  --c-primary-accent: #37b2ff;
+  --c-primary-soft: #233555;
+  --c-text: #e7edf6;
+  --c-text-soft: #a4b1c6;
+  --c-danger-bg: #3a2224;
+  --c-success-bg: #1e3a2c;
+  --c-highlight: #553a32;
+  --shadow-s: 0 1px 3px rgba(0,0,0,.6);
+  --shadow-m: 0 6px 24px -4px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.5);
+  background: var(--c-bg-page);
+  color: var(--c-text);
+}
+
+/* 3. 페이지 기본 */
 body {
-  background: linear-gradient(120deg, #e8edff 0%, #f7f7fa 100%);
-  font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background: var(--c-bg-page);
+  font-family: var(--font-stack);
   margin: 0;
-  min-height: 100vh;
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
 }
+
 .container {
-  max-width: 850px;
-  margin: 48px auto;
-  background: #fff;
-  border-radius: 22px;
-  box-shadow: 0 6px 32px #5165ff20, 0 2px 8px #0001;
-  padding: 36px 30px 30px 30px;
-  transition: box-shadow 0.2s;
-  border: 1.5px solid #e6e8f0;
+  max-width: 900px;
+  margin: 52px auto;
+  background: var(--c-bg-panel);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-m);
+  padding: 40px 38px 36px;
+  border: 1px solid var(--c-border);
   position: relative;
+  transition: box-shadow var(--transition), background var(--transition), border-color var(--transition);
 }
+
+.container:hover {
+  box-shadow: 0 8px 34px -8px rgba(40,70,170,.22), 0 4px 14px rgba(0,0,0,.08);
+}
+
 h2 {
-  text-align: left;
+  margin: 0 0 30px;
+  font-size: 1.5rem;
   font-weight: 700;
-  font-size: 1.4rem;
-  margin-bottom: 26px;
-  color: #3049ff;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
+  color: var(--c-primary);
 }
+
+/* 4. CodeMirror */
 .CodeMirror {
-  border-radius: 13px;
-  border: 1.5px solid #b5c6fa;
-  box-shadow: 0 2px 8px #3049ff0d;
-  background: #fafdff;
-  font-size: 1.07rem;
-  line-height: 1.75;
-  min-height: 220px;
-  width: 100%;
-  margin-bottom: 22px;
-  transition: border 0.16s;
+  border: 1.5px solid var(--c-border-strong);
+  background: var(--c-bg-panel-alt);
+  border-radius: var(--radius-m);
+  font-size: 1.04rem;
+  line-height: 1.7;
+  min-height: 240px;
+  transition: border-color var(--transition), background var(--transition);
 }
+
 .CodeMirror-focused {
-  border: 1.8px solid #3654ff;
-  background: #f4f8ff;
-  outline: none;
+  border-color: var(--c-primary);
+  background: #f5f8ff;
+  box-shadow: var(--shadow-focus);
 }
+
+/* === Dark Theme Readability Upgrade ======================================= */
+.theme-dark .CodeMirror {
+  background: #1f2530;
+  color: #e6edf5;
+  border-color: #425069;
+}
+.theme-dark .CodeMirror-lines {
+  padding: 8px 0 12px;
+}
+.theme-dark .CodeMirror pre {
+  font-variant-ligatures: none;
+}
+.theme-dark .CodeMirror-gutters {
+  background: #1b2029;
+  border-right: 1px solid #3a4556;
+  color: #7f8ba1;
+}
+.theme-dark .CodeMirror-linenumber {
+  color: #65738a;
+}
+.theme-dark .CodeMirror-cursor {
+  border-left: 2px solid #ffc347;
+}
+.theme-dark .CodeMirror-selected {
+  background: rgba(80,130,255,.28) !important;
+}
+.theme-dark .CodeMirror-focused .CodeMirror-selected {
+  background: rgba(90,150,255,.36) !important;
+}
+.theme-dark .CodeMirror ::selection {
+  background: rgba(90,150,255,.36);
+}
+.theme-dark .CodeMirror-line::selection,
+.theme-dark .CodeMirror-line > span::selection,
+.theme-dark .CodeMirror-line > span > span::selection {
+  background: rgba(90,150,255,.36);
+}
+
+/* Token-ish generic (since markdown mode is light) */
+.theme-dark .cm-header        { color:#89b4ff; }
+.theme-dark .cm-strong        { color:#ffc86b; }
+.theme-dark .cm-em            { color:#ffae9b; }
+.theme-dark .cm-link          { color:#6dcfff; text-decoration:underline; }
+.theme-dark .cm-string        { color:#9be480; }
+.theme-dark .cm-quote         { color:#7bc2ff; opacity:.95; }
+.theme-dark .cm-comment       { color:#6d7e92; font-style:italic; }
+.theme-dark .cm-url           { color:#54c1ff; }
+.theme-dark .cm-number        { color:#ffc76d; }
+.theme-dark .cm-keyword       { color:#caa6ff; }
+.theme-dark .cm-hr            { color:#6d7e92; }
+
+/* Scrollbar */
+.theme-dark .CodeMirror-scrollbar-filler,
+.theme-dark .CodeMirror-gutter-filler { background:#1f2530; }
+.theme-dark .CodeMirror ::-webkit-scrollbar {
+  width:10px;
+}
+.theme-dark .CodeMirror ::-webkit-scrollbar-thumb {
+  background:#394557;
+  border-radius:6px;
+}
+.theme-dark .CodeMirror ::-webkit-scrollbar-thumb:hover {
+  background:#46546a;
+}
+
+/* Error highlight contrast */
+.theme-dark .error-highlight {
+  background:#52312a !important;
+  box-shadow:0 0 0 1px rgba(255,140,92,.55);
+}
+
+/* Pass / Fail contrast adjust */
+.theme-dark .fail {
+  color:#ff8f95;
+  border-color:#ff626c;
+}
+.theme-dark .pass {
+  color:#3ae0a0;
+  border-color:#30c68c;
+}
+
+/* Placeholder (when present) */
+.theme-dark .cm-placeholder {
+  color:#5c6879;
+  font-style:italic;
+}
+
+/* Subtle focus ring harmonize */
+.theme-dark .CodeMirror-focused {
+  background:#242d3a;
+  box-shadow:0 0 0 2px rgba(90,130,255,.25);
+}
+
+/* Button contrast in dark */
+.theme-dark button {
+  background:linear-gradient(90deg,#4d6dff 70%,#43b5ff 100%);
+}
+.theme-dark .help-btn {
+  background:#273345 !important;
+  color:#b8c6dc !important;
+  border-color:#4b5d77 !important;
+}
+.theme-dark .help-btn:hover {
+  background:#314057 !important;
+}
+
+/* Modal content readability */
+.theme-dark .modal-content {
+  background:#242c37;
+  border-color:#3d4b5e;
+}
+.theme-dark .rule-list {
+  color:#b0bccb;
+}
+.theme-dark .rule-list h4 {
+  color:#85aaff;
+}
+
+/* Result panel */
+.theme-dark .result {
+  background:#242d39;
+  border-color:#3d4a5c;
+  color:#d8e2ef;
+}
+.theme-dark .error-msg:hover {
+  background:#2d3846;
+  border-color:#514040;
+}
+/* ========================================================================== */
+
+/* 5. 버튼 */
+button, .help-btn {
+  font-family: inherit;
+  position: relative;
+  isolation: isolate;
+}
+
 button {
   width: 100%;
-  margin: 10px 0 0 0;
-  font-size: 1.18rem;
+  margin-top: 12px;
+  font-size: 1.07rem;
   font-weight: 600;
-  background: linear-gradient(90deg, #3654ff 75%, #1c97e7 100%);
+  background: var(--gradient-btn);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 12px 0;
+  border-radius: var(--radius-m);
+  padding: 14px 0;
   cursor: pointer;
-  box-shadow: 0 2px 12px #3654ff24;
-  transition: background 0.14s, box-shadow 0.17s, transform 0.14s;
-  letter-spacing: 0.2px;
+  box-shadow: 0 4px 18px -4px rgba(54,84,255,.45), 0 2px 8px rgba(0,0,0,.12);
+  transition: var(--transition);
+  letter-spacing: .3px;
 }
+
 button:hover,
-button:focus {
-  background: linear-gradient(90deg, #1c97e7 70%, #3654ff 100%);
-  box-shadow: 0 3px 20px #1c97e74c;
-  transform: translateY(-1px) scale(1.01);
+button:focus-visible {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px -6px rgba(54,84,255,.55), 0 4px 14px rgba(0,0,0,.18);
 }
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* 6. 도움/히스토리 버튼 그룹 */
+.button-group.help-group {
+  position: absolute;
+  top: 30px;
+  right: 32px;
+  display: flex;
+  gap: 10px;
+}
+
+.help-btn {
+  padding: 8px 16px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--c-primary) !important;
+  background: #fff !important;
+  border: 1.5px solid var(--c-primary) !important;
+  border-radius: 999px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-s);
+}
+
+.help-btn::before {
+  content: "?";
+  width: 18px; height: 18px;
+  background: var(--c-primary);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+.help-btn:hover,
+.help-btn:focus-visible {
+  background: var(--c-primary-soft) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px -4px rgba(54,84,255,.35);
+  outline: none;
+}
+
+.help-btn:active {
+  transform: translateY(0);
+}
+
+/* 7. 결과 패널 */
 .result {
-  margin-top: 20px;
-  min-height: 46px;
-  max-height: 300px;
+  margin-top: 26px;
+  min-height: 54px;
+  max-height: 320px;
   overflow-y: auto;
-  overflow-x: hidden; /* 가로 스크롤 완전 차단 */
-  animation: fadein 0.7s;
-  padding: 22px 18px 15px 18px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px #3049ff10;
-  font-size: 1.07rem;
+  background: var(--c-bg-panel-alt);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-m);
+  padding: 20px 22px 18px;
+  font-size: 1rem;
+  line-height: 1.55;
   display: none;
-  box-sizing: border-box; /* 패딩 포함하여 크기 계산 */
+  box-shadow: var(--shadow-s);
+  transition: background var(--transition), border-color var(--transition);
 }
 
-/* 오류 목록 스크롤 제거 (부모에서 처리) */
-.result ul {
-  margin: 10px 0 0 0;
-  padding-left: 0;
-  /* max-height: 220px; 제거 */
-  /* overflow-y: auto; 제거 */
-  width: 100%; /* 명시적 너비 설정 */
+.result::-webkit-scrollbar {
+  width: 10px;
+}
+.result::-webkit-scrollbar-thumb {
+  background: #c7d2e3;
+  border-radius: 5px;
+}
+.result::-webkit-scrollbar-thumb:hover {
+  background: #b2becf;
 }
 
-/* 오류 메시지 가로 넘침 완전 방지 */
 .error-msg {
-  padding: 8px 12px;
-  margin: 4px 0;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: normal;
-  line-height: 1.4;
-  overflow: hidden; /* 넘치는 내용 숨김 */
-  text-overflow: ellipsis; /* 말줄임표 (한 줄일 때만) */
-  max-width: 100%; /* 최대 너비 제한 */
-  box-sizing: border-box; /* 패딩 포함 크기 계산 */
-  cursor: pointer; /* 추가된 부분 */
+  padding: 8px 12px 8px 10px;
+  margin: 2px 0 4px;
+  border-radius: var(--radius-s);
+  transition: var(--transition);
+  position: relative;
+  line-height: 1.45;
+  background: transparent;
+  border: 1px solid transparent;
 }
 
 .error-msg:hover {
-  background-color: #fff0f0;
-  transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(255, 83, 83, 0.15);
-  overflow: visible; /* 호버 시에는 전체 텍스트 표시 */
+  background: #fff;
+  border-color: #f0d5d5;
+  box-shadow: 0 2px 10px -2px rgba(255,83,83,.2);
+  transform: translateX(6px);
 }
 
-/* 모든 내부 요소 너비 제한 */
-.result * {
-  max-width: 100%;
-  box-sizing: border-box;
+.error-msg:active {
+  transform: translateX(3px);
 }
-@media (max-width: 1000px) {
-  .container {
-    max-width: 98vw;
-    padding: 18px 3vw 30px 3vw;
-  }
+
+.error-msg:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,83,83,.35);
+  background: #fff;
 }
-@keyframes fadein {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  80% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+/* 8. 상태 박스 */
+.pass, .fail {
+  border-left: 6px solid;
+  padding: 10px 12px 12px;
+  font-weight: 600;
+  border-radius: var(--radius-s);
+  margin-bottom: 6px;
 }
-/* 모달 스타일 */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-.modal-content {
-  position: relative;
-  background: white;
-  margin: 50px auto;
-  padding: 25px;
-  width: 80%;
-  max-width: 700px;
-  border-radius: 15px;
-  animation: slideDown 0.3s ease-out;
-  /* 세로 스크롤 추가 */
-  max-height: 82vh;          /* 화면 높이 대비 여유 */
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch; /* 모바일 부드러운 스크롤 */
-}
-@keyframes slideDown {
-  from {
-    transform: translateY(-100px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-.close {
-  position: absolute;
-  right: 25px;
-  top: 20px;
-  font-size: 28px;
-  cursor: pointer;
-  color: #666;
-}
-.rule-list {
-  margin-top: 20px;
-}
-.rule-list h4 {
-  color: #3654ff;
-  margin: 20px 0 10px 0;
-}
-.rule-list ul {
-  margin: 10px 0;
-  padding-left: 20px;
-}
-.rule-list li {
-  margin: 8px 0;
-  color: #444;
-}
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.button-group.help-group {
-  position: absolute;
-  top: 38px;
-  right: 30px;
-}
-.help-btn {
-  padding: 8px 16px;
-  font-size: 0.95rem;
-  color: #3654ff !important;
-  background: #fff !important;
-  border: 1.5px solid #3654ff !important;
-  border-radius: 20px !important;
-  width: auto !important;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
-}
-.help-btn:hover {
-  background: #f4f8ff !important;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 12px rgba(54, 84, 255, 0.15) !important;
-}
-.help-btn::before {
-  content: "?";
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  background: #3654ff;
-  color: white;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-.error-highlight {
-  background-color: #ffd7d7 !important;
-  border-radius: 3px !important;
-}
+
 .pass {
-  color: #218938;
-  background: #eaffed;
-  border-left: 6px solid #36d173;
-  font-weight: 700;
-  padding-left: 7px;
+  color: var(--c-success);
+  background: var(--c-success-bg);
+  border-color: var(--c-success);
 }
 
 .fail {
-  color: #e02e2e;
-  background: #fff3f3; /* 이 부분이 누락되었을 수 있음 */
-  border-left: 6px solid #ff5353;
-  font-weight: 700;
-  padding-left: 7px;
+  color: var(--c-danger);
+  background: var(--c-danger-bg);
+  border-color: var(--c-danger);
 }
-/* (선택) 스크롤바 스타일 (지원 브라우저에서만) */
+
+/* 9. 하이라이트 */
+.error-highlight {
+  background: var(--c-highlight) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 0 1px rgba(255,140,92,.4);
+}
+
+/* 10. 모달 */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(22,30,46,.55);
+  backdrop-filter: blur(4px) saturate(1.2);
+  z-index: 1000;
+  padding: 40px 18px 60px;
+  overflow-y: auto;
+}
+
+.modal-content {
+  position: relative;
+  background: var(--c-bg-panel);
+  margin: 0 auto 40px;
+  padding: 30px 34px 40px;
+  width: min(820px, 100%);
+  border-radius: 28px;
+  border: 1px solid var(--c-border-strong);
+  box-shadow: 0 20px 50px -20px rgba(40,60,140,.35), 0 8px 24px rgba(0,0,0,.15);
+  animation: modalIn .42s cubic-bezier(.32,.72,.24,1);
+  max-height: 82vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@keyframes modalIn {
+  0% { opacity: 0; transform: translateY(24px) scale(.97); }
+  60% { opacity: 1; }
+  100% { transform: translateY(0) scale(1); }
+}
+
 .modal-content::-webkit-scrollbar {
-  width: 10px;
+  width: 11px;
 }
 .modal-content::-webkit-scrollbar-track {
-  background: #f3f5f9;
-  border-radius: 6px;
+  background: transparent;
 }
 .modal-content::-webkit-scrollbar-thumb {
-  background: #c9d2e2;
+  background: #c5cfdd;
   border-radius: 6px;
 }
 .modal-content::-webkit-scrollbar-thumb:hover {
-  background: #b2bccd;
+  background: #b1bccd;
 }
+
+.close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 10px;
+  line-height: 1;
+  color: var(--c-text-soft);
+  transition: var(--transition);
+}
+
+.close:hover,
+.close:focus-visible {
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  outline: none;
+}
+
+/* 11. 규칙 리스트 */
+.rule-list {
+  margin-top: 10px;
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--c-text-soft);
+}
+
+.rule-list h4 {
+  color: var(--c-primary);
+  margin: 30px 0 10px;
+  font-size: 1.05rem;
+  letter-spacing: -.5px;
+}
+
+.rule-list ul {
+  margin: 12px 0 4px;
+  padding-left: 20px;
+}
+
+.rule-list li {
+  margin: 6px 0;
+}
+
+/* 12. 포커스 접근성 */
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* 13. 반응형 */
+@media (max-width: 840px) {
+  .container {
+    margin: 30px 14px 70px;
+    padding: 34px 24px 30px;
+  }
+  .button-group.help-group {
+    top: 20px;
+    right: 20px;
+  }
+  .modal-content {
+    padding: 26px 26px 34px;
+  }
+}
+
+/* 14. 다크 모드에서 특수 요소 대비 조정 */
+.theme-dark .CodeMirror-focused {
+  background: #273245;
+}
+.theme-dark .error-highlight {
+  box-shadow: 0 0 0 1px rgba(255,150,110,.55);
+}
+.theme-dark .fail { background: #3a2628; }
+.theme-dark .pass { background: #233a30; }
+
+/* 15. Micro UI 디테일 */
+.error-msg span:first-child {
+  font-size: .75rem;
+  opacity: .9;
+  transform: translateY(-1px);
+}
+
+/* 카테고리 라인 가독성 (라이트/다크 공통 기본) */
+.CodeMirror .cat-top    { font-weight:700; }
+.CodeMirror .cat-midtop { font-weight:600; }
+.CodeMirror .cat-mid    { font-weight:600; }
+.CodeMirror .cat-low    { font-weight:500; }
+
+/* 다크 테마 전용 색 / 배경 강조 */
+.theme-dark .CodeMirror .cat-top {
+  background: linear-gradient(90deg,#27324a 0%,rgba(39,50,74,0) 85%);
+  color:#9fc6ff;
+  border-left:4px solid #5a8dff;
+  padding-left:6px;
+}
+.theme-dark .CodeMirror .cat-midtop {
+  background: linear-gradient(90deg,#262f43 0%,rgba(38,47,67,0) 85%);
+  color:#b4d3ff;
+  border-left:3px solid #4877e6;
+  padding-left:6px;
+}
+.theme-dark .CodeMirror .cat-mid {
+  background: linear-gradient(90deg,#253442 0%,rgba(37,52,66,0) 85%);
+  color:#d3e6ff;
+  border-left:3px solid #3c96d9;
+  padding-left:6px;
+}
+.theme-dark .CodeMirror .cat-low {
+  background: linear-gradient(90deg,#2a3844 0%,rgba(42,56,68,0) 80%);
+  color:#cfe3f4;
+  border-left:2px solid #4bb5ff;
+  padding-left:6px;
+}
+
+/* 라이트 모드도 은은하게 */
+.CodeMirror .cat-top {
+  background: linear-gradient(90deg,#eef4ff 0%,rgba(238,244,255,0) 85%);
+  border-left:4px solid #3553ff;
+  padding-left:6px;
+  color:#1f3b86;
+}
+.CodeMirror .cat-midtop {
+  background: linear-gradient(90deg,#f2f6ff 0%,rgba(242,246,255,0) 85%);
+  border-left:3px solid #4c6dff;
+  padding-left:6px;
+  color:#2c4d9d;
+}
+.CodeMirror .cat-mid {
+  background: linear-gradient(90deg,#f5f9ff 0%,rgba(245,249,255,0) 85%);
+  border-left:3px solid #2492d9;
+  padding-left:6px;
+  color:#21506d;
+}
+.CodeMirror .cat-low {
+  background: linear-gradient(90deg,#f7fbff 0%,rgba(247,251,255,0) 80%);
+  border-left:2px solid #3aa9ef;
+  padding-left:6px;
+  color:#2a586c;
+}
+
+/* 줄 간 경계 보정 (하단 여백 소폭) */
+.CodeMirror .cat-top,
+.CodeMirror .cat-midtop,
+.CodeMirror .cat-mid,
+.CodeMirror .cat-low {
+  box-shadow: 0 1px 0 rgba(255,255,255,.04), 0 -1px 0 rgba(0,0,0,.04);
+  transition: background .25s ease, color .25s ease;
+}
+
+.theme-dark .CodeMirror .cat-top:hover,
+.theme-dark .CodeMirror .cat-midtop:hover,
+.theme-dark .CodeMirror .cat-mid:hover,
+.theme-dark .CodeMirror .cat-low:hover {
+  background: rgba(110,155,255,.12);
+}
+
+.CodeMirror .cat-top:hover,
+.CodeMirror .cat-midtop:hover,
+.CodeMirror .cat-mid:hover,
+.CodeMirror .cat-low:hover {
+  background: rgba(70,110,255,.10);
+}
+
+/* === Text color unify (Plain mode) =========================================
+   요구: 일반 모드 -> 검정(#000), 다크 모드 -> 흰색(#fff)
+   토큰별 색상(cm-* 클래스) 및 카테고리 색상(cat-*)을 모두 무시하고 단색으로 통일.
+   필요 시 이 블록을 삭제/주석 처리하면 기존 컬러 복구.
+--------------------------------------------------------------------------- */
+.CodeMirror,
+.CodeMirror pre,
+.CodeMirror-line,
+.CodeMirror-line span,
+.CodeMirror span,
+.CodeMirror .cm-header,
+.CodeMirror .cm-strong,
+.CodeMirror .cm-em,
+.CodeMirror .cm-link,
+.CodeMirror .cm-string,
+.CodeMirror .cm-quote,
+.CodeMirror .cm-comment,
+.CodeMirror .cm-url,
+.CodeMirror .cm-number,
+.CodeMirror .cm-keyword,
+.CodeMirror .cm-hr,
+.CodeMirror .cat-top,
+.CodeMirror .cat-midtop,
+.CodeMirror .cat-mid,
+.CodeMirror .cat-low {
+  color:#000 !important;
+}
+
+.theme-dark .CodeMirror,
+.theme-dark .CodeMirror pre,
+.theme-dark .CodeMirror-line,
+.theme-dark .CodeMirror-line span,
+.theme-dark .CodeMirror span,
+.theme-dark .CodeMirror .cm-header,
+.theme-dark .CodeMirror .cm-strong,
+.theme-dark .CodeMirror .cm-em,
+.theme-dark .CodeMirror .cm-link,
+.theme-dark .CodeMirror .cm-string,
+.theme-dark .CodeMirror .cm-quote,
+.theme-dark .CodeMirror .cm-comment,
+.theme-dark .CodeMirror .cm-url,
+.theme-dark .CodeMirror .cm-number,
+.theme-dark .CodeMirror .cm-keyword,
+.theme-dark .CodeMirror .cm-hr,
+.theme-dark .CodeMirror .cat-top,
+.theme-dark .CodeMirror .cat-midtop,
+.theme-dark .CodeMirror .cat-mid,
+.theme-dark .CodeMirror .cat-low {
+  color:#fff !important;
+}
+
+/* (선택) 하이라이트된 오류 텍스트도 대비 확보 */
+.theme-dark .error-highlight { color:#fff !important; }
+.error-highlight { color:#000 !important; }
+
+/* END */

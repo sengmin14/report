@@ -561,3 +561,50 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
+
+document.getElementById('themeToggle')?.addEventListener('click', () => {
+  document.documentElement.classList.toggle('theme-dark');
+  localStorage.setItem('pref-theme',
+    document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light');
+});
+
+(function initTheme(){
+  const saved = localStorage.getItem('pref-theme');
+  if (saved === 'dark') document.documentElement.classList.add('theme-dark');
+})();
+
+// === 카테고리 가독성 (다크모드) 라인 클래스 적용 =============================
+const CATEGORY_CLASSES = ["cat-top","cat-midtop","cat-mid","cat-low"];
+function classifyLine(line) {
+  if (/^\d+\.\s/.test(line)) return "cat-top";         // 대분류: 1. 2. 3.
+  if (/^\(\d+\)\s/.test(line)) return "cat-midtop";    // 대중분류: (1) (2)
+  if (/^-\s/.test(line)) return "cat-mid";             // 중분류: - 내용
+  if (/^\u2024\s/.test(line)) return "cat-low";        // 소분류: ․ 내용 (U+2024)
+  return null;
+}
+
+function applyCategoryLineClasses() {
+  if (!window.editor) return;
+  // 기존 라인 클래스 제거
+  editor.eachLine(l => {
+    CATEGORY_CLASSES.forEach(c => editor.removeLineClass(l, "wrap", c));
+  });
+  // 새로 적용
+  const lineCount = editor.lineCount();
+  for (let i = 0; i < lineCount; i++) {
+    const line = editor.getLine(i);
+    const cls = classifyLine(line);
+    if (cls) editor.addLineClass(i, "wrap", cls);
+  }
+}
+
+// 기존 실시간 검증 함수 끝부분( resultDiv 업데이트 직후 )에서 호출
+// performRealTimeValidation 끝(return 전) 혹은 debouncedValidation 직후 호출
+applyCategoryLineClasses();
+
+// 초기 로드/테마 전환 시에도 재적용 (테마 토글 후 색상 반영)
+document.getElementById('themeToggle')?.addEventListener('click', () => {
+  setTimeout(applyCategoryLineClasses, 0);
+});
+
+// 에디터 내용 변경 후 (이미 디바운스 검증 호출됨) — 검증 끝에서 호출하므로 별도 필요 없음
