@@ -34,21 +34,14 @@
                "Consolas", "Menlo", ui-monospace, monospace;
   --font-size-base: 15px;
   --line-ui: 1.6;
+
+  /* 0) 스크롤바 토큰 추가 */
+  --sb-size: 12px;
+  --sb-radius: 8px;
+  --sb-track: #eaf0fa;
+  --sb-thumb: #c3cfe4;
+  --sb-thumb-hover: #aebad1;
 }
-
-/* 모바일 브라우저 자동 확대 방지 */
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: .001ms !important;
-    animation-iteration-count: 1 !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* 2. 다크 테마 (선택) */
 .theme-dark {
   --c-bg-page: #151922;
   --c-bg-panel: #1f2530;
@@ -65,9 +58,27 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   --c-highlight: #553a32;
   --shadow-s: 0 1px 3px rgba(0,0,0,.6);
   --shadow-m: 0 6px 24px -4px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.5);
+  --sb-track: #1e2531;
+  --sb-thumb: #45536a;
+  --sb-thumb-hover: #556680;
   background: var(--c-bg-page);
   color: var(--c-text);
 }
+
+/* 모바일 브라우저 자동 확대 방지 */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 2. 다크 테마 (선택) */
+/* .theme-dark { ... }  부분은 위에서 --c-* 변수를 통해 설정됨 */
 
 /* 3. 페이지 기본 */
 body {
@@ -977,4 +988,85 @@ button:not(.help-btn):active {
   .button-group.help-group .help-btn {
     justify-content: center;
   }
+}
+
+/* 0) 스크롤바 토큰 추가 */
+:root {
+  --sb-size: 12px;
+  --sb-radius: 8px;
+  --sb-track: #eaf0fa;
+  --sb-thumb: #c3cfe4;
+  --sb-thumb-hover: #aebad1;
+}
+.theme-dark {
+  --sb-track: #1e2531;
+  --sb-thumb: #45536a;
+  --sb-thumb-hover: #556680;
+}
+
+/* 1) 레이아웃 튐 방지 + 관성 스크롤 */
+html, body {
+  scrollbar-gutter: stable both-edges;
+  scroll-behavior: auto;           /* 부자연스런 부드러운 스크롤 방지 */
+}
+.modal,
+.modal-content,
+.result,
+.CodeMirror {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 2) 글로벌 스크롤바(Chrome/Edge/Safari) */
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+*::-webkit-scrollbar-track {
+  background: var(--sb-track);
+  border-radius: var(--sb-radius);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb);
+  border-radius: var(--sb-radius);
+  border: 3px solid transparent;   /* 트랙과 분리감 */
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--sb-thumb-hover);
+}
+
+/* 3) Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb) var(--sb-track);
+}
+
+/* 4) 특정 영역 세부 톤 (결과/모달/에디터 모두 통일) */
+/* 기존 .result::-webkit-scrollbar*, .modal-content::-webkit-scrollbar* 규칙을 대체 */
+.result::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.CodeMirror ::-webkit-scrollbar { width: var(--sb-size); }
+
+.result::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
+.CodeMirror ::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb);
+  border-radius: var(--sb-radius);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+.result::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.CodeMirror ::-webkit-scrollbar-track {
+  background: var(--sb-track);
+  border-radius: var(--sb-radius);
+}
+
+/* 5) 스크롤 영역 시각 매끄러움 보강 */
+.result,
+.modal-content,
+.CodeMirror-scroll {
+  backdrop-filter: saturate(1.05);
+  transition: background-color .2s ease;
 }
