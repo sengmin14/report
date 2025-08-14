@@ -10,15 +10,43 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jetbrains-mono/2.304.0/web/woff2/JetBrainsMono.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- 모바일 글자 확대 방지 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   </head>
   <body>
     <div class="container">
       <h2>업무보고 자동검증기</h2>
       <div class="button-group help-group">
-        <button id="themeToggle" class="help-btn" type="button">테마</button>
-        <button id="helpBtn" class="help-btn" type="button">규칙</button>
-        <button id="changelogBtn" class="help-btn" type="button">이력</button>
+        <button id="themeToggle" class="help-btn" type="button">
+          <span class="icon" aria-hidden="true">
+            <!-- theme icon (sun/moon) -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12Z"/>
+              <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.2 4.2l1.4 1.4m12.8 12.8 1.4 1.4M4.2 19.8l1.4-1.4m12.8-12.8 1.4-1.4" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+          </span>
+          테마
+        </button>
+        <button id="helpBtn" class="help-btn" type="button">
+          <span class="icon" aria-hidden="true">
+            <!-- rules icon (list/check) -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 6h12M4 12h12M4 18h12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="m17 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          규칙
+        </button>
+        <button id="changelogBtn" class="help-btn" type="button">
+          <span class="icon" aria-hidden="true">
+            <!-- changelog icon (clock/arrow) -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M20 4v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          이력
+        </button>
       </div>
       <textarea id="code" name="code">여기에 붙여넣으세요</textarea>
       <div id="result" class="result"></div>
@@ -51,7 +79,7 @@
 
           <h4>4. 특수기호 공백 규칙</h4>
           <ul>
-            <li><code>></code>, <code>:</code> 앞뒤 공백 금지 (예: <code>A>B</code>만 허용)</li>
+            <li><code>></code>, <code>:</code> 앞뒤 공백 금지 (예: <code>A>B</code>만 허용, 단 <code>-></code> 화살표 연산자는 예외)</li>
             <li><code>+</code> 앞뒤 정확히 1칸 (예: <code>A + B</code>; <code>A+B</code>, <code>A  + B</code> 모두 오류)</li>
             <li><code>,</code> 앞 공백 금지 / 뒤 1칸 (예: <code>값, 다음</code>)</li>
           </ul>
@@ -72,7 +100,7 @@
 
           <h4>7. 오류 표시 / 기타</h4>
           <ul>
-            <li>오류 목록 최대 50개 표시 (초과분 개수 요약)</li>
+            <li>오류 목록 전체 표시 (제한 없음)</li>
             <li>오류 클릭 시 해당 행으로 이동 & 해당 패턴만 하이라이트 (오류창 스크롤 위치 유지)</li>
           </ul>
         </div>
@@ -96,8 +124,9 @@
             <li><b>v1.7.0</b> - 오류 목록 스크롤 & 50개 제한</li>
             <li><b>v1.8.0</b> - data-type 기반 하이라이트/이벤트 위임</li>
             <li><b>v1.8.1</b> - 들여쓰기 메시지 정합성, 규칙 모달/오류창 UI 개선</li>
-            <li><b>v1.9.0</b> - 혼동 문자(유사 소분류 기호, 전각 기호, 유사 dash/tilde) 검출 및 정밀 하이라이트</li>
-            <li><b>v1.9.1</b> - 소분류 시작 시 여가부 전용 점 체크로직 추가(유사제품 사용 방지)</li>
+            <li><b>v1.9.0</b> - 혼동 문자(유사 소분류 기호, 전각 기호, 유사 dash/tilde) 검출</li>
+            <li><b>v1.9.1</b> - 소분류 시작 시 '여가부 전용 점' 사용 고지(유사품 방지)</li>
+            <li><b>v1.10.0</b> - 폰트 개선(Pretendard Variable/JetBrains Mono), 버튼 아이콘화, '->' 예외 포함 특수기호 규칙, 오류 목록 전체 표시</li>
           </ul>
         </div>
       </div>
