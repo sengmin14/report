@@ -7,6 +7,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 
 // ▶️ 로컬스토리지 자동 저장/복원
 const STORAGE_KEY = "report:draft:v1";
+let restoredFromStorage = false; // ← 복원 여부 플래그
 
 // 저장(디바운스)
 const saveDraft = (() => {
@@ -33,9 +34,9 @@ const saveDraft = (() => {
     const cur = editor.getValue();
     if (saved && (!cur || cur.trim() === "" || cur.trim() === "여기에 붙여넣으세요")) {
       editor.setValue(saved);
-      // 플레이스홀더 제거 상태로 처리
+      restoredFromStorage = true; // ← 복원됨 표시
       if (typeof clearedPlaceholder !== "undefined") clearedPlaceholder = true;
-      // 하이라이트/검증은 함수 정의 이후에 실행되도록 지연 호출
+      // (유지) 보조 호출 – 정의 타이밍 이슈 대비
       setTimeout(() => {
         if (typeof performRealTimeValidation === "function") performRealTimeValidation();
       }, 50);
@@ -545,6 +546,20 @@ editor.on("focus", function () {
   // 포커스 시에도 검증 실행
   setTimeout(performRealTimeValidation, 100);
 });
+
+// === 초기 1회 자동 검사 스케줄 =============================================
+window.addEventListener("load", () => {
+  // 에디터 값이 존재(복원되었거나 사용자가 채워둠)하면 자동 검사
+  const v = editor.getValue().trim();
+  if (restoredFromStorage || (v && v !== "여기에 붙여넣으세요")) {
+    // 레이아웃/폰트 반영 직후 실행
+    requestAnimationFrame(() => {
+      refreshEditorSoon();
+      setTimeout(() => performRealTimeValidation(), 0);
+    });
+  }
+});
+// ==========================================================================
 
 // 모달 관련 코드
 const modal = document.getElementById("ruleModal");
