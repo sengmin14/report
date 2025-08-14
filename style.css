@@ -789,7 +789,6 @@ img, svg { max-width: 100%; height: auto; }
   /* 상단 버튼: 절대 위치 → 일반 흐름(그리드) */
   .button-group.help-group {
     position: static;
-    width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
@@ -857,12 +856,14 @@ img, svg { max-width: 100%; height: auto; }
 .theme-dark .CodeMirror-linenumber { color:#8ba0b8; }
 
 /* 테마 버튼 숨김 및 모바일 레이아웃 2열로 보정 */
-#themeToggle { display: none !important; }
-
+#themeToggle { display: none !important; } /* 잔여 테마 버튼 완전 제거 대비 */
 @media (max-width: 720px) {
   .button-group.help-group {
-    /* 기존 3열에서 2열로 조정 */
+    position: static;
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 8px 0 12px;
   }
 }
 
