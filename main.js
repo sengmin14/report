@@ -5,6 +5,47 @@ var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
   lineWrapping: true,
 });
 
+// ▶️ 로컬스토리지 자동 저장/복원
+const STORAGE_KEY = "report:draft:v1";
+
+// 저장(디바운스)
+const saveDraft = (() => {
+  let t;
+  return function saveDraft() {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      try {
+        const v = editor.getValue();
+        if (v && v.trim()) {
+          localStorage.setItem(STORAGE_KEY, v);
+        } else {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      } catch {}
+    }, 400);
+  };
+})();
+
+// 복원(초기 1회)
+(function restoreFromStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const cur = editor.getValue();
+    if (saved && (!cur || cur.trim() === "" || cur.trim() === "여기에 붙여넣으세요")) {
+      editor.setValue(saved);
+      // 플레이스홀더 제거 상태로 처리
+      if (typeof clearedPlaceholder !== "undefined") clearedPlaceholder = true;
+      // 하이라이트/검증은 함수 정의 이후에 실행되도록 지연 호출
+      setTimeout(() => {
+        if (typeof performRealTimeValidation === "function") performRealTimeValidation();
+      }, 50);
+    }
+  } catch {}
+})();
+
+// 변경 시 저장 훅
+editor.on("change", saveDraft);
+
 // ▶️ 포커스 시 플레이스홀더 자동 삭제
 let clearedPlaceholder = false;
 editor.on("focus", function () {
