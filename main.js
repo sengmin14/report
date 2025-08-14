@@ -623,3 +623,34 @@ document.getElementById('themeToggle')?.addEventListener('click', () => {
 });
 
 // 에디터 내용 변경 후 (이미 디바운스 검증 호출됨) — 검증 끝에서 호출하므로 별도 필요 없음
+
+// PC 전용 배경 리플 효과 (배경에만, 컨텐츠는 그대로)
+(function initPageRipple() {
+  const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (!mq.matches) return; // 모바일/터치 환경 제외
+
+  let ticking = false;
+  const root = document.body;
+
+  function triggerRipple(e) {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      // 마우스 좌표를 CSS 변수로 전달
+      root.style.setProperty('--gx', e.clientX + 'px');
+      root.style.setProperty('--gy', e.clientY + 'px');
+      // 애니메이션 재시작(클래스 토글)
+      root.classList.remove('is-ripple');
+      // reflow로 애니메이션 재가동 트릭
+      // eslint-disable-next-line no-unused-expressions
+      root.offsetWidth;
+      root.classList.add('is-ripple');
+      ticking = false;
+    });
+  }
+
+  window.addEventListener('mousemove', triggerRipple);
+  window.addEventListener('mouseleave', () => root.classList.remove('is-ripple'));
+})();
+
+document.body.classList.add('ripple-force'); // 필요할 때만 사용

@@ -865,3 +865,46 @@ img, svg { max-width: 100%; height: auto; }
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* 모바일/접근성: 전역 애니메이션 차단 범위 축소 (리플/에디터 제외) */
+@media (prefers-reduced-motion: reduce) {
+  .container, .help-btn, .result, .modal, .error-msg, .close, button {
+    animation: none !important;
+    transition: none !important;
+  }
+  /* 원하면 리플도 끌 수 있음 */
+  body:not(.ripple-force)::before { animation: none !important; }
+}
+
+/* === PC 전용 페이지 배경 리플(물결) 효과 - 가시성 강화 ===================== */
+@media (hover: hover) and (pointer: fine) {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    --gx: 50%;
+    --gy: 50%;
+    /* 대비 강화 + 블렌드로 배경과 자연스럽게 섞이게 */
+    background:
+      radial-gradient(circle at var(--gx) var(--gy),
+        rgba(53,83,255,.25) 0%,
+        rgba(53,83,255,.18) 12%,
+        rgba(53,83,255,0) 28%) no-repeat,
+      radial-gradient(circle at var(--gx) var(--gy),
+        rgba(27,149,230,.18) 0%,
+        rgba(27,149,230,0) 24%) no-repeat;
+    mix-blend-mode: multiply;
+    opacity: 0;
+    will-change: background-size, opacity;
+  }
+  body.is-ripple::before {
+    animation: pageRipple .9s ease-out forwards;
+  }
+  @keyframes pageRipple {
+    0%   { opacity: .45; background-size: 0 0, 0 0; }
+    100% { opacity: 0;   background-size: 950px 950px, 1500px 1500px; }
+  }
+}
+/* ========================================================================== */
