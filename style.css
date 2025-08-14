@@ -307,6 +307,9 @@ button:focus-visible {
   right: 32px;
   display: flex;
   gap: 10px;
+  flex-wrap: nowrap;          /* PC에선 한 줄 유지 */
+  align-items: center;
+  z-index: 2;
 }
 
 .help-btn {
@@ -879,33 +882,99 @@ img, svg { max-width: 100%; height: auto; }
 
 /* === PC 전용 페이지 배경 리플(물결) 효과 - 가시성 강화 ===================== */
 @media (hover: hover) and (pointer: fine) {
-  body::before {
+  body {
+    background:
+      radial-gradient(1200px 800px at 10% 0%, #eef3ff 0%, #f7f9ff 35%, #fbfcff 60%, #ffffff 100%);
+  }
+  body::after {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    --gx: 50%;
-    --gy: 50%;
-    /* 대비 강화 + 블렌드로 배경과 자연스럽게 섞이게 */
-    background:
-      radial-gradient(circle at var(--gx) var(--gy),
-        rgba(53,83,255,.25) 0%,
-        rgba(53,83,255,.18) 12%,
-        rgba(53,83,255,0) 28%) no-repeat,
-      radial-gradient(circle at var(--gx) var(--gy),
-        rgba(27,149,230,.18) 0%,
-        rgba(27,149,230,0) 24%) no-repeat;
+    background-image:
+      radial-gradient(#2d4bff0a 1px, transparent 1px),
+      radial-gradient(#2d4bff08 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px;
+    background-position: 0 0, 12px 12px;
     mix-blend-mode: multiply;
-    opacity: 0;
-    will-change: background-size, opacity;
-  }
-  body.is-ripple::before {
-    animation: pageRipple .9s ease-out forwards;
-  }
-  @keyframes pageRipple {
-    0%   { opacity: .45; background-size: 0 0, 0 0; }
-    100% { opacity: 0;   background-size: 950px 950px, 1500px 1500px; }
   }
 }
-/* ========================================================================== */
+
+/* 컨테이너가 배경 위로 떠 보이도록 레이어 고정 */
+.container {
+  isolation: isolate;
+  z-index: 1;
+  box-shadow:
+    0 20px 60px -20px rgba(12, 28, 60, .18),
+    0 8px 24px -12px rgba(12, 28, 60, .12),
+    0 1px 0 rgba(12, 28, 60, .05);
+}
+
+/* 전역 버튼 스타일 → 도움 버튼 제외 */
+button, .help-btn {
+  font-family: inherit;
+  position: relative;
+  isolation: isolate;
+}
+button:not(.help-btn) {
+  width: 100%;
+  margin-top: 12px;
+  font-size: 1.07rem;
+  font-weight: 600;
+  background: var(--gradient-btn);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-m);
+  padding: 14px 0;
+  cursor: pointer;
+  box-shadow: 0 4px 18px -4px rgba(54,84,255,.45), 0 2px 8px rgba(0,0,0,.12);
+  transition: var(--transition);
+  letter-spacing: .3px;
+}
+button:not(.help-btn):hover,
+button:not(.help-btn):focus-visible {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px -6px rgba(54,84,255,.55), 0 4px 14px rgba(0,0,0,.18);
+}
+button:not(.help-btn):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+}
+
+/* 상단 도움 버튼 정렬 고정 */
+.button-group.help-group {
+  position: absolute;
+  top: 30px;
+  right: 32px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;          /* PC에선 한 줄 유지 */
+  align-items: center;
+  z-index: 2;
+}
+.button-group.help-group .help-btn {
+  width: auto !important;     /* 전역 100% 폭 무시 */
+  flex: 0 0 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 모바일에서는 자동 줄바꿈(기존 규칙 유지) */
+@media (max-width: 720px) {
+  .button-group.help-group {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 8px 0 12px;
+  }
+  .button-group.help-group .help-btn {
+    justify-content: center;
+  }
+}
