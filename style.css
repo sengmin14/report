@@ -791,7 +791,7 @@ img, svg { max-width: 100%; height: auto; }
     position: static;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
     margin: 8px 0 12px;
   }
@@ -829,4 +829,39 @@ img, svg { max-width: 100%; height: auto; }
 /* 세로 방향에 특화: 키보드가 올라올 때 모달이 꽉 차지 않도록 */
 @media (orientation: portrait) {
   .modal-content { max-height: 86vh; }
+}
+
+/* 코드 라인 높이 기준(숫자/본문 동일 적용) */
+:root {
+  --line-code: 1.65;
+}
+
+/* CodeMirror 라인 높이 단일 기준으로 통일 */
+.CodeMirror { line-height: var(--line-code); }
+.CodeMirror pre { line-height: var(--line-code) !important; }
+
+/* 거터 엘리먼트들도 같은 라인 높이 사용 */
+.CodeMirror-gutter-wrapper,
+.CodeMirror-gutter-elt,
+.CodeMirror-linenumber {
+  line-height: var(--line-code) !important;
+}
+
+/* 라인번호 글꼴/여백만 지정(높이는 라인 높이로 일치) */
+.CodeMirror-linenumber {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 0 6px 0 4px;
+  color: #6a7487;
+}
+.theme-dark .CodeMirror-linenumber { color:#8ba0b8; }
+
+/* 테마 버튼 숨김 및 모바일 레이아웃 2열로 보정 */
+#themeToggle { display: none !important; }
+
+@media (max-width: 720px) {
+  .button-group.help-group {
+    /* 기존 3열에서 2열로 조정 */
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

@@ -561,16 +561,32 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-document.getElementById('themeToggle')?.addEventListener('click', () => {
-  document.documentElement.classList.toggle('theme-dark');
-  localStorage.setItem('pref-theme',
-    document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light');
-});
+// === Remove theme toggle feature ==========================================
+// 1) 강제로 라이트 테마 유지
+document.documentElement.classList.remove('theme-dark');
+try { localStorage.removeItem('pref-theme'); } catch {}
 
-(function initTheme(){
-  const saved = localStorage.getItem('pref-theme');
-  if (saved === 'dark') document.documentElement.classList.add('theme-dark');
-})();
+// 2) 테마 버튼 제거 (있더라도 DOM에서 삭제)
+document.getElementById('themeToggle')?.remove();
+
+// 3) 혹시 남아있을 수 있는 토글 핸들러 무력화(안전장치)
+window.removeEventListener?.('click', window.__themeToggleHandler || (()=>{}));
+// ==========================================================================
+
+// 폰트가 로드된 뒤에도 한 번 더 보정
+if (document.fonts?.ready) {
+  document.fonts.ready.then(refreshEditorSoon);
+}
+
+// 화면 회전/리사이즈 시 보정
+window.addEventListener('resize', refreshEditorSoon);
+
+function refreshEditorSoon() {
+  if (!window.editor || typeof editor.refresh !== 'function') return;
+  // 레이아웃 전환/폰트 로드 지연 보정
+  requestAnimationFrame(() => editor.refresh());
+  setTimeout(() => editor.refresh(), 80);
+}
 
 // === 카테고리 가독성 (다크모드) 라인 클래스 적용 =============================
 const CATEGORY_CLASSES = ["cat-top","cat-midtop","cat-mid","cat-low"];
