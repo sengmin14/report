@@ -25,6 +25,7 @@
     let next = 1;
     let t0 = 0;
     let finished = false;
+    let locked = true; // 카운트다운 동안 입력 잠금
 
     const nums = Array.from({ length: 20 }, (_, i) => i + 1);
     for (let i = nums.length - 1; i > 0; i--) {
@@ -38,14 +39,22 @@
           <div class="ng-chip">다음 숫자: <b id="ngNext">1</b></div>
           <div class="ng-chip">시간: <b id="ngTime">0.00</b>s</div>
         </div>
-        <div class="ng-grid" id="ngGrid"></div>
+        <div class="ng-grid-box" style="position:relative;">
+          <div class="ng-grid" id="ngGrid" style="pointer-events:none;"></div>
+          <div id="ngCountdown"
+               style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+                      background:rgba(255,255,255,.85); border-radius:12px; font-weight:800; font-size:52px;
+                      color:var(--ui,#1f2b44);">3</div>
+        </div>
       </div>
     `;
 
     const grid = document.getElementById('ngGrid');
     const timeEl = document.getElementById('ngTime');
     const nextEl = document.getElementById('ngNext');
+    const cdEl = document.getElementById('ngCountdown');
 
+    // 셀 렌더
     nums.forEach(n => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -55,18 +64,42 @@
       grid.appendChild(btn);
     });
 
+    // 타이머
     let rafId = 0;
     function tick() {
-      if (!t0 || finished) return;
+      if (finished) return;
       const ms = performance.now() - t0;
       timeEl.textContent = (ms / 1000).toFixed(2);
       rafId = requestAnimationFrame(tick);
     }
 
+    // 3-2-1 카운트다운 후 시작
+    function startCountdown() {
+      let c = 3;
+      cdEl.textContent = c;
+      const timer = setInterval(() => {
+        c -= 1;
+        if (c > 0) {
+          cdEl.textContent = c;
+        } else {
+          clearInterval(timer);
+          cdEl.textContent = '시작!';
+          setTimeout(() => {
+            locked = false;
+            t0 = performance.now();            // 여기서부터 카운트 시작
+            grid.style.pointerEvents = 'auto'; // 입력 허용
+            cdEl.style.display = 'none';
+            rafId = requestAnimationFrame(tick);
+          }, 500);
+        }
+      }, 1000);
+    }
+    startCountdown();
+
     function onCell(e) {
+      if (locked) return;                 // 카운트다운 중 입력 차단
       const n = +e.currentTarget.dataset.n;
       if (finished || n !== next) return;
-      if (next === 1) { t0 = performance.now(); rafId = requestAnimationFrame(tick); }
       e.currentTarget.classList.add('hit');
       next += 1;
       nextEl.textContent = String(Math.min(next, 20));
