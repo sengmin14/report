@@ -143,9 +143,7 @@
           <a class="ng-btn" href="../index.html">메인으로</a>
         </div>
 
-        <!-- 의학적 근거 요약 표 -->
         <div style="margin-top:12px;">
-          <div style="font-weight:700; color:var(--soft, #4b5770); margin:6px 0 8px;">의학적 근거 요약</div>
           <div style="overflow:auto;">
             <table style="width:100%; border-collapse:collapse; font-size:13px;">
               <thead>
