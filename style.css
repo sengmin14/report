@@ -1070,3 +1070,21 @@ html, body {
   backdrop-filter: saturate(1.05);
   transition: background-color .2s ease;
 }
+
+/* 제목 앞 파비콘 정렬 */
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;        /* 아이콘-텍스트 간격 */
+}
+.app-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;   /* 살짝 라운드 */
+  object-fit: contain;
+  display: inline-block;
+}
+
+@media (max-width: 720px) {
+  .app-logo { width: 24px; height: 24px; border-radius: 5px; }
+}
