@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="../favicon.ico"><!-- 루트 파비콘 참조 -->
+    <title>업무보고 자동검증기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- CodeMirror / Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.css" />
+    <link rel="stylesheet" href="./style.css" /><!-- report 전용 스타일 -->
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="app-title">
+        <img class="app-logo" src="../favicon.ico" alt="" width="28" height="28"><!-- 타이틀 앞 파비콘 -->
+        업무보고 자동검증기
+      </h2>
+
+      <div class="button-group help-group">
+        <a class="help-btn" href="../index.html" role="button">메인으로</a>
+        <button id="helpBtn" class="help-btn" type="button">
+          <span class="icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 6h12M4 12h12M4 18h12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="m17 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          규칙
+        </button>
+        <button id="changelogBtn" class="help-btn" type="button">
+          <span class="icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M20 4v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          이력
+        </button>
+      </div>
+
+      <textarea id="code" name="code">여기에 붙여넣으세요</textarea>
+      <div id="result" class="result"></div>
+    </div>
+
+    <!-- 규칙 모달 -->
+    <div id="ruleModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>검증 규칙 안내</h3>
+        <!-- 기존 규칙 내용 유지 -->
+        <div class="rule-list">
+          <h4>1. 공백 / 들여쓰기</h4>
+          <ul>
+            <li>라인 시작 공백은 1칸까지만 허용 (2칸 이상 → 오류)</li>
+            <li>계층 구조는 기호(1. / (1) / - / ․)로만 표현 (추가 들여쓰기 금지)</li>
+          </ul>
+
+          <h4>2. 날짜 표기</h4>
+            <ul>
+              <li>허용: <code>(8/23)</code>, <code>(~7/30)</code></li>
+              <li>월/일 0으로 시작 금지 (예: (08/23), (7/05))</li>
+              <li><code>까지</code> 포함 금지 (예: (7/30까지), (~8/15까지))</li>
+            </ul>
+
+          <h4>3. 괄호 / 대괄호 공백</h4>
+          <ul>
+            <li><code>( )</code>, <code>[ ]</code> 양옆 및 내부 불필요 공백 금지 (예: <code>( 값)</code>, <code>[값 ]</code>)</li>
+            <li>예외: 중분류(-) / 소분류(․) 기호 직후 바로 오는 괄호는 허용 (<code>- (설명)</code>)</li>
+          </ul>
+
+          <h4>4. 특수기호 공백 규칙</h4>
+          <ul>
+            <li><code>></code>, <code>:</code> 앞뒤 공백 금지 (예: <code>A>B</code>만 허용, 단 <code>-></code> 화살표 연산자는 예외)</li>
+            <li><code>+</code> 앞뒤 정확히 1칸 (예: <code>A + B</code>; <code>A+B</code>, <code>A  + B</code> 모두 오류)</li>
+            <li><code>,</code> 앞 공백 금지 / 뒤 1칸 (예: <code>값, 다음</code>)</li>
+          </ul>
+
+          <h4>5. 소분류 상태 중복</h4>
+          <ul>
+            <li>한 중분류(-) 아래 연속된 소분류(․) 상태가 모두 동일(완료/진행중/보류/취소/~M/D)하면</li>
+            <li>→ 소분류의 상태 제거, 중분류 라인에만 1회 표기</li>
+          </ul>
+
+          <h4>6. 혼동/유사 문자 금지</h4>
+          <ul>
+            <li>소분류 기호는 반드시 <code>․</code> (여가부 전용 점, U+2024) 1글자만 사용 ('.' / '·'(U+00B7) / '•'(U+2022) 등 유사품 문자는 모두 오류)</li>
+            <li>중분류 기호는 ASCII <code>-</code>만 허용 (en dash ‘–’, em dash ‘—’ 등 금지)</li>
+            <li>범위/날짜 틸드는 ASCII <code>~</code>만 허용 (全角 ‘～’, 유사 ‘∼’ 금지)</li>
+            <li>전각 문장부호 금지: （ ） ： ＞ ＋ ， → 각각 ( ) : > + , 로 교체</li>
+          </ul>
+
+          <h4>7. 오류 표시 / 기타</h4>
+          <ul>
+            <li>오류 목록 전체 표시 (제한 없음)</li>
+            <li>오류 클릭 시 해당 행으로 이동 & 해당 패턴만 하이라이트 (오류창 스크롤 위치 유지)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 변경 이력 모달 -->
+    <div id="changelogModal" class="modal">
+      <div class="modal-content">
+        <span class="close changelog-close">&times;</span>
+        <h3>규칙 추가/변경 이력</h3>
+        <div class="rule-list">
+          <ul>
+            <li><b>v1.10.0</b>
+              <ul>
+                <li>특수기호 공백 규칙 정밀화
+                  <ul>
+                    <li>'->' 화살표 예외 추가(공백 허용), 그 외 <code>></code>, <code>:</code> 앞뒤 공백 금지</li>
+                    <li><code>+</code> 앞뒤 정확히 1칸 강제(없음/2칸 이상 금지)</li>
+                    <li><code>,</code> 앞 공백 금지, 뒤 1칸 강제</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><b>v1.9.1</b>
+              <ul>
+                <li>소분류 기호 강제: '․'(여가부 전용 점)만 허용, 유사품('.' / '·' / '•') 사용 금지</li>
+              </ul>
+            </li>
+            <li><b>v1.9.0</b>
+              <ul>
+                <li>혼동 문자 규칙 추가
+                  <ul>
+                    <li>전각 문장부호 금지: （ ） ： ＞ ＋ ， → ASCII로 교체</li>
+                    <li>유사 dash(‐–—) 금지, 날짜/범위 <code>~</code>만 허용(～, ∼ 금지)</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><b>v1.8.x</b>
+              <ul>
+                <li>괄호/대괄호 공백 금지 규정 명확화 + 목록 기호 직후 괄호 예외(- (, ․ [ 등)</li>
+              </ul>
+            </li>
+            <li><b>v1.4.0</b>
+              <ul>
+                <li>소분류 상태 중복 규칙 도입: 같은 상태가 연속되면 중분류에만 1회 표기</li>
+              </ul>
+            </li>
+            <li><b>v1.2.0</b>
+              <ul>
+                <li>날짜 표기 규칙 확립: 허용 (M/D), (~M/D) / 선행 0·“까지” 금지</li>
+              </ul>
+            </li>
+            <li><b>v1.0.0</b>
+              <ul>
+                <li>기본 규칙: 들여쓰기 2칸 이상 금지, 기본 괄호/특수기호 공백 규칙</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/markdown/markdown.js"></script>
+    <script src="./main.js"></script><!-- report 전용 스크립트 -->
+  </body>
+</html>
