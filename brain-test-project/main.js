@@ -2,17 +2,45 @@
   const root = document.getElementById('ngRoot');
   const BEST_KEY = 'numgrid:best:1to20';
 
+// 입력 방식/디바이스 보정
+let lastInputType = null;
+function adjustSecondsForDevice(seconds, inputType) {
+  const OFFSETS = {
+    mouse: -0.35,
+    pen:   -0.15,
+    touch:  0.00,
+    defaultDesktop: -0.30,
+  };
+  const fine = window.matchMedia?.('(any-pointer: fine)').matches;
+  const coarse = window.matchMedia?.('(any-pointer: coarse)').matches;
+
+  let offset = 0;
+  if (inputType === 'mouse') offset = OFFSETS.mouse;
+  else if (inputType === 'pen') offset = OFFSETS.pen;
+  else if (inputType === 'touch') offset = OFFSETS.touch;
+  else if (fine && !coarse) offset = OFFSETS.defaultDesktop;
+
+  return { seconds: Math.max(0, seconds + offset), offset };
+}
+
   function renderIntro() {
-    const best = localStorage.getItem(BEST_KEY);
+    const bestMs = localStorage.getItem(BEST_KEY);
+    const bestChip = (() => {
+      if (!bestMs) return '';
+      const s = (+bestMs) / 1000;
+      const age = secondsToAge(s); // 최고기록 시간 → 나이 환산
+      return `<div class="ng-chip">최고 기록: <b>${s.toFixed(2)}s</b> <span style="color:var(--soft)">(${age}세)</span></div>`;
+    })();
+
     root.innerHTML = `
       <div class="ng-card">
         <p>화면에 <b>1~20</b>이 무작위로 배치됩니다. <b>1 → 20</b> 순서대로 빠르게 누르세요.</p>
         <div class="ng-kpi">
-          ${best ? `<div class="ng-chip">최고 기록: <b>${(+best/1000).toFixed(2)}s</b></div>` : ''}
+          ${bestChip}
         </div>
         <div class="ng-actions">
           <button class="ng-btn primary" id="ngStart">시작</button>
-          ${best ? `<button class="ng-btn" id="ngClear">기록 초기화</button>` : ''}
+          ${bestMs ? `<button class="ng-btn" id="ngClear">기록 초기화</button>` : ''}
         </div>
       </div>
     `;
@@ -97,7 +125,11 @@
     startCountdown();
 
     function onCell(e) {
-      if (locked) return;                 // 카운트다운 중 입력 차단
+      if (locked) return;
+      // 사용한 입력 방식 기록
+      if (!lastInputType) {
+        lastInputType = e.pointerType || (e.type === 'mousedown' ? 'mouse' : e.type === 'touchstart' ? 'touch' : null);
+      }
       const n = +e.currentTarget.dataset.n;
       if (finished || n !== next) return;
       e.currentTarget.classList.add('hit');
@@ -110,7 +142,13 @@
         showResult(ms);
       }
     }
-    grid.querySelectorAll('.ng-cell').forEach(el => el.addEventListener('click', onCell));
+
+    // 클릭 대신 즉시 반응하는 입력 이벤트로 바인딩
+    grid.querySelectorAll('.ng-cell').forEach(el => {
+      el.addEventListener('pointerdown', onCell, { passive: true });
+      el.addEventListener('mousedown', onCell, { passive: true });
+      el.addEventListener('touchstart', onCell, { passive: true });
+    });
   }
 
   // 시간(초) → 나이 매핑 테이블
@@ -149,27 +187,29 @@
 
   // 결과 계산부에 적용
   function showResult(ms) {
-    const s = ms / 1000;
+    const sRaw = ms / 1000;
+    const adj = adjustSecondsForDevice(sRaw, lastInputType); // 보정 적용
+    const s = adj.seconds;
+
     const age = secondsToAge(s);
 
-    // ≤6s: 18세, ≤8s: 19세, ≤10s: 20세, 10<s<30: round(20 + (s−10)*3), ≥30s: 80세
-    const rawAge =
-      s <= 6 ? 20 :
-      s >= 30 ? 80 :
-      20 + (s - 10) * 3;
-
-    const best = localStorage.getItem(BEST_KEY);
-    const isBest = !best || ms < +best;
+    const prevBest = localStorage.getItem(BEST_KEY);
+    const isBest = !prevBest || ms < +prevBest;
     if (isBest) localStorage.setItem(BEST_KEY, String(ms));
+
+    // 갱신 후 기준으로 최고기록 표기(시간 + 나이)
+    const bestMsAfter = +localStorage.getItem(BEST_KEY);
+    const bestSecAfter = bestMsAfter / 1000;
+    const bestAgeAfter = secondsToAge(bestSecAfter);
 
     root.innerHTML = `
       <div class="ng-card">
         <h2 style="margin:0 0 8px; font-size:20px;">결과</h2>
         <div class="ng-kpi">
-          <div class="ng-chip">기록: <b>${s.toFixed(2)}s</b></div>
+          <div class="ng-chip">기록: <b>${sRaw.toFixed(2)}s</b>${adj.offset ? ` <span style="color:var(--soft)">(보정 ${adj.offset.toFixed(2)}s → ${s.toFixed(2)}s)</span>` : ''}</div>
           <div class="ng-chip">추정 뇌나이: <b>${age}세</b></div>
           ${isBest ? `<div class="ng-chip" style="color:var(--primary)">🎉 최고 기록 갱신</div>` : ''}
-          ${best ? `<div class="ng-chip">최고 기록: <b>${(+best/1000).toFixed(2)}s</b></div>` : ''}
+          <div class="ng-chip">최고 기록: <b>${bestSecAfter.toFixed(2)}s</b> <span style="color:var(--soft)">(${bestAgeAfter}세)</span></div>
         </div>
         <div class="ng-actions">
           <button class="ng-btn primary" id="ngRetry">다시 하기</button>
