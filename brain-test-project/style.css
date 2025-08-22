@@ -18,6 +18,12 @@ body.numgrid-page{
   color:var(--ui);
 }
 
+/* 클릭 요소의 더블탭 확대 방지 힌트 */
+.no-zoom, .no-zoom button, .no-zoom a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* 뇌나이 테스트 전용 스크롤 제어 */
 html.numgrid-root { overflow-y: hidden; height: 100%; }
 html.numgrid-root.ng-scroll { overflow-y: auto; }
