@@ -1,4 +1,9 @@
 (function initNumGrid() {
+  // 페이지 전용 클래스 + 스크롤 제어
+  document.documentElement.classList.add('numgrid-root');
+  document.body.classList.add('numgrid-page');
+  const setScroll = (allow) => document.documentElement.classList.toggle('ng-scroll', !!allow);
+  setScroll(false); // 기본은 숨김
   const root = document.getElementById('ngRoot');
   const BEST_KEY = 'numgrid:best:1to20';
 
@@ -44,12 +49,14 @@ function adjustSecondsForDevice(seconds, inputType) {
         </div>
       </div>
     `;
+    setScroll(false); // 인트로에서는 스크롤 숨김
     document.getElementById('ngStart').addEventListener('click', startGame);
     const clearBtn = document.getElementById('ngClear');
     if (clearBtn) clearBtn.addEventListener('click', () => { localStorage.removeItem(BEST_KEY); renderIntro(); });
   }
 
   function startGame() {
+    setScroll(false); // 게임 중에도 숨김
     let next = 1;
     let t0 = 0;
     let finished = false;
@@ -246,6 +253,7 @@ function adjustSecondsForDevice(seconds, inputType) {
         </div>
       </div>
     `;
+    setScroll(true); // 결과 표시 때만 스크롤 허용
     document.getElementById('ngRetry').addEventListener('click', startGame);
   }
 

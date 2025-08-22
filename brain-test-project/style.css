@@ -18,6 +18,11 @@ body.numgrid-page{
   color:var(--ui);
 }
 
+/* 뇌나이 테스트 전용 스크롤 제어 */
+html.numgrid-root { overflow-y: hidden; height: 100%; }
+html.numgrid-root.ng-scroll { overflow-y: auto; }
+body.numgrid-page { min-height: 100dvh; }
+
 /* 레이아웃 */
 .ng-container{
   max-width: 960px; margin: 28px auto; padding: 0 16px;
