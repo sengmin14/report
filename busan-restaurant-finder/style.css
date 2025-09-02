@@ -9,9 +9,13 @@ body {
   color: #333;
   line-height: 1.6;
   background-color: #f8f9fa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
@@ -32,6 +36,7 @@ h1 {
 
 .search-box {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 10px;
 }
@@ -46,6 +51,11 @@ h1 {
 
 .search-box input {
   flex: 1;
+  min-width: 150px;
+}
+
+.search-box select {
+  min-width: 120px;
 }
 
 .search-box button {
@@ -63,29 +73,37 @@ h1 {
 }
 
 /* 메인 콘텐츠 스타일 */
+main {
+  flex: 1;
+  padding: 20px 0;
+}
+
 .main-content {
   display: flex;
   gap: 20px;
-  padding: 20px 0;
+  height: calc(100vh - 180px);
+  min-height: 500px;
 }
 
 .map-section {
   flex: 1.5;
-  height: 600px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 100%;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #e9ecef;
 }
 
 #map {
   width: 100%;
   height: 100%;
+  z-index: 1;
 }
 
 .list-section {
   flex: 1;
+  height: 100%;
   overflow-y: auto;
-  max-height: 600px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -96,6 +114,7 @@ h1 {
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
+  font-size: 20px;
 }
 
 /* 식당 카드 스타일 */
@@ -146,25 +165,95 @@ h1 {
   font-size: 14px;
 }
 
+.restaurant-card .phone {
+  margin-top: 5px;
+  color: #0b5ed7;
+  font-size: 14px;
+}
+
+/* Leaflet 마커 팝업 스타일 */
+.leaflet-popup-content {
+  margin: 10px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.leaflet-popup-content h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.leaflet-popup-content .rating {
+  color: #ff9500;
+  margin-bottom: 5px;
+}
+
+.leaflet-popup-content .category {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 맛집 카드 하이라이트 효과 */
+.restaurant-card.highlight {
+  background-color: #f0f9ff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+}
+
 /* 푸터 스타일 */
 footer {
   background-color: #343a40;
   color: #adb5bd;
-  padding: 20px 0;
+  padding: 15px 0;
   text-align: center;
+  margin-top: auto;
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .main-content {
     flex-direction: column;
+    height: auto;
   }
 
   .map-section {
-    height: 400px;
+    height: 350px;
+    margin-bottom: 20px;
   }
 
   .list-section {
-    max-height: none;
+    height: auto;
+    max-height: 500px;
+  }
+  
+  .search-box input,
+  .search-box select,
+  .search-box button {
+    width: 100%;
+  }
+  
+  h1 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    gap: 15px;
+  }
+  
+  .map-section {
+    height: 300px;
+  }
+  
+  .restaurant-card {
+    padding: 12px;
+  }
+  
+  .container {
+    padding: 0 10px;
+  }
+  
+  h1, h2 {
+    font-size: 18px;
   }
 }

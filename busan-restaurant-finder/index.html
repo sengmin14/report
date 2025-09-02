@@ -2,10 +2,15 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>부산 맛집 찾기</title>
   <link rel="stylesheet" href="style.css">
-  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fea224724b210dc1c1595a8a218d2587"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+        crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+        crossorigin=""></script>
 </head>
 <body>
   <header>
@@ -23,7 +28,7 @@
       </div>
     </div>
   </header>
-
+  
   <main>
     <div class="container main-content">
       <div class="map-section">
@@ -35,13 +40,13 @@
       </div>
     </div>
   </main>
-
+  
   <footer>
     <div class="container">
       <p>© 부산 맛집 찾기</p>
     </div>
   </footer>
-
+  
   <script src="main.js"></script>
 </body>
 </html>

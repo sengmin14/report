@@ -87,74 +87,55 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
   }
   
-  // 지도 초기화 함수
+  // 지도 초기화 함수 - Leaflet.js 사용
   function initMap() {
-    if (!window.kakao || !window.kakao.maps) {
-      console.error('카카오맵 API를 로드할 수 없습니다');
+    try {
+      // 지도 중심 좌표 (부산시청)
+      const busanCenter = [35.1798, 129.0750];
       
-      // 지도 영역에 오류 메시지 표시
-      document.getElementById('map').innerHTML = `
-        <div style="padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #f8f9fa;">
-          <p style="color: #e53e3e; margin-bottom: 10px;">지도를 로드할 수 없습니다</p>
-          <p style="font-size: 14px; color: #718096;">
-            브라우저의 보안 설정이나 확장 프로그램이 지도 로드를 차단했습니다.<br>
-            시크릿 모드에서 다시 시도해보세요.
-          </p>
-        </div>
-      `;
+      // 지도 생성 
+      map = L.map('map').setView(busanCenter, 13);
       
-      // 맛집 목록은 계속 표시
-      displayRestaurants(restaurants);
-      return;
+      // 타일 레이어 추가 (OpenStreetMap)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      
+      // 맛집 마커 표시
+      displayMarkers(restaurants);
+      
+    } catch (error) {
+      console.error('지도 초기화 중 오류 발생:', error);
+      document.getElementById('map').innerHTML = 
+        '<div style="padding: 20px; text-align: center;">지도를 불러오는데 실패했습니다.<br>페이지를 새로고침 해보세요.</div>';
     }
-    
-    // 지도 중심 좌표 (부산시청)
-    const defaultCenter = new kakao.maps.LatLng(35.1798, 129.0750);
-    
-    // 지도 생성 옵션
-    const mapOptions = {
-      center: defaultCenter,
-      level: 7
-    };
-    
-    // 지도 생성
-    map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
-    
-    // 식당 마커 표시
-    displayMarkers(restaurants);
   }
   
-  // 식당 마커 표시 함수
+  // 맛집 마커 표시 함수 - Leaflet.js 사용
   function displayMarkers(restaurantsToShow) {
     // 기존 마커 제거
-    markers.forEach(marker => marker.setMap(null));
+    markers.forEach(marker => marker.remove());
     markers = [];
     
     // 새 마커 생성
     restaurantsToShow.forEach(restaurant => {
-      const markerPosition = new kakao.maps.LatLng(
-        restaurant.location.lat, 
-        restaurant.location.lng
-      );
-      
-      const marker = new kakao.maps.Marker({
-        position: markerPosition,
+      // 마커 생성
+      const marker = L.marker([restaurant.location.lat, restaurant.location.lng], {
         title: restaurant.name
-      });
+      }).addTo(map);
       
-      // 지도에 마커 표시
-      marker.setMap(map);
-      markers.push(marker);
+      // 팝업 설정
+      const popupContent = `
+        <div>
+          <h3>${restaurant.name}</h3>
+          <div class="rating">★ ${restaurant.rating}</div>
+          <div class="category">${getCategoryName(restaurant.category)}</div>
+        </div>
+      `;
+      marker.bindPopup(popupContent);
       
-      // 인포윈도우 생성
-      const infowindow = new kakao.maps.InfoWindow({
-        content: `<div style="padding:5px;font-size:12px;">${restaurant.name}</div>`
-      });
-      
-      // 클릭 이벤트 추가
-      kakao.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map, marker);
-        
+      // 마커 클릭 이벤트
+      marker.on('click', function() {
         // 해당 식당으로 스크롤
         const restaurantElement = document.getElementById(`restaurant-${restaurant.id}`);
         if (restaurantElement) {
@@ -165,6 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
           }, 2000);
         }
       });
+      
+      markers.push(marker);
     });
   }
   
@@ -193,22 +176,15 @@ document.addEventListener('DOMContentLoaded', function() {
       
       card.addEventListener('click', () => {
         // 지도 이동 및 줌
-        const position = new kakao.maps.LatLng(
-          restaurant.location.lat, 
-          restaurant.location.lng
-        );
-        map.setCenter(position);
-        map.setLevel(3); // 줌 레벨 설정
+        map.setView([restaurant.location.lat, restaurant.location.lng], 16);
         
-        // 해당 마커의 인포윈도우 열기
-        const marker = markers.find((m, i) => 
+        // 해당 마커 팝업 열기
+        const marker = markers.find((_, i) => 
           restaurantsToShow[i].id === restaurant.id
         );
+        
         if (marker) {
-          const infowindow = new kakao.maps.InfoWindow({
-            content: `<div style="padding:5px;font-size:12px;">${restaurant.name}</div>`
-          });
-          infowindow.open(map, marker);
+          marker.openPopup();
         }
       });
       
