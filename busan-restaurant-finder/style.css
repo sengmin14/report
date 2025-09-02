@@ -1,0 +1,170 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #333;
+  line-height: 1.6;
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* 헤더 스타일 */
+header {
+  background-color: #0b5ed7;
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-box input,
+.search-box select {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.search-box input {
+  flex: 1;
+}
+
+.search-box button {
+  background-color: #0a4bb7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.search-box button:hover {
+  background-color: #093d96;
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.map-section {
+  flex: 1.5;
+  height: 600px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.list-section {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 600px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.list-section h2 {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 식당 카드 스타일 */
+.restaurant-card {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid #eee;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-3px);
+}
+
+.restaurant-card h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.restaurant-card .rating {
+  color: #ff9500;
+  margin-bottom: 8px;
+}
+
+.restaurant-card .category-tag {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.restaurant-card address {
+  color: #6c757d;
+  font-style: normal;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.restaurant-card p {
+  color: #495057;
+  font-size: 14px;
+}
+
+/* 푸터 스타일 */
+footer {
+  background-color: #343a40;
+  color: #adb5bd;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .map-section {
+    height: 400px;
+  }
+
+  .list-section {
+    max-height: none;
+  }
+}

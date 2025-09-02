@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>부산 맛집 찾기</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- 카카오맵 API (자신의 API 키로 교체) -->
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>부산 맛집 찾기</h1>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="맛집 검색...">
+        <select id="categoryFilter">
+          <option value="">전체 카테고리</option>
+          <option value="korean">한식</option>
+          <option value="seafood">해산물</option>
+          <option value="cafe">카페</option>
+        </select>
+        <button id="searchBtn">검색</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container main-content">
+      <div class="map-section">
+        <div id="map"></div>
+      </div>
+      <div class="list-section">
+        <h2>맛집 목록</h2>
+        <div id="restaurantList"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2023 부산 맛집 찾기</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
