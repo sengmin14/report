@@ -104,6 +104,18 @@ document.addEventListener('DOMContentLoaded', function() {
       // 맛집 마커 표시
       displayMarkers(restaurants);
       
+      // 모바일 환경에서 지도 크기 조정 문제 해결
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 300);
+      
+      // 창 크기 변경 시 지도 다시 그리기
+      window.addEventListener('resize', function() {
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 200);
+      });
+      
     } catch (error) {
       console.error('지도 초기화 중 오류 발생:', error);
       document.getElementById('map').innerHTML = 

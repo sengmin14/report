@@ -11,6 +11,19 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
         crossorigin=""></script>
+  <!-- Leaflet 모바일 최적화를 위한 추가 스타일 -->
+  <style>
+    .leaflet-touch .leaflet-control-zoom {
+      display: block !important;
+    }
+    
+    /* 기기 방향 변경 시 지도가 올바르게 표시되도록 */
+    @media screen and (orientation: portrait), screen and (orientation: landscape) {
+      #map {
+        height: 100% !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>

@@ -213,47 +213,36 @@ footer {
   .main-content {
     flex-direction: column;
     height: auto;
+    min-height: auto;
   }
 
   .map-section {
-    height: 350px;
+    flex: none;
+    height: 400px; /* 모바일에서 더 크게 설정 */
+    width: 100%;
     margin-bottom: 20px;
+    display: block !important; /* 강제로 표시 */
+    visibility: visible !important;
+    z-index: 1;
+  }
+
+  #map {
+    height: 100% !important;
+    width: 100% !important;
+    display: block !important;
+    z-index: 5;
   }
 
   .list-section {
+    flex: none;
     height: auto;
     max-height: 500px;
   }
-  
-  .search-box input,
-  .search-box select,
-  .search-box button {
-    width: 100%;
-  }
-  
-  h1 {
-    font-size: 20px;
-  }
 }
 
+/* 더 작은 화면에 대한 추가 조정 */
 @media (max-width: 480px) {
-  .main-content {
-    gap: 15px;
-  }
-  
   .map-section {
-    height: 300px;
-  }
-  
-  .restaurant-card {
-    padding: 12px;
-  }
-  
-  .container {
-    padding: 0 10px;
-  }
-  
-  h1, h2 {
-    font-size: 18px;
+    height: 350px; /* 작은 화면에서는 조금 더 작게 */
   }
 }
