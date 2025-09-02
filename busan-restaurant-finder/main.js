@@ -89,28 +89,39 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 지도 초기화 함수
   function initMap() {
-    // 카카오맵 API 로드 여부 확인
-    if (window.kakao && window.kakao.maps) {
-      // 지도 중심 좌표 (부산시청)
-      const defaultCenter = new kakao.maps.LatLng(35.1798, 129.0750);
+    if (!window.kakao || !window.kakao.maps) {
+      console.error('카카오맵 API를 로드할 수 없습니다');
       
-      // 지도 생성 옵션
-      const mapOptions = {
-        center: defaultCenter,
-        level: 7
-      };
+      // 지도 영역에 오류 메시지 표시
+      document.getElementById('map').innerHTML = `
+        <div style="padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #f8f9fa;">
+          <p style="color: #e53e3e; margin-bottom: 10px;">지도를 로드할 수 없습니다</p>
+          <p style="font-size: 14px; color: #718096;">
+            브라우저의 보안 설정이나 확장 프로그램이 지도 로드를 차단했습니다.<br>
+            시크릿 모드에서 다시 시도해보세요.
+          </p>
+        </div>
+      `;
       
-      // 지도 생성
-      map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
-      
-      // 식당 마커 표시
-      displayMarkers(restaurants);
-    } else {
-      // API 로드 실패 시
-      document.getElementById('map').innerHTML = 
-        '<div style="padding: 20px; text-align: center;">지도 API를 불러오는데 실패했습니다.<br>API 키를 확인해주세요.</div>';
-      console.error('Kakao Maps API is not loaded.');
+      // 맛집 목록은 계속 표시
+      displayRestaurants(restaurants);
+      return;
     }
+    
+    // 지도 중심 좌표 (부산시청)
+    const defaultCenter = new kakao.maps.LatLng(35.1798, 129.0750);
+    
+    // 지도 생성 옵션
+    const mapOptions = {
+      center: defaultCenter,
+      level: 7
+    };
+    
+    // 지도 생성
+    map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
+    
+    // 식당 마커 표시
+    displayMarkers(restaurants);
   }
   
   // 식당 마커 표시 함수
