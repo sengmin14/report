@@ -1040,3 +1040,42 @@ body.landing {
   box-shadow: 0 4px 16px -6px rgba(20,60,160,.15), 0 1px 3px rgba(0,0,0,.06);
 }
 .cta-btn.alt:hover { background: #f7f9ff; }
+
+/* 메인 페이지의 CSS 파일에 추가 */
+.featured-link {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.restaurant-link {
+  display: inline-block;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  max-width: 300px;
+}
+
+.restaurant-link:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.restaurant-link img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 10px;
+}
+
+.restaurant-link h3 {
+  color: #0b5ed7;
+  margin-bottom: 10px;
+}
+
+.restaurant-link p {
+  font-size: 14px;
+  color: #6c757d;
+}

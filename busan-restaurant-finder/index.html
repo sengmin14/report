@@ -11,19 +11,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
         crossorigin=""></script>
-  <!-- Leaflet 모바일 최적화를 위한 추가 스타일 -->
-  <style>
-    .leaflet-touch .leaflet-control-zoom {
-      display: block !important;
-    }
-    
-    /* 기기 방향 변경 시 지도가 올바르게 표시되도록 */
-    @media screen and (orientation: portrait), screen and (orientation: landscape) {
-      #map {
-        height: 100% !important;
-      }
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -35,12 +22,25 @@
           <option value="">전체 카테고리</option>
           <option value="korean">한식</option>
           <option value="seafood">해산물</option>
+          <option value="snack">분식</option>
+          <option value="chinese">중식</option>
+          <option value="japanese">일식</option>
+          <option value="western">양식</option>
+          <option value="dessert">디저트</option>
           <option value="cafe">카페</option>
+          <option value="bakery">베이커리</option>
+          <option value="chicken">치킨</option>
         </select>
         <button id="searchBtn">검색</button>
       </div>
     </div>
   </header>
+  
+  <!-- 여기에 모바일 탭 추가 -->
+  <div class="mobile-tabs">
+    <button class="tab-btn active" data-target="map">지도 보기</button>
+    <button class="tab-btn" data-target="list">맛집 목록</button>
+  </div>
   
   <main>
     <div class="container main-content">
@@ -54,12 +54,19 @@
     </div>
   </main>
   
+  <div class="mobile-fab">
+    <button id="scrollTopBtn">↑</button>
+  </div>
+  
   <footer>
     <div class="container">
-      <p>© 부산 맛집 찾기</p>
+      <p>© <script>document.write(new Date().getFullYear())</script> 부산 맛집 찾기</p>
     </div>
   </footer>
-  
+
+  <!-- data.js를 먼저 로드 -->
+  <script src="data.js"></script>
+  <!-- 그 다음 main.js 로드 -->
   <script src="main.js"></script>
 </body>
 </html>

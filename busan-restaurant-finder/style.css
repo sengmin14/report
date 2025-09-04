@@ -171,6 +171,13 @@ main {
   font-size: 14px;
 }
 
+/* 맛집 카드 클릭 효과 */
+.restaurant-card.highlight {
+  background-color: #f0f8ff;
+  transform: scale(0.98);
+  transition: all 0.2s ease;
+}
+
 /* Leaflet 마커 팝업 스타일 */
 .leaflet-popup-content {
   margin: 10px;
@@ -190,6 +197,26 @@ main {
 .leaflet-popup-content .category {
   font-size: 12px;
   color: #666;
+}
+
+/* 모바일에서 클릭 가능한 요소 스타일 개선 */
+@media (max-width: 768px) {
+  .restaurant-card {
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .restaurant-card::after {
+    content: "👉 지도보기";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: #0b5ed7;
+    background: #e9f5ff;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
 }
 
 /* 맛집 카드 하이라이트 효과 */
@@ -238,11 +265,293 @@ footer {
     height: auto;
     max-height: 500px;
   }
+
+  /* 터치 영역 최적화 */
+  button, select, .restaurant-card {
+    touch-action: manipulation;
+  }
+
+  /* 모바일 헤더 최적화 */
+  header {
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .search-box {
+    gap: 8px;
+  }
+
+  .search-box input,
+  .search-box select,
+  .search-box button {
+    height: 40px; /* 더 큰 터치 영역 */
+    font-size: 16px; /* iOS에서 자동 확대 방지 */
+    padding: 0 12px;
+  }
+
+  /* 모바일에서 검색 버튼 강조 */
+  .search-box button {
+    width: 100%;
+    margin-top: 5px;
+    height: 44px;
+    font-weight: bold;
+  }
+
+  /* 모바일 레이아웃 개선 */
+  .main-content {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+  }
+
+  /* 지도 영역 */
+  .map-section {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+
+  /* 지도 컨트롤 크기 증가 */
+  .leaflet-touch .leaflet-control-zoom a {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  /* 목록 영역 */
+  .list-section {
+    max-height: none;
+    height: auto;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .list-section h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+
+  /* 목록 아이템 최적화 */
+  .restaurant-card {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+
+  .restaurant-card h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* 맛집 카드 내부 여백 최적화 */
+  .restaurant-card .rating,
+  .restaurant-card .category-tag,
+  .restaurant-card address,
+  .restaurant-card p {
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .restaurant-card .phone {
+    font-size: 14px;
+  }
+
+  /* 스크롤 최적화 */
+  .list-section {
+    -webkit-overflow-scrolling: touch;
+    max-height: 450px;
+  }
 }
 
-/* 더 작은 화면에 대한 추가 조정 */
+/* 작은 모바일 화면 추가 최적화 */
 @media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
   .map-section {
-    height: 350px; /* 작은 화면에서는 조금 더 작게 */
+    height: 250px;
+    margin-bottom: 8px;
+  }
+
+  /* 매우 작은 화면에서 불필요한 여백 제거 */
+  .restaurant-card {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  /* 가격 정보 표시 (추가된 데이터 활용) */
+  .restaurant-card .price-info {
+    display: inline-block;
+    background-color: #e9f5ff;
+    color: #0b5ed7;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-top: 4px;
+  }
+}
+
+/* 가로 모드 최적화 */
+@media (max-width: 900px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+    height: calc(100vh - 150px);
+  }
+
+  .map-section {
+    height: 100%;
+    flex: 1;
+  }
+
+  .list-section {
+    flex: 1;
+    height: 100%;
+    max-height: 100%;
+  }
+}
+
+/* 하단 작업 버튼 영역 추가 */
+.mobile-actions {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-actions {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  .mobile-actions button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    border: none;
+    background: #0b5ed7;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+
+  /* 하단 버튼 있을 때 여백 추가 */
+  body {
+    padding-bottom: 60px;
+  }
+}
+
+/* 모바일 탭 인터페이스 */
+.mobile-tabs {
+  display: none;
+}
+
+/* 플로팅 버튼 */
+.mobile-fab {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* 탭 인터페이스 */
+  .mobile-tabs {
+    display: flex;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: white;
+    z-index: 999;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .mobile-tabs .tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #6c757d;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .mobile-tabs .tab-btn.active {
+    color: #0b5ed7;
+    border-bottom-color: #0b5ed7;
+    background: white;
+  }
+  
+  /* 지도/목록 영역 분리 */
+  .main-content {
+    flex-direction: column;
+  }
+  
+  /* 목록 섹션 스타일 */
+  .list-section {
+    display: none;
+  }
+  
+  /* 맵 섹션 높이 조정 */
+  .map-section {
+    height: calc(100vh - 180px);
+    margin-bottom: 0;
+  }
+  
+  /* 활성화된 탭에 따라 표시 */
+  .main-content.show-map .map-section {
+    display: block !important;
+  }
+
+  .main-content.show-map .list-section {
+    display: none !important;
+  }
+
+  .main-content.show-list .map-section {
+    display: none !important;
+  }
+
+  .main-content.show-list .list-section {
+    display: block !important;
+    max-height: none;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+  }
+  
+  /* 스크롤 맨 위로 버튼 */
+  .mobile-fab {
+    display: block;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  .mobile-fab button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: #0b5ed7;
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   }
 }
