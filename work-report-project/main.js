@@ -166,13 +166,6 @@ function checkReportFormatting(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // 1. 들여쓰기 검증 (2칸 이상 금지)
-    if (!isBlank(line)) {
-      if (/^\s{2,}/.test(line)) {
-        errors.push(`[${i + 1}행] 들여쓰기는 2칸 이상 금지(불필요한 앞공백).`);
-      }
-    }
-
     // 2. 괄호/대괄호 공백 규칙
     let skipLeftBracketSpace = false;
     // 중분류/소분류의 시작 부분 괄호는 예외 처리
