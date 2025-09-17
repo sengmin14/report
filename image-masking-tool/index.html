@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이미지 개인정보 자동 마스킹</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="../index.html" class="home-btn">← 메인으로</a>
+      <h1>이미지 개인정보 자동 마스킹</h1>
+      <p class="subtitle">주민번호, 휴대폰, 이메일, IP 자동 검출</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="tool-container">
+      <div class="upload-section">
+        <div class="upload-area" id="dropArea">
+          <div class="upload-content">
+            <svg width="64" height="64" viewBox="0 0 64 64" class="upload-icon" aria-hidden="true">
+              <rect width="64" height="64" rx="8" fill="#f8f9fa"/>
+              <path d="M18,32 L32,18 L46,32" stroke="#0b5ed7" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M32,18 L32,46" stroke="#0b5ed7" stroke-width="3" stroke-linecap="round"/>
+              <path d="M18,46 L46,46" stroke="#0b5ed7" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <h3>이미지 업로드</h3>
+            <p>이미지를 끌어다 놓거나 클릭하여 선택하세요</p>
+            <input type="file" id="fileInput" accept="image/*" hidden />
+            <button id="uploadBtn" class="btn primary" type="button">파일 선택</button>
+          </div>
+        </div>
+
+        <div class="options-panel">
+          <h3>마스킹 옵션</h3>
+          <div class="options-list">
+            <label class="option-item"><input type="checkbox" id="maskRRN" checked /> 주민등록번호</label>
+            <label class="option-item"><input type="checkbox" id="maskPhone" checked /> 휴대폰 번호</label>
+            <label class="option-item"><input type="checkbox" id="maskEmail" checked /> 이메일 주소</label>
+            <label class="option-item"><input type="checkbox" id="maskIP" checked /> IP 주소</label>
+            <!-- 주소 옵션 제거 -->
+          </div>
+          <div class="mask-style">
+            <h4>마스킹 스타일</h4>
+            <select id="maskStyle">
+              <option value="black">검은색 박스</option>
+              <option value="blur">블러(반투명 박스)</option>
+              <option value="asterisk">별표(*) 대체</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 진행 상태 -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+        <p id="progressText">이미지 분석 중...</p>
+      </div>
+
+      <!-- 결과 섹션 -->
+      <div class="result-section" id="resultSection">
+        <div class="tabs">
+          <button class="tab-btn active" data-target="original" type="button">원본 이미지</button>
+          <button class="tab-btn" data-target="masked" type="button">마스킹 이미지</button>
+          <button class="tab-btn" data-target="compare" type="button">비교 보기</button>
+        </div>
+
+        <!-- 원본 -->
+        <div class="tab-content active" id="original">
+          <div class="image-container">
+            <img id="originalImage" alt="원본 이미지" />
+          </div>
+        </div>
+
+        <!-- 마스킹 -->
+        <div class="tab-content" id="masked">
+          <div class="image-container">
+            <img id="maskedImage" alt="마스킹된 이미지" />
+          </div>
+          <div class="action-buttons">
+            <button id="downloadBtn" class="btn primary" type="button">마스킹 이미지 다운로드</button>
+          </div>
+        </div>
+
+        <!-- 비교 -->
+        <div class="tab-content" id="compare">
+          <div class="compare-container">
+            <div class="image-container half">
+              <h4>원본</h4>
+              <img id="compareOriginal" alt="원본 이미지" />
+            </div>
+            <div class="image-container half">
+              <h4>마스킹</h4>
+              <img id="compareMasked" alt="마스킹된 이미지" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 감지 결과 목록 -->
+        <div class="detection-info">
+          <h3>감지된 개인정보</h3>
+          <div id="detectionList" class="detection-list"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© <script>document.write(new Date().getFullYear())</script> 개인정보 자동 마스킹 도구 | Powered by Tesseract.js (클래식 엔진)</p>
+    </div>
+  </footer>
+  
+  <!-- Tesseract.js 먼저 로드 -->
+  <script src="https://unpkg.com/tesseract.js@5.0.5/dist/tesseract.min.js"></script>
+  
+  <!-- OpenCV.js는 스크립트에서 동적으로 로드 -->
+  <script src="./script.js"></script>
+</body>
+</html>

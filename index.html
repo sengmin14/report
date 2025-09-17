@@ -15,17 +15,34 @@
       </h1>
       <p class="landing-sub">업무보고 자동검증기와 뇌나이 측정용 미니게임을 이용해 보세요.</p>
 
-      <!-- 링크 버튼 2개 -->
+      <!-- 링크 버튼 2개로 수정 (개인정보 마스킹 버튼 제거) -->
       <div class="cta-group">
         <a class="cta-btn" href="./work-report-project/index.html">업무보고 자동검증기</a>
         <a class="cta-btn" href="./brain-test-project/index.html">뇌나이 측정 테스트</a>
+      </div>
+
+      <!-- 이미지 마스킹 도구 링크 추가 (이 부분은 유지) -->
+      <div class="featured-link">
+        <a href="./image-masking-tool/index.html" class="privacy-link">
+          <svg class="privacy-icon" width="64" height="64" viewBox="0 0 64 64">
+            <rect width="64" height="64" rx="8" fill="#f8f9fa"/>
+            <rect x="10" y="15" width="44" height="34" rx="4" fill="#e7f5ff" stroke="#0b5ed7" stroke-width="2"/>
+            <rect x="20" y="25" width="24" height="6" rx="2" fill="#ff6b6b"/>
+            <rect x="24" y="35" width="16" height="6" rx="2" fill="#ff6b6b"/>
+            <circle cx="16" cy="22" r="2" fill="#0b5ed7"/>
+            <circle cx="16" cy="32" r="2" fill="#0b5ed7"/>
+            <circle cx="16" cy="42" r="2" fill="#0b5ed7"/>
+            <path d="M48,18 L52,14 M52,18 L48,14" stroke="#0b5ed7" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>이미지 개인정보 자동 마스킹</h3>
+          <p>주민번호, 휴대폰, 이메일, IP, 아이디, 주소 등을 자동 검출하여 마스킹합니다.</p>
+        </a>
       </div>
 
       <!-- 부산 맛집 링크 추가 -->
       <div class="featured-link">
         <a href="busan-restaurant-finder/index.html" class="restaurant-link">
           <svg class="restaurant-icon" width="64" height="64">
-            <!-- 위 SVG 코드 삽입 -->
             <circle cx="32" cy="32" r="32" fill="#e7f5ff"/>
             <path d="M10,32 C10,15 22,10 32,10 C42,10 54,15 54,32 C54,49 42,54 32,54 C22,54 10,49 10,32 Z" 
                   fill="#0b5ed7"/>
@@ -34,14 +51,14 @@
             <path d="M22,22 L42,42" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
             <path d="M42,22 L22,42" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
           </svg>
-          <h3>부산 가성비 맛집 100선</h3>
+          <h3>부산 가성비 맛집 200선</h3>
           <p>현지인들이 추천하는 진짜 부산 맛집을 찾아보세요!</p>
         </a>
       </div>
     </main>
     <script src="./main.js"></script>
-    <!-- SVG 코드 추가 -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="64" height="64">
+    <!-- SVG 코드 수정 (유지) -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="64" height="64" id="busan-food-icon" style="display:none;">
       <!-- 배경 원 -->
       <circle cx="256" cy="256" r="240" fill="#e7f5ff" stroke="#0b5ed7" stroke-width="12"/>
       
@@ -63,10 +80,10 @@
       <path d="M256,125 C256,105 266,110 266,95" stroke="#868e96" stroke-width="3" stroke-linecap="round"/>
       <path d="M276,130 C276,110 286,115 286,100" stroke="#868e96" stroke-width="3" stroke-linecap="round"/>
       
-      <!-- 100선 텍스트 -->
+      <!-- 200선으로 수정 -->
       <rect x="176" y="350" width="160" height="40" rx="20" fill="#0b5ed7"/>
       <text x="256" y="378" font-family="Arial, sans-serif" font-size="24" font-weight="bold" 
-            fill="white" text-anchor="middle">100선</text>
+            fill="white" text-anchor="middle">200선</text>
       
       <!-- 부산 별 마커 -->
       <path d="M256,100 L263,115 L280,115 L267,125 L272,140 L256,130 L240,140 L245,125 L232,115 L249,115 Z" 
