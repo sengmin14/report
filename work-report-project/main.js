@@ -66,7 +66,9 @@ function checkReportFormatting(text) {
   // 금지되는 날짜 패턴:
   // 1. 월/일이 0으로 시작 (예: 08/23, 8/05)
   // 2. "까지" 포함된 경우 (예: ~8/30까지)
+  // 3. 마침표(.) 형식 날짜 (예: 12.12, ~9.30)
   const forbiddenZeroOrUntilDate = /\(\~?((0\d{1}|[1-9]|1[0-2]))\/((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
+  const forbiddenDotDate = /\(\~?((0\d{1}|[1-9]|1[0-2]))\.((0\d{1}|[1-9]|[12][0-9]|3[01]))(\s*까지)?\)/g;
 
   // --- 유틸리티 함수 정의 ---
   // 특정 위치의 라인 반환 (존재하지 않으면 빈 문자열)
@@ -101,6 +103,8 @@ function checkReportFormatting(text) {
   // --- 날짜 표기 검증 로직 ---
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
+    
+    // 기존 패턴 검사 (슬래시 형식)
     let matches = line.match(forbiddenZeroOrUntilDate);
     if (matches) {
       for (let m of matches) {
@@ -116,6 +120,16 @@ function checkReportFormatting(text) {
             `[${i + 1}행] 허용되지 않는 날짜 표기: ${m} (날짜는 (8/23), (~7/30) 형태만 허용, 월/일 0으로 시작·"까지" 포함은 금지)`
           );
         }
+      }
+    }
+    
+    // 마침표 패턴 검사 추가 (마침표 형식은 모두 금지)
+    let dotMatches = line.match(forbiddenDotDate);
+    if (dotMatches) {
+      for (let m of dotMatches) {
+        errors.push(
+          `[${i + 1}행] 허용되지 않는 날짜 표기: ${m} (마침표(.) 형식은 사용 금지, 대신 슬래시(/) 형식을 사용하세요 - 예: (9/30))`
+        );
       }
     }
   }
