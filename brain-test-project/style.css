@@ -31,7 +31,7 @@ body.numgrid-page { min-height: 100dvh; }
 
 /* 레이아웃 */
 .ng-container{
-  max-width: 960px; margin: 28px auto; padding: 0 16px;
+  max-width: 960px; margin: 60px auto 28px; padding: 0 16px;
 }
 .ng-header{
   display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 14px;
@@ -49,7 +49,8 @@ body.numgrid-page { min-height: 100dvh; }
 /* 카드 */
 .ng-card{
   background:var(--panel); border:1px solid var(--border);
-  border-radius: 18px; padding: 18px 16px; box-shadow: 0 8px 24px -12px rgba(20,40,120,.18), 0 2px 8px rgba(16,24,40,.06);
+  border-radius: 18px; padding: 18px 16px 18px 50px; /* 왼쪽 패딩을 16px에서 50px로 증가 */
+  box-shadow: 0 8px 24px -12px rgba(20,40,120,.18), 0 2px 8px rgba(16,24,40,.06);
 }
 
 /* 소개/요약 */
@@ -80,6 +81,98 @@ body.numgrid-page { min-height: 100dvh; }
 }
 .ng-btn.primary{ border-color: transparent; background: linear-gradient(90deg,#3553ff 70%,#1b95e6); color:#fff; }
 .ng-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+
+/* 예쁜 홈 버튼 스타일링 */
+.home-button-container {
+  position: fixed;
+  top: 10px;
+  left: 10px; /* right에서 left로 변경 */
+  z-index: 1000;
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: white;
+  text-decoration: none;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(107, 142, 251, 0.4);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.home-button .material-icons {
+  font-size: 20px;
+}
+
+.home-button span:not(.material-icons) {
+  display: none;
+}
+
+/* 호버 효과 유지 */
+.home-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(107, 142, 251, 0.6);
+}
+
+.home-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(107, 142, 251, 0.4);
+}
+
+/* 반응형: 모바일에서 텍스트 숨기고 아이콘만 표시 */
+@media (max-width: 600px) {
+  /* 버튼 위치 및 크기 조정 */
+  .home-button-container {
+    top: 5px;
+    left: 5px;
+  }
+  
+  .home-button {
+    width: 32px; /* 더 작게 */
+    height: 32px; /* 더 작게 */
+    padding: 0; /* 패딩 제거 */
+  }
+  
+  .home-button .material-icons {
+    font-size: 16px; /* 아이콘 크기 줄이기 */
+  }
+  
+  /* 카드 패딩 늘리기 */
+  .ng-card {
+    padding: 18px 16px 18px 60px; /* 왼쪽 패딩 더 늘리기 */
+    padding-top: 24px; /* 상단 패딩도 늘리기 */
+    margin-top: 10px; /* 상단 여백 추가 */
+  }
+  
+  /* 추가: 첫 번째 텍스트 라인에 여백 추가 */
+  .ng-card > *:first-child {
+    margin-left: 10px;
+  }
+}
+
+/* 초소형 화면을 위한 추가 조정 */
+@media (max-width: 400px) {
+  .ng-card {
+    padding-left: 70px; /* 더 작은 화면에서는 더 많은 패딩 */
+  }
+  
+  /* 아주 작은 화면에서는 버튼을 우측으로 이동하는 옵션도 고려 */
+  /* 
+  .home-button-container {
+    left: auto;
+    right: 5px;
+  }
+  */
+}
 
 /* 반응형 */
 @media (max-width: 720px){
