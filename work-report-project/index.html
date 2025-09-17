@@ -69,6 +69,7 @@
               <li>허용: <code>(8/23)</code>, <code>(~7/30)</code></li>
               <li>월/일 0으로 시작 금지 (예: (08/23), (7/05))</li>
               <li><code>까지</code> 포함 금지 (예: (7/30까지), (~8/15까지))</li>
+              <li>마침표(.) 형식 금지 (예: (9.30), (~12.12), (9.30까지))</li>
             </ul>
 
           <h4>3. 괄호 / 대괄호 공백</h4>
@@ -114,6 +115,17 @@
         <h3>규칙 추가/변경 이력</h3>
         <div class="rule-list">
           <ul>
+            <li><b>v1.11.0</b>
+              <ul>
+                <li>날짜 표기 규칙 강화
+                  <ul>
+                    <li>마침표(.) 형식 날짜 패턴 사용 금지 (예: (9.30), (~12.12))</li>
+                    <li>"까지" 포함된 마침표 형식도 감지 및 금지 (예: (9.30까지))</li>
+                    <li>날짜는 슬래시(/) 형식만 허용 (예: (9/30), (~7/30))</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
             <li><b>v1.10.0</b>
               <ul>
                 <li>특수기호 공백 규칙 정밀화
@@ -166,8 +178,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/markdown/markdown.js"></script>
-    <script src="../prevent-zoom.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/markdown/markdown.js"></script>    <script src="../prevent-zoom.js"></script>
     <script src="./main.js"></script><!-- report 전용 스크립트 -->
   </body>
 </html>
