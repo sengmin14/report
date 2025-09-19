@@ -585,3 +585,11 @@ footer {
 .rating, .restaurant-item p.rating {
   display: none !important;
 }
+
+/* 마커 스타일 */
+.map-marker {
+  width: 24px;
+  height: 35px;
+  transform-origin: bottom center;
+  /* 필요시 다른 스타일 속성 */
+}

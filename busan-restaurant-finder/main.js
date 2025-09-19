@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const busanCenter = [35.17414164719, 129.12641555476];
       
       // 지도 생성 - 줌 레벨을 13에서 15로 증가
-      map = L.map('map').setView(busanCenter, 18);
+      map = L.map('map').setView(busanCenter, 16);
       
       // 타일 레이어 추가 (OpenStreetMap)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -354,6 +354,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
     }
+  }
+  
+  // 마커 생성 함수 수정
+  function createMarker(place) {
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(place.lat, place.lng),
+      map: map,
+      // 마커 이미지 크기 추가 축소
+      image: new kakao.maps.MarkerImage(
+        // 마커 이미지 경로
+        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+        // 마커 이미지 크기 (더 작게 설정)
+        new kakao.maps.Size(16, 24), 
+        // 마커 이미지 중심좌표
+        new kakao.maps.Point(8, 24)
+      )
+    });
+    
+    // 마커 클릭 이벤트 등 기존 코드
+    // ...existing code...
+    
+    return marker;
   }
   
   // 앱 초기화
