@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>센텀 점심 맛집 수집기 (단일 HTML)</title>
+<style>
+  :root { --bg:#0b0d12; --card:#131723; --muted:#8ea0b8; --text:#e7efff; --accent:#4da3ff; }
+  body { margin:0; background:linear-gradient(180deg,#0b0d12,#0f1320 40%,#0b0d12); color:var(--text); font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Apple SD Gothic Neo,Pretendard,Noto Sans KR,Arial; }
+  .wrap { max-width:980px; margin:32px auto; padding:0 16px; }
+  .card { background:var(--card); border:1px solid #1d2333; border-radius:16px; padding:20px; box-shadow:0 8px 30px rgba(0,0,0,.25); }
+  h1 { font-size:20px; margin:0 0 12px; display:flex; align-items:center; gap:10px; }
+  h1 .dot { width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 16px var(--accent); }
+  p.hint { color:var(--muted); margin:6px 0 18px; }
+  .grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; }
+  .grid .col-span-2 { grid-column: span 2; }
+  label { font-size:12px; color:#b9c7df; display:block; margin:6px 0; }
+  input, select, textarea { width:100%; background:#0c1020; color:var(--text); border:1px solid #25304a; border-radius:10px; padding:10px 12px; outline:none; }
+  textarea { min-height:160px; resize:vertical; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  button { background:linear-gradient(180deg,#3e8dff,#2b6fe3); border:none; color:white; padding:10px 14px; border-radius:12px; font-weight:600; cursor:pointer; }
+  button.secondary { background:#0e1426; border:1px solid #2a3551; color:#d6e3ff; }
+  button.ghost { background:transparent; border:1px dashed #2a3551; color:#aac3ff; }
+  .pill { background:#0e162b; color:#a9c4ff; padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid #25304a; }
+  .muted { color:var(--muted); }
+  .mt { margin-top:16px; }
+  .mt-lg { margin-top:22px; }
+  .table { overflow:auto; border:1px solid #1f2740; border-radius:12px; }
+  table { width:100%; border-collapse:collapse; min-width:720px; }
+  th, td { padding:10px 12px; font-size:13px; border-bottom:1px solid #1f2740; }
+  th { text-align:left; color:#a9c4ff; background:#0f1424; position:sticky; top:0; }
+  tr:hover td { background:#0d1323; }
+  .footnote { font-size:12px; color:#91a6c8; }
+  .ok { color:#79ffb8 }
+  .warn { color:#ffd479 }
+  .err { color:#ff7a7a }
+  .badge { font-size:12px; padding:3px 8px; border-radius:10px; border:1px solid #2a3551; background:#0d1529; color:#bfe0ff; }
+  .right { margin-left:auto; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1><span class="dot"></span> 센텀 점심 맛집 수집기 <span class="pill">단일 HTML / 카카오 로컬 API</span></h1>
+      <p class="hint">
+        한국청소년상담복지개발원(<strong>센텀사이언스파크</strong>)을 중심으로, <strong>음식점(FD6)</strong> + <strong>카페(CE7)</strong>를
+        반경 내에서 모아 <strong>최대 300개</strong>를 중복 제거/거리순 정렬 후, 원하는 스키마로 내보냅니다.
+      </p>
+
+      <div class="grid">
+        <div>
+          <label>카카오 REST API 키 <span class="muted">(Authorization: KakaoAK &lt;KEY&gt;)</span></label>
+          <input id="apiKey" placeholder="예) 0123456789abcdef0123456789abcdef" />
+        </div>
+        <div>
+          <label>타겟 개수 (최대 300)</label>
+          <input id="target" type="number" min="1" max="300" value="300" />
+        </div>
+        <div>
+          <label>반경 (미터)</label>
+          <input id="radius" type="number" min="100" max="10000" value="3000" />
+        </div>
+        <div>
+          <label>정렬</label>
+          <select id="sortMode">
+            <option value="distance" selected>거리순</option>
+            <option value="name">가나다/알파벳</option>
+          </select>
+        </div>
+
+        <div class="col-span-2">
+          <label>중심 위도 (lat)</label>
+          <input id="lat" type="number" step="0.0000001" value="35.17414164719" />
+        </div>
+        <div class="col-span-2">
+          <label>중심 경도 (lng)</label>
+          <input id="lng" type="number" step="0.0000001" value="129.12641555476" />
+        </div>
+      </div>
+
+      <div class="row mt">
+        <button id="runBtn">수집 시작</button>
+        <button id="stopBtn" class="secondary">중지</button>
+        <span id="status" class="badge">대기 중</span>
+        <span class="right footnote">카테고리: <strong>FD6(음식점)</strong>, <strong>CE7(카페)</strong> / 최대 페이지 45, size 15</span>
+      </div>
+
+      <div class="mt-lg">
+        <div class="row">
+          <button id="copyBtn" class="ghost">코드 복사 (const restaurants = ...)</button>
+          <button id="dlJsBtn" class="ghost">JS 다운로드</button>
+          <button id="dlJsonBtn" class="ghost">JSON 다운로드</button>
+          <span id="count" class="pill right">0 건</span>
+        </div>
+        <textarea id="output" class="mt" placeholder="여기에 const restaurants = [...] 코드가 생성됩니다."></textarea>
+      </div>
+    </div>
+
+    <div class="card mt-lg">
+      <div class="row">
+        <h2 style="font-size:16px;margin:0;">미리보기</h2>
+        <span class="pill">Top 50 미리보기</span>
+      </div>
+      <div class="table mt">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>이름</th>
+              <th>카테고리</th>
+              <th>주소</th>
+              <th>전화</th>
+              <th>lat</th>
+              <th>lng</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="footnote mt">평점/가격대는 카카오 로컬 API에서 제공하지 않습니다(필요 시 Google Places 등으로 후보강).</p>
+    </div>
+
+    <p class="footnote mt-lg">
+      ⚠️ 브라우저에서 REST API를 직접 호출하므로 키가 노출될 수 있습니다. 개인 용도/테스트용으로 사용하세요.
+      CORS가 차단되면 같은 로직을 Node/PowerShell에서 실행하세요.
+    </p>
+  </div>
+
+<script>
+(function(){
+  const CATEGORIES = ["FD6","CE7"]; // 음식점 + 카페
+  let stopFlag = false;
+
+  const $ = (id) => document.getElementById(id);
+  const apiKeyEl = $("apiKey");
+  const targetEl = $("target");
+  const radiusEl = $("radius");
+  const latEl = $("lat");
+  const lngEl = $("lng");
+  const sortModeEl = $("sortMode");
+  const statusEl = $("status");
+  const countEl = $("count");
+  const outputEl = $("output");
+  const tblBody = document.querySelector("#tbl tbody");
+
+  $("runBtn").addEventListener("click", run);
+  $("stopBtn").addEventListener("click", () => stopFlag = true);
+  $("copyBtn").addEventListener("click", copyCode);
+  $("dlJsBtn").addEventListener("click", () => downloadFile("restaurants.js", outputEl.value || ""));
+  $("dlJsonBtn").addEventListener("click", downloadJson);
+
+  function setStatus(text, cls="badge"){
+    statusEl.textContent = text;
+    statusEl.className = cls;
+  }
+
+  function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+  function mapCategory(name="", group=""){
+    if (group === "CE7") return "cafe";
+    const n = (name || "").toLowerCase();
+    if (n.includes("일식") || n.includes("돈까스") || n.includes("초밥") || n.includes("라멘")) return "japanese";
+    if (n.includes("중식") || n.includes("짜장") || n.includes("마라")) return "chinese";
+    if (n.includes("양식") || n.includes("스테이크") || n.includes("피자") || n.includes("파스타")) return "western";
+    if (n.includes("분식")) return "snack";
+    if (n.includes("베이커리") || n.includes("빵")) return "bakery";
+    if (n.includes("한식") || n.includes("국밥") || n.includes("찌개") || n.includes("백반") || n.includes("곰탕") || n.includes("비빔밥")) return "korean";
+    return group === "FD6" ? "korean" : "other";
+  }
+
+  function haversine(a, b){
+    const R = 6371000;
+    const toRad = d => d * Math.PI / 180;
+    const dLat = toRad(b.lat - a.lat);
+    const dLng = toRad(b.lng - a.lng);
+    const sLat1 = toRad(a.lat);
+    const sLat2 = toRad(b.lat);
+    const A = Math.sin(dLat/2)**2 + Math.cos(sLat1)*Math.cos(sLat2)*Math.sin(dLng/2)**2;
+    const C = 2 * Math.atan2(Math.sqrt(A), Math.sqrt(1 - A));
+    return R * C;
+  }
+
+  // 카테고리 검색 함수 수정 (size 값을 30에서 15로 변경)
+  async function searchCategory(cat, center, radius, apiKey, target){
+    const out = [];
+    // 페이지는 더 많이 요청 (15→45)
+    for (let page=1; page<=45 && out.length < target; page++){
+      if (stopFlag) break;
+      const url = new URL("https://dapi.kakao.com/v2/local/search/category.json");
+      url.searchParams.set("category_group_code", cat);
+      url.searchParams.set("x", String(center.lng)); 
+      url.searchParams.set("y", String(center.lat)); 
+      url.searchParams.set("radius", String(radius));
+      url.searchParams.set("sort", "distance");
+      url.searchParams.set("page", String(page));
+      // size는 반드시 15 이하여야 함
+      url.searchParams.set("size", "15");
+      // 이하 코드 동일...
+      const res = await fetch(url, { headers: { Authorization: `KakaoAK ${apiKey}` } });
+      if (!res.ok){
+        const t = await res.text();
+        throw new Error(`카카오 요청 실패 [${res.status}] ${t}`);
+      }
+      const json = await res.json();
+      const docs = json.documents || [];
+      out.push(...docs);
+      setStatus(`수집 중… ${cat} p.${page} (누적 ${out.length})`, "badge");
+      if (docs.length < 15) break;
+      await delay(110);
+      // API 호출 사이에 딜레이 추가 (API 제한 방지)
+      await delay(300); // 300ms 지연
+    }
+    return out;
+  }
+
+  // 키워드 검색 함수 추가
+  async function searchKeyword(keyword, center, radius, apiKey, target) {
+    const out = [];
+    for (let page=1; page<=15 && out.length < target; page++) {
+      if (stopFlag) break;
+      const url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json");
+      url.searchParams.set("query", keyword);
+      url.searchParams.set("x", String(center.lng)); 
+      url.searchParams.set("y", String(center.lat)); 
+      url.searchParams.set("radius", String(radius));
+      url.searchParams.set("sort", "distance");
+      url.searchParams.set("page", String(page));
+      url.searchParams.set("size", "15");
+      
+      const res = await fetch(url, { headers: { Authorization: `KakaoAK ${apiKey}` } });
+      if (!res.ok){
+        const t = await res.text();
+        throw new Error(`카카오 요청 실패 [${res.status}] ${t}`);
+      }
+      const json = await res.json();
+      const docs = json.documents || [];
+      out.push(...docs);
+      setStatus(`수집 중… ${keyword} p.${page} (누적 ${out.length})`, "badge");
+      if (docs.length < 15) break;
+      await delay(110);
+      // API 호출 사이에 딜레이 추가 (API 제한 방지)
+      await delay(300); // 300ms 지연
+    }
+    return out;
+  }
+
+  function toSchema(p, id){
+    const lat = Number(p.y);
+    const lng = Number(p.x);
+    return {
+      id,
+      name: p.place_name || "",
+      category: mapCategory(p.category_name, p.category_group_code),
+      rating: null, // 카카오 로컬 API는 평점/가격대 제공 안 함
+      address: p.road_address_name || p.address_name || "",
+      description: "",
+      phone: p.phone || "",
+      price: null,
+      location: { lat, lng }
+    };
+  }
+
+  function renderPreview(list){
+    tblBody.innerHTML = "";
+    const rows = list.slice(0,50).map(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.id}</td>
+        <td>${escapeHtml(r.name)}</td>
+        <td>${escapeHtml(r.category)}</td>
+        <td>${escapeHtml(r.address || "")}</td>
+        <td>${escapeHtml(r.phone || "")}</td>
+        <td>${r.location.lat.toFixed(6)}</td>
+        <td>${r.location.lng.toFixed(6)}</td>
+      `;
+      return tr;
+    });
+    rows.forEach(tr => tblBody.appendChild(tr));
+  }
+
+  function makeCode(list){
+    const code = "const restaurants = " + JSON.stringify(list, null, 2) + ";\n\nexport default restaurants;\n";
+    outputEl.value = code;
+  }
+
+  async function run(){
+    stopFlag = false;
+    try{
+      setStatus("검증 중…","badge");
+      const apiKey = apiKeyEl.value.trim();
+      if (!apiKey) throw new Error("카카오 REST API 키를 입력하세요.");
+      const center = { lat: Number(latEl.value), lng: Number(lngEl.value) };
+      const target = Math.min(300, Math.max(1, Number(targetEl.value)||300));
+      const radius = Math.min(10000, Math.max(100, Number(radiusEl.value)||3000));
+
+      // 1) 수집
+      setStatus("카테고리 수집 시작","badge");
+      const raw = [];
+      // 각 카테고리당 target 수집이 아니라, 전체 target/2씩 분배하여 수집
+      const catTarget = Math.ceil(target / CATEGORIES.length);
+      for (const cat of CATEGORIES){
+        if (stopFlag) break;
+        const part = await searchCategory(cat, center, radius, apiKey, catTarget);
+        raw.push(...part);
+      }
+      // 키워드 검색 추가
+      const keywordList = ["맛집", "식당", "레스토랑", "카페", "분식", "한식", "일식", "중식"];
+      for (const keyword of keywordList) {
+        if (stopFlag) break;
+        const part = await searchKeyword(keyword, center, radius, apiKey, 50);
+        raw.push(...part);
+      }
+      if (stopFlag) { setStatus("중지됨","warn pill"); return; }
+
+      // 중심점 주변을 4개 영역으로 나눠서 각각 검색
+      const offsets = [
+        {lat: 0.003, lng: 0.003},  // 북동
+        {lat: 0.003, lng: -0.003}, // 북서
+        {lat: -0.003, lng: 0.003}, // 남동
+        {lat: -0.003, lng: -0.003} // 남서
+      ];
+
+      for (const offset of offsets) {
+        const newCenter = {
+          lat: center.lat + offset.lat,
+          lng: center.lng + offset.lng
+        };
+        
+        for (const cat of CATEGORIES) {
+          const part = await searchCategory(cat, newCenter, radius/2, apiKey, target/4);
+          raw.push(...part);
+        }
+      }
+      if (stopFlag) { setStatus("중지됨","warn pill"); return; }
+
+      // 2) 중복 제거
+      setStatus("중복 제거…","badge");
+      const seen = new Set();
+      const dedup = [];
+      for (const p of raw){
+        const key = p.id || p.place_url || `${p.x},${p.y}:${p.place_name}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        dedup.push(p);
+      }
+
+      // 3) 정렬
+      setStatus("정렬…","badge");
+      const sortMode = sortModeEl.value;
+      if (sortMode === "name"){
+        dedup.sort((a,b) => (a.place_name||"").localeCompare(b.place_name||""));
+      } else {
+        dedup.sort((a,b) => {
+          const d1 = haversine(center, { lat: Number(a.y), lng: Number(a.x) });
+          const d2 = haversine(center, { lat: Number(b.y), lng: Number(b.x) });
+          return d1 - d2;
+        });
+      }
+
+      // 4) 상위 200 변환
+      const top = dedup.slice(0, target);
+      const restaurants = top.map((p,i) => toSchema(p, i+1));
+
+      // 5) 렌더/출력
+      countEl.textContent = `${restaurants.length} 건`;
+      renderPreview(restaurants);
+      makeCode(restaurants);
+      setStatus(`완료 (${restaurants.length}건)`, "ok pill");
+    } catch (e){
+      console.error(e);
+      setStatus("에러: " + e.message, "err pill");
+      alert("에러: " + e.message);
+    }
+  }
+
+  function copyCode(){
+    if (!outputEl.value.trim()){
+      alert("출력 내용이 없습니다. 먼저 수집을 실행하세요.");
+      return;
+    }
+    navigator.clipboard.writeText(outputEl.value).then(()=>{
+      setStatus("코드 복사 완료", "ok pill");
+    }).catch(()=>{
+      setStatus("복사 실패", "err pill");
+    });
+  }
+
+  function downloadFile(filename, content){
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 0);
+  }
+
+  function downloadJson(){
+    try{
+      const code = outputEl.value;
+      if (!code.trim()){ alert("먼저 수집을 실행하세요."); return; }
+      // output 코드에서 배열만 파싱
+      const match = code.match(/const restaurants = ([\s\S]*?);\s*export default/);
+      if (!match){ alert("출력 파싱 실패"); return; }
+      const json = match[1];
+      downloadFile("restaurants.json", JSON.stringify(JSON.parse(json), null, 2));
+    } catch(e){
+      alert("JSON 저장 실패: " + e.message);
+    }
+  }
+
+  function escapeHtml(s){
+    return (s??"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+})();
+</script>
+</body>
+</html>

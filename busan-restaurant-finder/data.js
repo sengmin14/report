@@ -1,2204 +1,4202 @@
 const restaurants = [
   {
-    id: 1,
-    name: "고봉민김밥",
-    category: "korean",
-    rating: 4.8,
-    address: "부산 중구 남포동 국제시장 2길 9",
-    description: "현지인들이 줄 서서 먹는 김밥집, 두툼한 속재료와 신선한 맛이 특징",
-    phone: "051-245-0082",
-    price: "3,500원~",
-    location: { lat: 35.0987, lng: 129.0318 }
-  },
-  {
-    id: 2,
-    name: "밀면희야",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 부산진구 서면로 39",
-    description: "70년 전통의 부산 밀면 맛집, 진한 육수와 쫄깃한 면발",
-    phone: "051-806-1854",
-    price: "8,000원",
-    location: { lat: 35.1568, lng: 129.0571 }
-  },
-  {
-    id: 3,
-    name: "돼지국밥 뽀글이",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 부산진구 가야대로 772",
-    description: "아침부터 북적이는 로컬 맛집, 진한 국물과 푸짐한 고기량",
-    phone: "051-892-3456",
-    price: "8,000원",
-    location: { lat: 35.1632, lng: 129.0527 }
-  },
-  {
-    id: 4,
-    name: "민락 수변 조개구이",
-    category: "seafood",
-    rating: 4.5,
-    address: "부산 수영구 민락수변로 17",
-    description: "현지인들이 소주와 함께 즐기는 곳, 직접 구워먹는 신선한 조개",
-    phone: "051-754-8971",
-    price: "15,000원부터",
-    location: { lat: 35.1537, lng: 129.1181 }
-  },
-  {
-    id: 5,
-    name: "부평 깡통시장 충무김밥",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 중구 부평동 부평깡통시장 안",
-    description: "시장 안에 있는 숨은 맛집, 매콤한 오징어 무침과 김밥의 조화",
-    phone: "051-245-1235",
-    price: "7,000원",
-    location: { lat: 35.1052, lng: 129.0260 }
-  },
-  {
-    id: 6,
-    name: "국제시장 할매국밥",
-    category: "seafood",
-    rating: 4.6,
-    address: "부산 중구 국제시장 2길 14",
-    description: "50년 넘은 역사의 생선국밥 전문점, 담백한 생선국물과 푸짐한 양",
-    phone: "051-245-9876",
-    price: "8,000원",
-    location: { lat: 35.1003, lng: 129.0289 }
-  },
-  {
-    id: 7,
-    name: "온천장 밀면",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 동래구 온천장로 55",
-    description: "동네 주민들이 40년간 찾는 밀면집, 시원한 육수와 매콤한 양념의 조화",
-    phone: "051-552-3678",
-    price: "7,000원",
-    location: { lat: 35.2027, lng: 129.0840 }
-  },
-  {
-    id: 8,
-    name: "동래파전",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 동래구 동래시장길 11",
-    description: "시장 안 로컬 맛집, 바삭한 겉면과 해산물이 듬뿍",
-    phone: "051-555-1234",
-    price: "10,000원",
-    location: { lat: 35.2065, lng: 129.0845 }
-  },
-  {
-    id: 9,
-    name: "쌍둥이 돼지국밥",
-    category: "korean",
-    rating: 4.8,
-    address: "부산 부산진구 가야대로 503",
-    description: "새벽에도 사람 많은 진짜 로컬 맛집, 진한 국물과 부드러운 수육",
-    phone: "051-892-1256",
-    price: "7,000원",
-    location: { lat: 35.1605, lng: 129.0536 }
-  },
-  {
-    id: 10,
-    name: "장성생갈비",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 금정구 장전동 419-7",
-    description: "대학가 근처 학생들이 자주 찾는 갈비집, 두툼한 고기와 달콤한 양념",
-    phone: "051-582-9834",
-    price: "13,000원",
-    location: { lat: 35.2321, lng: 129.0848 }
-  },
-  {
-    id: 11,
-    name: "이가네떡볶이",
-    category: "snack",
-    rating: 4.6,
-    address: "부산 중구 광복로 62-1",
-    description: "30년 전통의 부산식 떡볶이, 달달하고 매콤한 부산식 떡볶이",
-    phone: "051-245-3218",
-    price: "3,000원",
-    location: { lat: 35.0997, lng: 129.0309 }
-  },
-  {
-    id: 12,
-    name: "초원복국",
-    category: "seafood",
-    rating: 4.5,
-    address: "부산 남구 용소로 43",
-    description: "새벽까지 하는 해장 맛집, 시원한 국물과 신선한 복어",
-    phone: "051-628-5678",
-    price: "10,000원",
-    location: { lat: 35.1325, lng: 129.0828 }
-  },
-  
-  // 추가 맛집 목록
-  {
-    id: 13,
-    name: "백종원의 원조쌈밥집",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 동구 범일동 62-1",
-    description: "푸짐한 양의 쌈밥과 반찬을 저렴한 가격에 즐길 수 있는 곳",
-    phone: "051-631-1234",
-    price: "7,000원",
-    location: { lat: 35.1392, lng: 129.0622 }
-  },
-  {
-    id: 14,
-    name: "원조할매국수",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 남구 대연동 산13-5",
-    description: "칼국수와 수육의 완벽한 조화, 30년 전통의 맛집",
-    phone: "051-625-7890",
-    price: "6,000원",
-    location: { lat: 35.1319, lng: 129.0843 }
-  },
-  {
-    id: 15,
-    name: "해운대 짬뽕집",
-    category: "chinese",
-    rating: 4.4,
-    address: "부산 해운대구 중동2로 11",
-    description: "해산물이 가득한 얼큰한 짬뽕, 관광객보다 현지인이 더 많이 찾는 곳",
-    phone: "051-744-3456",
-    price: "7,000원",
-    location: { lat: 35.1623, lng: 129.1629 }
-  },
-  {
-    id: 16,
-    name: "만나분식",
-    category: "snack",
-    rating: 4.7,
-    address: "부산 남구 대연동 54-12",
-    description: "대학가에서 인기 있는 가성비 분식점, 특히 치즈라면이 인기",
-    phone: "051-612-4567",
-    price: "4,000원~",
-    location: { lat: 35.1336, lng: 129.0995 }
-  },
-  {
-    id: 17,
-    name: "서면 왕만두",
-    category: "chinese",
-    rating: 4.2,
-    address: "부산 부산진구 서면로 68",
-    description: "손으로 직접 빚은 왕만두, 얇은 피와 육즙 가득한 속",
-    phone: "051-803-5678",
-    price: "5,000원",
-    location: { lat: 35.1582, lng: 129.0585 }
-  },
-  {
-    id: 18,
-    name: "옛날통닭",
-    category: "chicken",
-    rating: 4.6,
-    address: "부산 동래구 온천천로 361",
-    description: "30년 전통의 옛날통닭, 바삭한 튀김옷과 촉촉한 속살",
-    phone: "051-552-6789",
-    price: "16,000원",
-    location: { lat: 35.1969, lng: 129.0802 }
-  },
-  {
-    id: 19,
-    name: "이가네낙지",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 영도구 태종로 34",
-    description: "신선한 낙지를 저렴하게 즐길 수 있는 곳, 낙지볶음이 대표 메뉴",
-    phone: "051-417-7890",
-    price: "9,000원",
-    location: { lat: 35.0893, lng: 129.0411 }
-  },
-  {
-    id: 20,
-    name: "다리집순대국",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사상구 모라로 126",
-    description: "깔끔한 국물에 순대가 듬뿍, 가성비 최고의 순대국밥",
-    phone: "051-301-8901",
-    price: "7,000원",
-    location: { lat: 35.1891, lng: 128.9943 }
-  },
-  {
-    id: 21,
-    name: "대구탕할매집",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 서구 충무동2가 11-5",
-    description: "구수한 대구탕으로 유명한 40년 전통 식당, 시원한 맛이 일품",
-    phone: "051-254-9012",
-    price: "8,000원",
-    location: { lat: 35.0975, lng: 129.0247 }
-  },
-  {
-    id: 22,
-    name: "금정산성 막걸리집",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 금정구 산성로 231",
-    description: "직접 담근 막걸리와 함께 먹는 파전, 산책 후 들리기 좋은 곳",
-    phone: "051-517-0123",
-    price: "10,000원",
-    location: { lat: 35.2831, lng: 129.0556 }
-  },
-  {
-    id: 23,
-    name: "할매국밥 원조",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 금정구 서동 175-7",
-    description: "푸짐한 양의 돼지국밥, 아침부터 줄 서는 인기 맛집",
-    phone: "051-523-1234",
-    price: "7,000원",
-    location: { lat: 35.2175, lng: 129.0927 }
-  },
-  {
-    id: 24,
-    name: "깡통골목 빈대떡",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 중구 부평동 27-1",
-    description: "노릇노릇 바삭한 빈대떡, 소주와 함께 먹기 좋은 안주",
-    phone: "051-255-2345",
-    price: "7,000원",
-    location: { lat: 35.1041, lng: 129.0279 }
-  },
-  {
-    id: 25,
-    name: "영도 손칼국수",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 영도구 태종로 96",
-    description: "매일 반죽하는 쫄깃한 면발의 칼국수, 푸짐한 양",
-    phone: "051-412-3456",
-    price: "6,000원",
-    location: { lat: 35.0913, lng: 129.0436 }
-  },
-  {
-    id: 26,
-    name: "이바돔 감자탕",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사하구 하단동 526-6",
-    description: "뼈에서 살이 흘러내리는 부드러운 감자탕, 가족 모임에 좋음",
-    phone: "051-203-4567",
-    price: "25,000원",
-    location: { lat: 35.1105, lng: 128.9649 }
-  },
-  {
-    id: 27,
-    name: "화명동 닭한마리",
-    category: "korean",
-    rating: 4.2,
-    address: "부산 북구 화명동 1571-6",
-    description: "닭 한 마리를 통째로 넣어 끓인 보양식, 시원한 국물이 특징",
-    phone: "051-363-5678",
-    price: "20,000원",
-    location: { lat: 35.2351, lng: 129.0117 }
-  },
-  {
-    id: 28,
-    name: "서면 콩나물국밥",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 부산진구 서면로 35",
-    description: "해장하기 좋은 얼큰한 콩나물국밥, 24시간 영업",
-    phone: "051-802-6789",
-    price: "5,000원",
-    location: { lat: 35.1576, lng: 129.0574 }
-  },
-  {
-    id: 29,
-    name: "남천동 낙곱새",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 수영구 남천동로 12",
-    description: "낙지, 곱창, 새우를 한번에 즐기는 매콤한 요리, 2인 이상 추천",
-    phone: "051-624-7890",
-    price: "20,000원",
-    location: { lat: 35.1436, lng: 129.1130 }
-  },
-  {
-    id: 30,
-    name: "맥도날드 해운대역점",
-    category: "western",
-    rating: 4.0,
-    address: "부산 해운대구 좌동순환로 23",
-    description: "24시간 영업하는 패스트푸드점, 해운대 심야 식사 해결",
-    phone: "051-741-8901",
-    price: "6,000원~",
-    location: { lat: 35.1710, lng: 129.1773 }
-  },
-  {
-    id: 31,
-    name: "화전 할매국수",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 금정구 금샘로 461",
-    description: "직접 반죽한 면으로 만든 국수, 토속적인 맛이 일품",
-    phone: "051-516-9012",
-    price: "7,000원",
-    location: { lat: 35.2854, lng: 129.0921 }
-  },
-  {
-    id: 32,
-    name: "범일동 육전",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 동구 범일로 65",
-    description: "얇게 썬 소고기를 계란옷을 입혀 구운 육전 전문점",
-    phone: "051-631-0123",
-    price: "12,000원",
-    location: { lat: 35.1416, lng: 129.0639 }
-  },
-  {
-    id: 33,
-    name: "송정 해물파전",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 해운대구 송정구서로 13",
-    description: "바다 앞에서 먹는 해물파전, 바삭하고 해산물이 듬뿍",
-    phone: "051-704-1234",
-    price: "15,000원",
-    location: { lat: 35.1784, lng: 129.1996 }
-  },
-  {
-    id: 34,
-    name: "문현동 짬뽕",
-    category: "chinese",
-    rating: 4.2,
-    address: "부산 남구 문현동 315-46",
-    description: "싸고 맛있는 짬뽕, 넉넉한 양에 해산물이 많음",
-    phone: "051-632-2345",
-    price: "6,000원",
-    location: { lat: 35.1373, lng: 129.0641 }
-  },
-  {
-    id: 35,
-    name: "다대포 회센터",
-    category: "seafood",
-    rating: 4.4,
-    address: "부산 사하구 다대동 524-1",
-    description: "저렴한 가격에 즐기는 싱싱한 회, 포장도 가능",
-    phone: "051-263-3456",
-    price: "30,000원~",
-    location: { lat: 35.0550, lng: 128.9649 }
-  },
-  {
-    id: 36,
-    name: "연산 부산곱창",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 연제구 연산동 729-1",
-    description: "30년 전통의 곱창 전문점, 아삭한 채소와 함께 먹는 쫄깃한 곱창",
-    phone: "051-863-4567",
-    price: "12,000원",
-    location: { lat: 35.1845, lng: 129.0795 }
-  },
-  {
-    id: 37,
-    name: "하단 불백",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 사하구 하단동 605-5",
-    description: "저렴한 가격에 푸짐한 양의 제육불고기와 공기밥",
-    phone: "051-204-5678",
-    price: "6,000원",
-    location: { lat: 35.1097, lng: 128.9666 }
-  },
-  {
-    id: 38,
-    name: "기장 손칼국수",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 기장군 기장읍 차성로 271",
-    description: "멸치 육수로 맛을 낸 담백한 칼국수, 김치와 궁합이 좋음",
-    phone: "051-723-6789",
-    price: "7,000원",
-    location: { lat: 35.2438, lng: 129.2131 }
-  },
-  {
-    id: 39,
-    name: "동래 가마솥 추어탕",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 동래구 충렬대로 114",
-    description: "구수한 맛의 미꾸라지 추어탕, 건강식으로 인기",
-    phone: "051-552-7890",
-    price: "9,000원",
-    location: { lat: 35.2022, lng: 129.0832 }
-  },
-  {
-    id: 40,
-    name: "광안리 베이커리",
-    category: "bakery",
-    rating: 4.6,
-    address: "부산 수영구 광안해변로 277",
-    description: "바다가 보이는 베이커리, 크림빵과 소금빵이 유명",
-    phone: "051-754-8901",
-    price: "2,000원~",
-    location: { lat: 35.1531, lng: 129.1140 }
-  },
-  {
-    id: 41,
-    name: "당감동 왕만두",
-    category: "chinese",
-    rating: 4.3,
-    address: "부산 부산진구 당감동 582-14",
-    description: "30년 전통 왕만두집, 육즙이 풍부한 속이 특징",
-    phone: "051-893-9012",
-    price: "5,000원",
-    location: { lat: 35.1709, lng: 129.0421 }
-  },
-  {
-    id: 42,
-    name: "민락 회국수",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 수영구 민락수변로 29",
-    description: "신선한 회와 시원한 국수의 조화, 여름철 인기 메뉴",
-    phone: "051-756-0123",
-    price: "12,000원",
-    location: { lat: 35.1539, lng: 129.1185 }
-  },
-  {
-    id: 43,
-    name: "해리단길 핫도그",
-    category: "snack",
-    rating: 4.2,
-    address: "부산 해운대구 우동 629-6",
-    description: "바삭한 튀김 옷에 쫄깃한 소시지, 다양한 소스 제공",
-    phone: "051-744-1234",
-    price: "3,000원",
-    location: { lat: 35.1633, lng: 129.1586 }
-  },
-  {
-    id: 44,
-    name: "범일동 순두부",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 동구 범일로 82",
-    description: "얼큰한 순두부찌개, 식사 시간에는 줄을 서야 함",
-    phone: "051-635-2345",
-    price: "7,000원",
-    location: { lat: 35.1409, lng: 129.0630 }
-  },
-  {
-    id: 45,
-    name: "서동 짬뽕왕",
-    category: "chinese",
-    rating: 4.4,
-    address: "부산 금정구 서동로 172",
-    description: "해산물이 푸짐한 짬뽕, 면의 양이 많아 포만감이 큼",
-    phone: "051-523-3456",
-    price: "6,000원",
-    location: { lat: 35.2173, lng: 129.0937 }
-  },
-  {
-    id: 46,
-    name: "남포동 팥빙수",
-    category: "dessert",
-    rating: 4.7,
-    address: "부산 중구 광복로 62-3",
-    description: "옛날 방식 그대로 만드는 팥빙수, 여름철 인기 디저트",
-    phone: "051-245-4567",
-    price: "7,000원",
-    location: { lat: 35.0995, lng: 129.0315 }
-  },
-  {
-    id: 47,
-    name: "감천문화마을 오뎅바",
-    category: "snack",
-    rating: 4.3,
-    address: "부산 사하구 감내2로 177",
-    description: "감천문화마을에서 만나는 추억의 오뎅바, 다양한 토핑 선택 가능",
-    phone: "051-204-5678",
-    price: "2,500원",
-    location: { lat: 35.0993, lng: 129.0101 }
-  },
-  {
-    id: 48,
-    name: "하단 김치찜",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사하구 낙동대로 536",
-    description: "묵은지와 삼겹살로 만든 김치찜, 2인 이상 추천",
-    phone: "051-205-6789",
-    price: "20,000원",
-    location: { lat: 35.1073, lng: 128.9632 }
-  },
-  {
-    id: 49,
-    name: "온천장 손칼국수",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 동래구 온천장로 45",
-    description: "담백한 국물에 쫄깃한 면발, 식사와 간식으로 좋음",
-    phone: "051-556-7890",
-    price: "6,000원",
-    location: { lat: 35.2177, lng: 129.0770 }
-  },
-  {
-    id: 50,
-    name: "해운대 낙지볶음",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 해운대구 중동1로 33",
-    description: "매콤한 낙지볶음과 쫄깃한 소면의 조합, 2인 이상 추천",
-    phone: "051-742-8901",
-    price: "20,000원",
-    location: { lat: 35.1631, lng: 129.1613 }
-  },
-  {
-    id: 51,
-    name: "영도 물회",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 영도구 태종로 102",
-    description: "시원하고 새콤한 물회, 여름철 별미로 인기",
-    phone: "051-412-9012",
-    price: "12,000원",
-    location: { lat: 35.0907, lng: 129.0432 }
-  },
-  {
-    id: 52,
-    name: "사상 돼지국밥",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사상구 사상로 190",
-    description: "40년 전통의 돼지국밥, 진한 국물과 부드러운 고기",
-    phone: "051-301-0123",
-    price: "8,000원",
-    location: { lat: 35.1537, lng: 128.9900 }
-  },
-  {
-    id: 53,
-    name: "괴정 비빔당면",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 사하구 낙동대로 321",
-    description: "매콤달콤한 비빔당면, 가성비 좋은 분식",
-    phone: "051-202-1234",
-    price: "4,500원",
-    location: { lat: 35.1031, lng: 128.9932 }
-  },
-  {
-    id: 54,
-    name: "광안리 조개구이",
-    category: "seafood",
-    rating: 4.6,
-    address: "부산 수영구 광안해변로 237",
-    description: "바다 앞에서 즐기는 조개구이, 소주와 함께 먹기 좋음",
-    phone: "051-753-2345",
-    price: "15,000원~",
-    location: { lat: 35.1521, lng: 129.1185 }
-  },
-  {
-    id: 55,
-    name: "서면 유부주머니",
-    category: "japanese",
-    rating: 4.4,
-    address: "부산 부산진구 서면로 68-1",
-    description: "일본식 유부주머니, 다양한 속재료로 만든 테이크아웃 음식",
-    phone: "051-802-3456",
-    price: "3,000원",
-    location: { lat: 35.1584, lng: 129.0597 }
-  },
-  {
-    id: 56,
-    name: "초원복국",
-    category: "seafood",
-    rating: 4.5,
-    address: "부산 남구 용소로 43",
-    description: "새벽까지 하는 해장 맛집, 시원한 국물과 신선한 복어",
-    phone: "051-628-5678",
-    price: "10,000원",
-    location: { lat: 35.1325, lng: 129.0828 }
-  },
-  {
-    id: 57,
-    name: "덕천 손만두",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 북구 덕천동 394-3",
-    description: "직접 빚은 만두, 얇은 피와 육즙이 풍부한 속",
-    phone: "051-334-5678",
-    price: "5,000원",
-    location: { lat: 35.2107, lng: 129.0298 }
-  },
-  {
-    id: 58,
-    name: "남천동 낙지볶음",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 수영구 남천동로 28",
-    description: "매콤한 양념의 낙지볶음, 소면사리 추가 가능",
-    phone: "051-622-6789",
-    price: "10,000원",
-    location: { lat: 35.1432, lng: 129.1125 }
-  },
-  {
-    id: 59,
-    name: "기장 해물파전",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 기장군 기장읍 기장해안로 15",
-    description: "기장 특산물로 만든 해물파전, 해산물이 듬뿍",
-    phone: "051-721-7890",
-    price: "15,000원",
-    location: { lat: 35.2395, lng: 129.2222 }
-  },
-  {
-    id: 60,
-    name: "구포 국수",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 북구 구포시장길 12",
-    description: "구포시장에서 유명한 국수집, 시원한 멸치국수가 인기",
-    phone: "051-332-8901",
-    price: "5,000원",
-    location: { lat: 35.2056, lng: 129.0055 }
-  },
-  {
-    id: 61,
-    name: "부산대 떡볶이",
-    category: "snack",
-    rating: 4.5,
-    address: "부산 금정구 부산대학로 63번길 26",
-    description: "부산대 앞 인기 떡볶이집, 매콤달콤한 맛이 일품",
-    phone: "051-581-9012",
-    price: "3,500원",
-    location: { lat: 35.2310, lng: 129.0845 }
-  },
-  {
-    id: 62,
-    name: "진구 왕돈까스",
-    category: "japanese",
-    rating: 4.3,
-    address: "부산 진구 전포대로 180",
-    description: "부산 진구에서 유명한 돈까스 맛집, 두툼한 고기와 바삭한 튀김옷",
-    phone: "051-806-0123",
-    price: "8,000원",
-    location: { lat: 35.1558, lng: 129.0628 }
-  },
-  {
-    id: 63,
-    name: "해운대 물회",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 해운대구 달맞이길 62",
-    description: "신선한 해산물로 만든 물회, 여름철 인기 메뉴",
-    phone: "051-741-1234",
-    price: "15,000원",
-    location: { lat: 35.1609, lng: 129.1742 }
-  },
-  {
-    id: 64,
-    name: "서동 불백",
-    category: "korean",
-    rating: 4.2,
-    address: "부산 금정구 서동로 159",
-    description: "저렴하고 푸짐한 불고기백반, 학생들에게 인기",
-    phone: "051-525-2345",
-    price: "6,500원",
-    location: { lat: 35.2176, lng: 129.0950 }
-  },
-  {
-    id: 65,
-    name: "연산동 양곱창",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 연제구 연산로 17",
-    description: "30년 전통의 양곱창 전문점, 쫄깃한 식감이 특징",
-    phone: "051-864-3456",
-    price: "15,000원",
-    location: { lat: 35.1836, lng: 129.0797 }
-  },
-  {
-    id: 66,
-    name: "남포동 비빔밥",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 중구 창선동1가 12-1",
-    description: "신선한 야채와 고소한 참기름이 어우러진 비빔밥",
-    phone: "051-245-4567",
-    price: "8,000원",
-    location: { lat: 35.1002, lng: 129.0320 }
-  },
-  {
-    id: 67,
-    name: "대연동 닭발",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 남구 대연동 100-5",
-    description: "매콤한 양념의 닭발, 소주 안주로 인기",
-    phone: "051-626-5678",
-    price: "12,000원",
-    location: { lat: 35.1329, lng: 129.0878 }
-  },
-  {
-    id: 68,
-    name: "하단 칼국수",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 사하구 하단동 526-12",
-    description: "쫄깃한 면발과 시원한 육수의 칼국수, 손으로 직접 반죽",
-    phone: "051-204-6789",
-    price: "6,000원",
-    location: { lat: 35.1091, lng: 128.9659 }
-  },
-  {
-    id: 69,
-    name: "광안리 아이스크림",
-    category: "dessert",
-    rating: 4.5,
-    address: "부산 수영구 광안해변로 219",
-    description: "광안리 해변가에서 즐기는 수제 아이스크림, 다양한 맛 제공",
-    phone: "051-752-7890",
-    price: "4,000원",
-    location: { lat: 35.1533, lng: 129.1181 }
-  },
-  {
-    id: 70,
-    name: "장전동 짜장면",
-    category: "chinese",
-    rating: 4.2,
-    address: "부산 금정구 장전동 419-22",
-    description: "진한 짜장 소스와 쫄깃한 면발의 조화, 학생들에게 인기",
-    phone: "051-581-8901",
-    price: "5,500원",
-    location: { lat: 35.2324, lng: 129.0855 }
-  },
-  {
-    id: 71,
-    name: "사하 회국수",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 사하구 하신번영로 175",
-    description: "신선한 회와 시원한 냉면의 조합, 저렴한 가격",
-    phone: "051-202-9012",
-    price: "10,000원",
-    location: { lat: 35.1011, lng: 128.9667 }
-  },
-  {
-    id: 72,
-    name: "부전시장 야채전",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 진구 부전동 168-371",
-    description: "신선한 야채로 만든 전, 다양한 종류의 전 판매",
-    phone: "051-817-0123",
-    price: "5,000원",
-    location: { lat: 35.1551, lng: 129.0608 }
-  },
-  {
-    id: 73,
-    name: "수정동 냉면",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 동구 수정동 575-8",
-    description: "시원한 육수와 쫄깃한 면발의 평양냉면, 여름철 인기",
-    phone: "051-632-1234",
-    price: "8,000원",
-    location: { lat: 35.1295, lng: 129.0436 }
-  },
-  {
-    id: 74,
-    name: "영도 어묵",
-    category: "snack",
-    rating: 4.5,
-    address: "부산 영도구 대평북로 55",
-    description: "영도에서 유명한 수제 어묵, 다양한 종류 판매",
-    phone: "051-418-2345",
-    price: "2,000원~",
-    location: { lat: 35.0929, lng: 129.0457 }
-  },
-  {
-    id: 75,
-    name: "동래 녹차빙수",
-    category: "dessert",
-    rating: 4.4,
-    address: "부산 동래구 충렬대로 107",
-    description: "동래에서 유명한 녹차빙수, 달콤하고 부드러운 맛",
-    phone: "051-557-3456",
-    price: "8,000원",
-    location: { lat: 35.2013, lng: 129.0843 }
-  },
-  {
-    id: 76,
-    name: "기장 오리불고기",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 기장군 정관읍 구연방곡로 11",
-    description: "숯불에 구운 오리불고기, 신선한 야채와 함께 제공",
-    phone: "051-727-4567",
-    price: "30,000원",
-    location: { lat: 35.3235, lng: 129.1830 }
-  },
-  {
-    id: 77,
-    name: "서면 타코야키",
-    category: "japanese",
-    rating: 4.2,
-    address: "부산 부산진구 서면로 39-1",
-    description: "일본식 타코야키, 바삭한 겉면과 부드러운 속",
-    phone: "051-805-5678",
-    price: "3,500원",
-    location: { lat: 35.1572, lng: 129.0580 }
-  },
-  {
-    id: 78,
-    name: "사직 비빔밥",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 동래구 사직로 22",
-    description: "신선한 야채와 고기가 어우러진 비빔밥, 깔끔한 맛",
-    phone: "051-502-6789",
-    price: "7,000원",
-    location: { lat: 35.1956, lng: 129.0595 }
-  },
-  {
-    id: 79,
-    name: "해운대 회도시락",
-    category: "seafood",
-    rating: 4.6,
-    address: "부산 해운대구 구남로 15",
-    description: "포장 가능한 회 도시락, 해변에서 즐기기 좋음",
-    phone: "051-742-7890",
-    price: "15,000원",
-    location: { lat: 35.1635, lng: 129.1617 }
-  },
-  {
-    id: 80,
-    name: "감전동 소고기국밥",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 사상구 감전동 524-7",
-    description: "진한 육수의 소고기국밥, 푸짐한 양과 저렴한 가격",
-    phone: "051-312-8901",
-    price: "8,000원",
-    location: { lat: 35.1475, lng: 128.9809 }
-  },
-  {
-    id: 81,
-    name: "구포시장 어묵",
-    category: "snack",
-    rating: 4.7,
-    address: "부산 북구 구포시장길 20",
-    description: "구포시장에서 유명한 수제 어묵, 국물이 일품",
-    phone: "051-332-9012",
-    price: "3,000원",
-    location: { lat: 35.2051, lng: 129.0063 }
-  },
-  {
-    id: 82,
-    name: "온천장 팥빙수",
-    category: "dessert",
-    rating: 4.3,
-    address: "부산 동래구 온천장로 55-3",
-    description: "직접 끓인 팥소로 만든 팥빙수, 다양한 토핑 제공",
-    phone: "051-552-0123",
-    price: "7,000원",
-    location: { lat: 35.2022, lng: 129.0828 }
-  },
-  {
-    id: 83,
-    name: "수영 아구찜",
-    category: "seafood",
-    rating: 4.5,
-    address: "부산 수영구 수영로 410",
-    description: "매콤한 양념의 아구찜, 2인 이상 추천",
-    phone: "051-757-1234",
-    price: "25,000원",
-    location: { lat: 35.1686, lng: 129.1127 }
-  },
-  {
-    id: 84,
-    name: "해운대 찐빵",
-    category: "snack",
-    rating: 4.2,
-    address: "부산 해운대구 중동2로 11",
-    description: "겨울철 인기 간식, 따뜻한 찐빵과 호떡",
-    phone: "051-747-2345",
-    price: "1,500원",
-    location: { lat: 35.1628, lng: 129.1633 }
-  },
-  {
-    id: 85,
-    name: "부산대 김치찌개",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 금정구 장전동 419-3",
-    description: "칼칼한 김치찌개, 푸짐한 고기와 김치가 특징",
-    phone: "051-582-3456",
-    price: "7,000원",
-    location: { lat: 35.2313, lng: 129.0854 }
-  },
-  {
-    id: 86,
-    name: "서면 양꼬치",
-    category: "chinese",
-    rating: 4.4,
-    address: "부산 부산진구 서면로 68-12",
-    description: "본격 중국식 양꼬치, 저렴한 가격에 맥주와 함께",
-    phone: "051-807-4567",
-    price: "10,000원",
-    location: { lat: 35.1582, lng: 129.0590 }
-  },
-  {
-    id: 87,
-    name: "문현동 수제버거",
-    category: "western",
-    rating: 4.3,
-    address: "부산 남구 문현동 315-38",
-    description: "수제 패티로 만든 햄버거, 다양한 토핑 선택 가능",
-    phone: "051-636-5678",
-    price: "7,000원",
-    location: { lat: 35.1367, lng: 129.0647 }
-  },
-  {
-    id: 88,
-    name: "영도 과메기",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 영도구 남항로 32",
-    description: "동해안에서 공수한 신선한 과메기, 소주와 궁합이 좋음",
-    phone: "051-412-6789",
-    price: "15,000원",
-    location: { lat: 35.0898, lng: 129.0398 }
-  },
-  {
-    id: 89,
-    name: "부전시장 씨앗호떡",
-    category: "snack",
-    rating: 4.7,
-    address: "부산 부산진구 부전동 168-1",
-    description: "바삭한 겉면과 달콤한 속, 다양한 견과류 토핑",
-    phone: "051-817-7890",
-    price: "2,000원",
-    location: { lat: 35.1549, lng: 129.0611 }
-  },
-  {
-    id: 90,
-    name: "동래 국밥",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 동래구 동래시장길 29",
-    description: "동래시장에서 유명한 국밥집, 얼큰한 국물이 특징",
-    phone: "051-552-8901",
-    price: "7,500원",
-    location: { lat: 35.2054, lng: 129.0852 }
-  },
-  {
-    id: 91,
-    name: "연산동 짜장면",
-    category: "chinese",
-    rating: 4.3,
-    address: "부산 연제구 연산로 12",
-    description: "30년 전통의 중화요리집, 깊은 맛의 짜장면",
-    phone: "051-863-9012",
-    price: "6,000원",
-    location: { lat: 35.1842, lng: 129.0800 }
-  },
-  {
-    id: 92,
-    name: "남포동 핫바",
-    category: "snack",
-    rating: 4.2,
-    address: "부산 중구 남포동2가 35-8",
-    description: "바삭하고 쫄깃한 핫바, 다양한 소스 제공",
-    phone: "051-245-0123",
-    price: "2,500원",
-    location: { lat: 35.0993, lng: 129.0292 }
-  },
-  {
-    id: 93,
-    name: "구포 막창",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 북구 구포동 1233-4",
-    description: "숯불에 구운 막창, 쫄깃한 식감과 고소한 맛이 특징",
-    phone: "051-332-1234",
-    price: "15,000원",
-    location: { lat: 35.2051, lng: 129.0078 }
-  },
-  {
-    id: 94,
-    name: "서면 샐러드",
-    category: "western",
-    rating: 4.5,
-    address: "부산 부산진구 서면로 36",
-    description: "건강식 샐러드 전문점, 신선한 야채와 단백질 선택 가능",
-    phone: "051-806-2345",
-    price: "8,500원",
-    location: { lat: 35.1574, lng: 129.0572 }
-  },
-  {
-    id: 95,
-    name: "장전동 마라탕",
-    category: "chinese",
-    rating: 4.3,
-    address: "부산 금정구 장전동 420-1",
-    description: "사천식 마라탕, 매운 정도 선택 가능",
-    phone: "051-583-3456",
-    price: "9,000원",
-    location: { lat: 35.2315, lng: 129.0862 }
-  },
-  {
-    id: 96,
-    name: "기장 멸치국수",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 기장군 기장읍 대변리 442",
-    description: "기장 특산 멸치로 만든 국수, 시원하고 깔끔한 맛",
-    phone: "051-721-4567",
-    price: "6,000원",
-    location: { lat: 35.2437, lng: 129.2277 }
-  },
-  {
-    id: 97,
-    name: "초량 돼지갈비",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 동구 초량동 561-7",
-    description: "숯불에 구운 돼지갈비, 특제 양념이 맛의 비결",
-    phone: "051-464-5678",
-    price: "12,000원",
-    location: { lat: 35.1232, lng: 129.0429 }
-  },
-  {
-    id: 98,
-    name: "광안리 커피",
-    category: "cafe",
-    rating: 4.6,
-    address: "부산 수영구 광안해변로 229",
-    description: "바다가 보이는 카페, 로스팅한 원두로 내린 커피",
-    phone: "051-752-6789",
-    price: "4,500원",
-    location: { lat: 35.1525, lng: 129.1169 }
-  },
-  {
-    id: 99,
-    name: "영도 어묵탕",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 영도구 태종로 86",
-    description: "다양한 어묵으로 끓인 탕, 겨울철 인기 메뉴",
-    phone: "051-416-7890",
-    price: "8,000원",
-    location: { lat: 35.0917, lng: 129.0423 }
-  },
-  {
-    id: 100,
-    name: "사직 닭똥집",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 동래구 사직로 45",
-    description: "바삭하게 튀긴 닭똥집, 맥주와 함께 인기 안주",
-    phone: "051-505-8901",
-    price: "13,000원",
-    location: { lat: 35.1983, lng: 129.0620 }
-  },
-  {
-    id: 101,
-    name: "센텀 소문난국밥",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 해운대구 센텀4로 15",
-    description: "센텀시티 직장인들이 즐겨찾는 돼지국밥, 푸짐한 고기량과 깔끔한 국물",
-    phone: "051-742-3421",
-    price: "8,000원",
-    location: { lat: 35.1722, lng: 129.1282 }
-  },
-  {
-    id: 102,
-    name: "센텀 미소야",
-    category: "japanese",
-    rating: 4.5,
-    address: "부산 해운대구 센텀동로 25",
-    description: "가성비 좋은 일식 덮밥, 다양한 메뉴와 넉넉한 양",
-    phone: "051-742-5678",
-    price: "9,000원",
-    location: { lat: 35.1731, lng: 129.1293 }
-  },
-  {
-    id: 103,
-    name: "홍콩반점 센텀점",
-    category: "chinese",
-    rating: 4.3,
-    address: "부산 해운대구 센텀시티로 97",
-    description: "저렴한 가격의 중화요리, 짬뽕과 탕수육이 인기",
-    phone: "051-744-9876",
-    price: "6,500원",
-    location: { lat: 35.1695, lng: 129.1306 }
-  },
-  {
-    id: 104,
-    name: "센텀 옛날통닭",
-    category: "chicken",
-    rating: 4.6,
-    address: "부산 해운대구 센텀2로 27",
-    description: "바삭한 옛날통닭, 두명이서 배부르게 먹을 수 있는 양",
-    phone: "051-741-3456",
-    price: "16,000원",
-    location: { lat: 35.1747, lng: 129.1267 }
-  },
-  {
-    id: 105,
-    name: "센텀 손칼국수",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 해운대구 센텀중앙로 145",
-    description: "직접 반죽한 쫄깃한 면발, 시원한 멸치육수로 유명",
-    phone: "051-745-2345",
-    price: "7,000원",
-    location: { lat: 35.1710, lng: 129.1320 }
-  },
-  {
-    id: 106,
-    name: "신세계백화점 지하 김밥천국",
-    category: "korean",
-    rating: 4.2,
-    address: "부산 해운대구 센텀남대로 35 신세계백화점 지하1층",
-    description: "쇼핑몰 내 저렴한 분식, 김밥과 라면 조합이 인기",
-    phone: "051-745-6789",
-    price: "4,000원~",
-    location: { lat: 35.1688, lng: 129.1301 }
-  },
-  {
-    id: 107,
-    name: "센텀 버거",
-    category: "western",
-    rating: 4.5,
-    address: "부산 해운대구 센텀시티로 60",
-    description: "수제 패티 버거, 바삭한 감자튀김과 함께 즐기는 가성비 버거",
-    phone: "051-742-7890",
-    price: "7,500원",
-    location: { lat: 35.1706, lng: 129.1291 }
-  },
-  {
-    id: 108,
-    name: "센텀 비빔당면",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 해운대구 센텀시티로 25",
-    description: "매콤달콤한 비빔당면과 튀김의 조합, 점심 식사로 인기",
-    phone: "051-743-8901",
-    price: "5,500원",
-    location: { lat: 35.1717, lng: 129.1283 }
-  },
-  {
-    id: 109,
-    name: "남포동 고래국수",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 중구 남포동5가 18-1",
-    description: "30년 전통의 국수 전문점, 시원한 멸치국수와 바삭한 만두",
-    phone: "051-246-3789",
-    price: "7,000원",
-    location: { lat: 35.0984, lng: 129.0308 }
-  },
-  {
-    id: 110,
-    name: "괴정 불백",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 사하구 괴정로 201",
-    description: "푸짐한 양의 제육불고기와 밥, 저렴한 가격이 특징",
-    phone: "051-205-1234",
-    price: "6,500원",
-    location: { lat: 35.0993, lng: 128.9928 }
-  },
-  {
-    id: 111,
-    name: "경성대 닭칼국수",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 남구 용소로 45",
-    description: "직접 반죽한 면과 진한 닭육수, 학생들에게 인기",
-    phone: "051-612-5678",
-    price: "7,500원",
-    location: { lat: 35.1365, lng: 129.0997 }
-  },
-  {
-    id: 112,
-    name: "송도 해물라면",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 서구 송도해변로 27",
-    description: "바다 앞에서 먹는 해물 가득한 라면, 푸짐한 양",
-    phone: "051-254-6789",
-    price: "6,000원",
-    location: { lat: 35.0723, lng: 129.0168 }
-  },
-  {
-    id: 113,
-    name: "광안리 조개구이",
-    category: "seafood",
-    rating: 4.5,
-    address: "부산 수영구 광안해변로 265",
-    description: "저렴한 가격에 즐기는 조개구이와 소주, 회 추가 가능",
-    phone: "051-754-7890",
-    price: "20,000원",
-    location: { lat: 35.1526, lng: 129.1184 }
-  },
-  {
-    id: 114,
-    name: "서면 김치찌개",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 부산진구 서면로 46",
-    description: "깔끔한 맛의 김치찌개, 점심 식사로 인기",
-    phone: "051-802-8901",
-    price: "7,000원",
-    location: { lat: 35.1581, lng: 129.0579 }
-  },
-  {
-    id: 115,
-    name: "기장 해물탕",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 기장군 기장읍 기장해안로 98",
-    description: "기장 특산물로 끓인 해물탕, 2인 이상 추천",
-    phone: "051-721-9012",
-    price: "35,000원",
-    location: { lat: 35.2395, lng: 129.2298 }
-  },
-  {
-    id: 116,
-    name: "화명동 냉면",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 북구 화명신도시로 123",
-    description: "시원한 동치미 국물의 냉면, 고기 토핑 추가 가능",
-    phone: "051-363-0123",
-    price: "8,000원",
-    location: { lat: 35.2354, lng: 129.0119 }
-  },
-  {
-    id: 117,
-    name: "영도 단팥빵",
-    category: "bakery",
-    rating: 4.6,
-    address: "부산 영도구 태종로 105",
-    description: "옛날 방식으로 만든 단팥빵, 바삭한 겉면과 달콤한 팥소",
-    phone: "051-414-1234",
-    price: "1,500원",
-    location: { lat: 35.0908, lng: 129.0428 }
-  },
-  {
-    id: 118,
-    name: "부산대 김밥",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 금정구 장전동 418-10",
-    description: "학생들 사이에서 인기 있는 김밥집, 저렴한 가격과 푸짐한 양",
-    phone: "051-582-2345",
-    price: "3,000원",
-    location: { lat: 35.2317, lng: 129.0841 }
-  },
-  {
-    id: 119,
-    name: "사직 떡볶이",
-    category: "snack",
-    rating: 4.4,
-    address: "부산 동래구 사직로 57",
-    description: "매콤달콤한 떡볶이, 30년 전통의 비법 소스",
-    phone: "051-505-3456",
-    price: "3,500원",
-    location: { lat: 35.1991, lng: 129.0624 }
-  },
-  {
-    id: 120,
-    name: "해운대 팥빙수",
-    category: "dessert",
-    rating: 4.6,
-    address: "부산 해운대구 구남로 28",
-    description: "직접 끓인 팥과 연유의 조화, 여름철 인기 메뉴",
-    phone: "051-742-4567",
-    price: "8,000원",
-    location: { lat: 35.1632, lng: 129.1630 }
-  },
-  {
-    id: 121,
-    name: "초량 칼국수",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 동구 초량상로 12",
-    description: "시원한 멸치육수와 쫄깃한 면발, 고소한 김가루 토핑",
-    phone: "051-465-5678",
-    price: "7,000원",
-    location: { lat: 35.1222, lng: 129.0421 }
-  },
-  {
-    id: 122,
-    name: "센텀 마라탕",
-    category: "chinese",
-    rating: 4.3,
-    address: "부산 해운대구 센텀3로 26",
-    description: "100g당 가격의 착한 마라탕, 맵기 조절 가능",
-    phone: "051-745-6789",
-    price: "1,500원/100g",
-    location: { lat: 35.1736, lng: 129.1280 }
-  },
-  {
-    id: 123,
-    name: "문현동 냉묵밥",
-    category: "korean",
-    rating: 4.2,
-    address: "부산 남구 문현동 319-8",
-    description: "여름철 별미 냉묵밥, 새콤달콤한 맛이 특징",
-    phone: "051-632-7890",
-    price: "7,000원",
-    location: { lat: 35.1358, lng: 129.0643 }
-  },
-  {
-    id: 124,
-    name: "덕천동 순대국밥",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 북구 덕천동 362-4",
-    description: "순대와 내장이 푸짐한 국밥, 칼칼한 국물 맛이 일품",
-    phone: "051-334-8901",
-    price: "8,000원",
-    location: { lat: 35.2103, lng: 129.0313 }
-  },
-  {
-    id: 125,
-    name: "태종대 오징어튀김",
-    category: "snack",
-    rating: 4.4,
-    address: "부산 영도구 태종로 203",
-    description: "바다 앞에서 먹는 신선한 오징어튀김, 소스가 일품",
-    phone: "051-404-9012",
-    price: "5,000원",
-    location: { lat: 35.0761, lng: 129.0861 }
-  },
-  {
-    id: 126,
-    name: "금정산성 막걸리",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 금정구 산성로 391",
-    description: "금정산성에서 즐기는 막걸리와 파전, 산행 후 방문 추천",
-    phone: "051-517-0123",
-    price: "15,000원",
-    location: { lat: 35.2873, lng: 129.0564 }
-  },
-  {
-    id: 127,
-    name: "서동 할매국밥",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 금정구 서동로 176",
-    description: "깔끔한 맛의 돼지국밥, 수육 추가 가능",
-    phone: "051-523-1234",
-    price: "7,000원",
-    location: { lat: 35.2173, lng: 129.0957 }
-  },
-  {
-    id: 128,
-    name: "다대포 회국수",
-    category: "seafood",
-    rating: 4.4,
-    address: "부산 사하구 다대로 530",
-    description: "신선한 회와 시원한 국수의 조화, 여름철 별미",
-    phone: "051-263-2345",
-    price: "10,000원",
-    location: { lat: 35.0457, lng: 128.9681 }
-  },
-  {
-    id: 129,
-    name: "장전동 부대찌개",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 금정구 장전동 419-17",
-    description: "각종 재료가 푸짐한 부대찌개, 2인 이상 추천",
-    phone: "051-582-3456",
-    price: "18,000원",
-    location: { lat: 35.2322, lng: 129.0857 }
-  },
-  {
-    id: 130,
-    name: "하단 떡갈비",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 사하구 하단동 605-2",
-    description: "직접 다진 고기로 만든 떡갈비, 양념이 일품",
-    phone: "051-204-4567",
-    price: "8,000원",
-    location: { lat: 35.1093, lng: 128.9669 }
-  },
-  {
-    id: 131,
-    name: "광안리 짬뽕",
-    category: "chinese",
-    rating: 4.5,
-    address: "부산 수영구 광안해변로 205",
-    description: "해산물이 듬뿍 들어간 얼큰한 짬뽕, 저렴한 가격",
-    phone: "051-751-5678",
-    price: "6,500원",
-    location: { lat: 35.1518, lng: 129.1175 }
-  },
-  {
-    id: 132,
-    name: "남포동 꽃게탕",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 중구 광복로 63",
-    description: "알이 가득한 꽃게로 끓인 탕, 2인 이상 추천",
-    phone: "051-245-6789",
-    price: "30,000원",
-    location: { lat: 35.0998, lng: 129.0302 }
-  },
-  {
-    id: 133,
-    name: "온천장 치킨",
-    category: "chicken",
-    rating: 4.4,
-    address: "부산 동래구 온천천로 73",
-    description: "바삭한 옛날통닭, 맥주와 함께 즐기기 좋음",
-    phone: "051-552-7890",
-    price: "16,000원",
-    location: { lat: 35.2173, lng: 129.0779 }
-  },
-  {
-    id: 134,
-    name: "금사 삼겹살",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 금정구 금사로 105",
-    description: "두툼한 생삼겹살, 김치찌개 서비스 제공",
-    phone: "051-532-8901",
-    price: "12,000원",
-    location: { lat: 35.2219, lng: 129.1114 }
-  },
-  {
-    id: 135,
-    name: "해운대 어묵",
-    category: "snack",
-    rating: 4.6,
-    address: "부산 해운대구 구남로 10",
-    description: "부산식 어묵 종류가 다양, 따뜻한 국물과 함께",
-    phone: "051-741-9012",
-    price: "3,000원~",
-    location: { lat: 35.1624, lng: 129.1613 }
-  },
-  {
-    id: 136,
-    name: "수정동 콩국수",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 동구 수정로 52",
-    description: "직접 갈아만든 콩국물, 여름철 인기 메뉴",
-    phone: "051-633-0123",
-    price: "7,000원",
-    location: { lat: 35.1297, lng: 129.0442 }
-  },
-  {
-    id: 137,
-    name: "광복동 팬케이크",
-    category: "dessert",
-    rating: 4.4,
-    address: "부산 중구 광복로 86-1",
-    description: "폭신한 팬케이크와 다양한 토핑, 카페 음료와 함께",
-    phone: "051-246-1234",
-    price: "8,000원",
-    location: { lat: 35.1010, lng: 129.0327 }
-  },
-  {
-    id: 138,
-    name: "부산대 양꼬치",
-    category: "chinese",
-    rating: 4.5,
-    address: "부산 금정구 장전동 418-5",
-    description: "숯불에 구운 양꼬치, 맥주와 함께 인기",
-    phone: "051-583-2345",
-    price: "10,000원",
-    location: { lat: 35.2316, lng: 129.0838 }
-  },
-  {
-    id: 139,
-    name: "송정 돈가스",
-    category: "japanese",
-    rating: 4.3,
-    address: "부산 해운대구 송정광어골로 21",
-    description: "두툼한 등심 돈가스, 소스가 별미",
-    phone: "051-702-3456",
-    price: "8,000원",
-    location: { lat: 35.1781, lng: 129.1993 }
-  },
-  {
-    id: 140,
-    name: "동래 팥죽",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 동래구 동래시장길 15",
-    description: "동래시장에서 유명한 팥죽, 찹쌀이 듬뿍",
-    phone: "051-552-4567",
-    price: "6,000원",
-    location: { lat: 35.2053, lng: 129.0846 }
-  },
-  {
-    id: 141,
-    name: "기장 문어비빔밥",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 기장군 기장읍 기장해안로 75",
-    description: "기장 특산 문어로 만든 비빔밥, 신선한 식감",
-    phone: "051-722-5678",
-    price: "10,000원",
-    location: { lat: 35.2392, lng: 129.2260 }
-  },
-  {
-    id: 142,
-    name: "구포 아구찜",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 북구 구포동 1156-3",
-    description: "매콤한 양념의 아구찜, 2인 이상 추천",
-    phone: "051-335-6789",
-    price: "25,000원",
-    location: { lat: 35.2043, lng: 129.0087 }
-  },
-  {
-    id: 143,
-    name: "괴정 순대볶음",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 사하구 괴정로 209",
-    description: "쫄깃한 순대와 매콤한 양념의 조화, 소주 안주로 인기",
-    phone: "051-203-7890",
-    price: "15,000원",
-    location: { lat: 35.0989, lng: 128.9932 }
-  },
-  {
-    id: 144,
-    name: "남천동 삼계탕",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 수영구 남천동로 32",
-    description: "인삼과 한약재가 듬뿍 들어간 보양식",
-    phone: "051-621-8901",
-    price: "13,000원",
-    location: { lat: 35.1438, lng: 129.1127 }
-  },
-  {
-    id: 145,
-    name: "초량 비빔국수",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 동구 초량로 62",
-    description: "매콤달콤한 비빔국수, 여름철 인기 메뉴",
-    phone: "051-463-9012",
-    price: "7,000원",
-    location: { lat: 35.1248, lng: 129.0428 }
-  },
-  {
-    id: 146,
-    name: "용호동 짬뽕밥",
-    category: "chinese",
-    rating: 4.5,
-    address: "부산 남구 용호로 77",
-    description: "해산물이 듬뿍 들어간 짬뽕밥, 매콤한 맛이 특징",
-    phone: "051-628-0123",
-    price: "8,000원",
-    location: { lat: 35.1239, lng: 129.0983 }
-  },
-  {
-    id: 147,
-    name: "금정산 산채비빔밥",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 금정구 산성로 453",
-    description: "금정산에서 채취한 산나물로 만든 비빔밥, 건강식",
-    phone: "051-517-1234",
-    price: "9,000원",
-    location: { lat: 35.2912, lng: 129.0579 }
-  },
-  {
-    id: 148,
-    name: "대연 동태찌개",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 남구 대연로 123",
-    description: "동태와 각종 채소가 푸짐하게 들어간 찌개, 시원한 국물",
-    phone: "051-627-2345",
-    price: "8,000원",
-    location: { lat: 35.1332, lng: 129.0986 }
-  },
-  {
-    id: 149,
-    name: "화명동 샤브샤브",
-    category: "japanese",
-    rating: 4.6,
-    address: "부산 북구 화명신도시로 111",
-    description: "무제한 야채와 고기, 2인 이상 추천",
-    phone: "051-364-3456",
-    price: "12,000원",
-    location: { lat: 35.2348, lng: 129.0121 }
-  },
-  {
-    id: 150,
-    name: "수영 굴국밥",
-    category: "seafood",
-    rating: 4.5,
-    address: "부산 수영구 수영로 422",
-    description: "신선한 굴이 듬뿍 들어간 국밥, 겨울철 별미",
-    phone: "051-758-4567",
-    price: "9,000원",
-    location: { lat: 35.1684, lng: 129.1140 }
-  },
-  {
-    id: 151,
-    name: "낙민동 두루치기",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 동래구 낙민로 23",
-    description: "30년 전통의 두루치기 전문점, 매콤한 양념과 푸짐한 양이 특징",
-    phone: "051-553-1234",
-    price: "8,000원",
-    location: { lat: 35.2040, lng: 129.0921 }
-  },
-  {
-    id: 152,
-    name: "학장동 돈가스",
-    category: "japanese",
-    rating: 4.5,
-    address: "부산 사상구 학장로 123",
-    description: "두툼한 등심 돈가스, 학생들에게 인기 있는 가성비 맛집",
-    phone: "051-315-2345",
-    price: "6,500원",
-    location: { lat: 35.1480, lng: 128.9910 }
-  },
-  {
-    id: 153,
-    name: "명지 어시장 회",
-    category: "seafood",
-    rating: 4.8,
-    address: "부산 강서구 명지동 3242-1",
-    description: "싱싱한 회를 시장 가격으로, 직접 고르는 재미가 있는 곳",
-    phone: "051-271-3456",
-    price: "30,000원~",
-    location: { lat: 35.0931, lng: 128.9037 }
-  },
-  {
-    id: 154,
-    name: "대저 토마토국수",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 강서구 대저1동 2377-3",
-    description: "지역 특산물 토마토로 만든 시원한 국수, 여름철 별미",
-    phone: "051-971-4567",
-    price: "7,000원",
-    location: { lat: 35.1568, lng: 128.9530 }
-  },
-  {
-    id: 155,
-    name: "명륜동 팔각도",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 동래구 명륜로 65",
-    description: "30년 전통의 곰탕 전문점, 깔끔한 국물과 부드러운 고기",
-    phone: "051-552-5678",
-    price: "9,000원",
-    location: { lat: 35.2103, lng: 129.0770 }
-  },
-  {
-    id: 156,
-    name: "좌천동 고로케",
-    category: "snack",
-    rating: 4.6,
-    address: "부산 동구 좌천로 72",
-    description: "바삭한 튀김옷과 다양한 속재료, 테이크아웃 간식으로 인기",
-    phone: "051-635-6789",
-    price: "2,000원~",
-    location: { lat: 35.1339, lng: 129.0461 }
-  },
-  {
-    id: 157,
-    name: "재송동 아구찜",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 해운대구 재송로 83",
-    description: "알싸한 양념의 아구찜, 푸짐한 양에 가격 대비 만족도 높음",
-    phone: "051-781-7890",
-    price: "25,000원",
-    location: { lat: 35.1915, lng: 129.1254 }
-  },
-  {
-    id: 158,
-    name: "가야 순두부",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 부산진구 가야동 565-7",
-    description: "직접 만든 두부로 끓인 순두부찌개, 2인분부터 가능",
-    phone: "051-892-8901",
-    price: "7,000원",
-    location: { lat: 35.1548, lng: 129.0349 }
-  },
-  {
-    id: 159,
-    name: "용당동 생선구이",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 남구 용당로 42",
-    description: "신선한 생선으로 만드는 구이 정식, 푸짐한 반찬이 특징",
-    phone: "051-626-9012",
-    price: "9,000원",
-    location: { lat: 35.1214, lng: 129.0896 }
-  },
-  {
-    id: 160,
-    name: "반여동 돼지국밥",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 해운대구 반여로 115",
-    description: "새벽부터 준비하는 진한 국물의 돼지국밥, 수육도 맛있음",
-    phone: "051-784-0123",
-    price: "7,500원",
-    location: { lat: 35.1957, lng: 129.1205 }
-  },
-  {
-    id: 161,
-    name: "석대 버섯전골",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 금정구 석대로 105",
-    description: "다양한 버섯을 듬뿍 넣은 전골, 한약재 육수로 건강식",
-    phone: "051-531-1234",
-    price: "25,000원",
-    location: { lat: 35.2397, lng: 129.1142 }
-  },
-  {
-    id: 162,
-    name: "남천 홍합탕",
-    category: "seafood",
-    rating: 4.4,
-    address: "부산 수영구 남천동로 45",
-    description: "신선한 홍합으로 끓인 시원한 탕, 소주와 궁합이 좋음",
-    phone: "051-622-2345",
-    price: "15,000원",
-    location: { lat: 35.1442, lng: 129.1133 }
-  },
-  {
-    id: 163,
-    name: "민락 조개구이",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 수영구 민락수변로 45",
-    description: "다양한 조개를 저렴하게 즐길 수 있는 조개구이 전문점",
-    phone: "051-757-3456",
-    price: "20,000원",
-    location: { lat: 35.1545, lng: 129.1190 }
-  },
-  {
-    id: 164,
-    name: "구서 막창",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 금정구 구서로 124",
-    description: "두툼한 막창과 특제 소스, 직장인들에게 인기",
-    phone: "051-583-4567",
-    price: "12,000원",
-    location: { lat: 35.2460, lng: 129.0922 }
-  },
-  {
-    id: 165,
-    name: "서창동 갈비찜",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 금정구 서동로 156",
-    description: "부드럽게 찐 갈비찜, 달콤매콤한 양념이 특징",
-    phone: "051-529-5678",
-    price: "35,000원",
-    location: { lat: 35.2215, lng: 129.1018 }
-  },
-  {
-    id: 166,
-    name: "초읍 돈까스",
-    category: "japanese",
-    rating: 4.3,
-    address: "부산 부산진구 초읍로 82",
-    description: "수제 돈까스 전문점, 다양한 소스와 함께 제공",
-    phone: "051-802-6789",
-    price: "8,000원",
-    location: { lat: 35.1722, lng: 129.0544 }
-  },
-  {
-    id: 167,
-    name: "전포동 우동",
-    category: "japanese",
-    rating: 4.5,
-    address: "부산 부산진구 전포대로 185",
-    description: "일본식 정통 우동, 쫄깃한 면발과 깊은 육수가 특징",
-    phone: "051-807-7890",
-    price: "6,500원",
-    location: { lat: 35.1555, lng: 129.0637 }
-  },
-  {
-    id: 168,
-    name: "대연 꼬막비빔밥",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 남구 대연로 123",
-    description: "신선한 꼬막으로 만든 비빔밥, 특제 고추장 양념이 별미",
-    phone: "051-626-8901",
-    price: "9,000원",
-    location: { lat: 35.1338, lng: 129.0882 }
-  },
-  {
-    id: 169,
-    name: "우암동 생선찜",
-    category: "seafood",
-    rating: 4.4,
-    address: "부산 남구 우암로 56",
-    description: "신선한 생선으로 만든 찜요리, 매콤한 양념이 일품",
-    phone: "051-637-9012",
-    price: "20,000원",
-    location: { lat: 35.1265, lng: 129.0679 }
-  },
-  {
-    id: 170,
-    name: "만덕 보쌈",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 북구 만덕대로 135",
-    description: "부드러운 고기와 신선한 쌈채소, 저렴한 가격으로 인기",
-    phone: "051-342-0123",
-    price: "25,000원",
-    location: { lat: 35.2086, lng: 129.0474 }
-  },
-  {
-    id: 171,
-    name: "다전동 청국장",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사하구 다대로15번길 23",
-    description: "직접 띄운 청국장, 구수한 맛이 일품인 건강식",
-    phone: "051-264-1234",
-    price: "7,000원",
-    location: { lat: 35.0484, lng: 128.9694 }
-  },
-  {
-    id: 172,
-    name: "명지 돼지갈비",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 강서구 명지국제6로 105",
-    description: "숯불에 구운 돼지갈비, 특제 양념으로 맛을 낸 인기 메뉴",
-    phone: "051-271-2345",
-    price: "12,000원",
-    location: { lat: 35.0946, lng: 128.9039 }
-  },
-  {
-    id: 173,
-    name: "용호동 게장",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 남구 용호로 156",
-    description: "간장게장과 양념게장을 모두 즐길 수 있는 게장 전문점",
-    phone: "051-625-3456",
-    price: "30,000원",
-    location: { lat: 35.1214, lng: 129.1026 }
-  },
-  {
-    id: 174,
-    name: "장림 낙지볶음",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사하구 장림로 93",
-    description: "신선한 낙지로 만든 매콤한 볶음, 소면사리 추가 가능",
-    phone: "051-261-4567",
-    price: "18,000원",
-    location: { lat: 35.0871, lng: 128.9681 }
-  },
-  {
-    id: 175,
-    name: "금사동 순대국",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 금정구 금사로 83",
-    description: "푸짐한 순대국밥, 얼큰한 국물이 특징인 해장 메뉴",
-    phone: "051-532-5678",
-    price: "7,000원",
-    location: { lat: 35.2197, lng: 129.1087 }
-  },
-  {
-    id: 176,
-    name: "반송 왕갈비",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 해운대구 반송로 122",
-    description: "두툼한 소갈비를 저렴한 가격에 즐길 수 있는 맛집",
-    phone: "051-783-6789",
-    price: "15,000원",
-    location: { lat: 35.2273, lng: 129.1577 }
-  },
-  {
-    id: 177,
-    name: "봉림동 짬뽕",
-    category: "chinese",
-    rating: 4.4,
-    address: "부산 동래구 봉림로 62",
-    description: "해산물이 듬뿍 들어간 짬뽕, 얼큰한 국물이 일품",
-    phone: "051-556-7890",
-    price: "6,000원",
-    location: { lat: 35.2124, lng: 129.0874 }
-  },
-  {
-    id: 178,
-    name: "모라 국밥",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사상구 모라로 155",
-    description: "새벽부터 준비하는 돼지국밥, 깔끔한 국물 맛이 특징",
-    phone: "051-301-8901",
-    price: "7,000원",
-    location: { lat: 35.1894, lng: 128.9978 }
-  },
-  {
-    id: 179,
-    name: "연산 샤브샤브",
-    category: "japanese",
-    rating: 4.7,
-    address: "부산 연제구 연산로 94",
-    description: "신선한 야채와 고기를 무제한으로 즐기는 샤브샤브",
-    phone: "051-866-9012",
-    price: "12,000원",
-    location: { lat: 35.1872, lng: 129.0823 }
-  },
-  {
-    id: 180,
-    name: "청학동 김밥",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 영도구 청학로 48",
-    description: "알찬 속재료로 가득한 김밥, 다양한 종류 제공",
-    phone: "051-416-0123",
-    price: "2,500원~",
-    location: { lat: 35.0966, lng: 129.0504 }
-  },
-  {
-    id: 181,
-    name: "대티 칼국수",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사하구 대티로 73",
-    description: "시원한 국물과 쫄깃한 면발, 수제비와 함께 즐기는 인기 메뉴",
-    phone: "051-204-1234",
-    price: "6,000원",
-    location: { lat: 35.1067, lng: 128.9798 }
-  },
-  {
-    id: 182,
-    name: "사직 족발",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 동래구 사직북로 45",
-    description: "부드러운 족발과 쫄깃한 껍데기, 특제 양념이 일품",
-    phone: "051-505-2345",
-    price: "25,000원",
-    location: { lat: 35.1977, lng: 129.0603 }
-  },
-  {
-    id: 183,
-    name: "주례 뼈해장국",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 사상구 주례로 112",
-    description: "얼큰한 뼈해장국, 해장하기 좋은 시원한 국물",
-    phone: "051-312-3456",
-    price: "8,000원",
-    location: { lat: 35.1526, lng: 129.0001 }
-  },
-  {
-    id: 184,
-    name: "남구 낙곱새",
-    category: "korean",
-    rating: 4.7,
-    address: "부산 남구 용소로 67",
-    description: "낙지와 곱창, 새우를 한번에 즐기는 매콤한 요리",
-    phone: "051-628-4567",
-    price: "18,000원",
-    location: { lat: 35.1326, lng: 129.0837 }
-  },
-  {
-    id: 185,
-    name: "하단 냉면",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 사하구 낙동대로 456",
-    description: "시원한 냉면과 맛있는 수육, 여름철 인기 메뉴",
-    phone: "051-206-5678",
-    price: "8,000원",
-    location: { lat: 35.1082, lng: 128.9650 }
-  },
-  {
-    id: 186,
-    name: "구포시장 호떡",
-    category: "snack",
-    rating: 4.6,
-    address: "부산 북구 구포시장길 14-1",
-    description: "겨울철 인기 간식, 바삭한 겉면과 달콤한 속",
-    phone: "051-332-6789",
-    price: "1,500원",
-    location: { lat: 35.2055, lng: 129.0060 }
-  },
-  {
-    id: 187,
-    name: "학장동 육개장",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 사상구 학장로 78",
-    description: "얼큰한 육개장, 시원한 국물과 푸짐한 고기양",
-    phone: "051-315-7890",
-    price: "8,000원",
-    location: { lat: 35.1490, lng: 128.9905 }
-  },
-  {
-    id: 188,
-    name: "거제 갈매기살",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 연제구 거제동 1456-2",
-    description: "숯불에 구운 갈매기살, 특제 소금과 함께 제공",
-    phone: "051-866-8901",
-    price: "12,000원",
-    location: { lat: 35.1833, lng: 129.0744 }
-  },
-  {
-    id: 189,
-    name: "다대포 생선구이",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 사하구 다대로 623",
-    description: "다대포 바다 앞에서 즐기는 신선한 생선구이",
-    phone: "051-262-9012",
-    price: "15,000원",
-    location: { lat: 35.0468, lng: 128.9655 }
-  },
-  {
-    id: 190,
-    name: "명장동 짜장면",
-    category: "chinese",
-    rating: 4.3,
-    address: "부산 동래구 명장로 76",
-    description: "30년 전통의 중화요리, 진한 짜장소스가 특징",
-    phone: "051-553-0123",
-    price: "5,500원",
-    location: { lat: 35.2047, lng: 129.0984 }
-  },
-  {
-    id: 191,
-    name: "화명 칼국수",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 북구 화명신도시로 97",
-    description: "직접 반죽한 면으로 만든 칼국수, 시원한 국물이 일품",
-    phone: "051-363-1234",
-    price: "7,000원",
-    location: { lat: 35.2340, lng: 129.0111 }
-  },
-  {
-    id: 192,
-    name: "괴정 아구찜",
-    category: "korean",
-    rating: 4.6,
-    address: "부산 사하구 괴정로 174",
-    description: "매콤한 양념의 아구찜, 콩나물과 함께 끓여 시원함을 더함",
-    phone: "051-202-2345",
-    price: "30,000원",
-    location: { lat: 35.0978, lng: 128.9945 }
-  },
-  {
-    id: 193,
-    name: "장전동 순두부",
-    category: "korean",
-    rating: 4.4,
-    address: "부산 금정구 장전로 60",
-    description: "돌솥에 끓여내는 순두부찌개, 김치와 함께 제공",
-    phone: "051-582-3456",
-    price: "6,500원",
-    location: { lat: 35.2318, lng: 129.0866 }
-  },
-  {
-    id: 194,
-    name: "가야 돈까스",
-    category: "japanese",
-    rating: 4.5,
-    address: "부산 부산진구 가야로 126",
-    description: "두툼한 등심 돈까스, 다양한 소스 선택 가능",
-    phone: "051-893-4567",
-    price: "7,500원",
-    location: { lat: 35.1545, lng: 129.0325 }
-  },
-  {
-    id: 195,
-    name: "삼락 전어구이",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 사상구 삼락동 29-45",
-    description: "가을철 별미 전어구이, 기름진 맛이 일품",
-    phone: "051-301-5678",
-    price: "20,000원",
-    location: { lat: 35.1722, lng: 128.9793 }
-  },
-  {
-    id: 196,
-    name: "민락 회덮밥",
-    category: "seafood",
-    rating: 4.6,
-    address: "부산 수영구 민락수변로 39",
-    description: "신선한 회를 얹은 덮밥, 특제 고추장 양념이 별미",
-    phone: "051-756-6789",
-    price: "9,000원",
-    location: { lat: 35.1541, lng: 129.1187 }
-  },
-  {
-    id: 197,
-    name: "당리 샤브샤브",
-    category: "japanese",
-    rating: 4.4,
-    address: "부산 사하구 당리동 산19-8",
-    description: "무제한 야채와 고기를 즐기는 샤브샤브, 단체 모임에 인기",
-    phone: "051-206-7890",
-    price: "12,000원",
-    location: { lat: 35.0996, lng: 128.9765 }
-  },
-  {
-    id: 198,
-    name: "연지동 냉면",
-    category: "korean",
-    rating: 4.5,
-    address: "부산 부산진구 연지로 45",
-    description: "시원한 동치미 육수에 쫄깃한 면발, 여름철 인기",
-    phone: "051-816-8901",
-    price: "8,000원",
-    location: { lat: 35.1701, lng: 129.0584 }
-  },
-  {
-    id: 199,
-    name: "부산대 닭똥집",
-    category: "korean",
-    rating: 4.3,
-    address: "부산 금정구 부산대학로 63번길 18",
-    description: "바삭하게 튀긴 닭똥집, 맥주와 함께 즐기는 안주",
-    phone: "051-581-9012",
-    price: "12,000원",
-    location: { lat: 35.2308, lng: 129.0844 }
-  },
-  {
-    id: 200,
-    name: "송도해수욕장 조개구이",
-    category: "seafood",
-    rating: 4.7,
-    address: "부산 서구 송도해변로 43",
-    description: "바다 앞에서 즐기는 조개구이, 신선한 해산물과 소주의 조합",
-    phone: "051-253-0123",
-    price: "25,000원",
-    location: { lat: 35.0730, lng: 129.0175 }
+    "id": 1,
+    "name": "더파티 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 79",
+    "description": "",
+    "phone": "051-711-7770",
+    "price": null,
+    "location": {
+      "lat": 35.1739455226063,
+      "lng": 129.126345524752
+    }
+  },
+  {
+    "id": 2,
+    "name": "스페이스단단 마틴3호점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 79",
+    "description": "",
+    "phone": "051-746-2279",
+    "price": null,
+    "location": {
+      "lat": 35.174252704894066,
+      "lng": 129.12578721235099
+    }
+  },
+  {
+    "id": 3,
+    "name": "어오케이커피 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 78",
+    "description": "",
+    "phone": "051-714-3143",
+    "price": null,
+    "location": {
+      "lat": 35.17460888226473,
+      "lng": 129.1268007125356
+    }
+  },
+  {
+    "id": 4,
+    "name": "스타벅스 센텀그린타워점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 78",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.174671678729,
+      "lng": 129.126662964482
+    }
+  },
+  {
+    "id": 5,
+    "name": "카페051 본사",
+    "category": "other",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 78",
+    "description": "",
+    "phone": "1577-7978",
+    "price": null,
+    "location": {
+      "lat": 35.1746383846375,
+      "lng": 129.126916720129
+    }
+  },
+  {
+    "id": 6,
+    "name": "BBQ 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-744-3999",
+    "price": null,
+    "location": {
+      "lat": 35.17460509680965,
+      "lng": 129.12542543015394
+    }
+  },
+  {
+    "id": 7,
+    "name": "보리맥주",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-3092",
+    "price": null,
+    "location": {
+      "lat": 35.1750828761207,
+      "lng": 129.12623686507
+    }
+  },
+  {
+    "id": 8,
+    "name": "고더커피 스카이비즈점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "070-8800-5955",
+    "price": null,
+    "location": {
+      "lat": 35.1746980800264,
+      "lng": 129.125467361808
+    }
+  },
+  {
+    "id": 9,
+    "name": "한솥도시락 센텀중앙로점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-783-0737",
+    "price": null,
+    "location": {
+      "lat": 35.17510387253169,
+      "lng": 129.12632411605404
+    }
+  },
+  {
+    "id": 10,
+    "name": "치킨신드롬 센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-3092",
+    "price": null,
+    "location": {
+      "lat": 35.1751010834687,
+      "lng": 129.126226364153
+    }
+  },
+  {
+    "id": 11,
+    "name": "해운대맛집 봉계한우로스구이 애견동반식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "0507-1352-7993",
+    "price": null,
+    "location": {
+      "lat": 35.1751369202174,
+      "lng": 129.126238272855
+    }
+  },
+  {
+    "id": 12,
+    "name": "고품격커피공장 스카이비즈점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17458151736376,
+      "lng": 129.12527994448877
+    }
+  },
+  {
+    "id": 13,
+    "name": "메가MGC커피 부산센텀큐비점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-0656",
+    "price": null,
+    "location": {
+      "lat": 35.17517274269033,
+      "lng": 129.12640493159566
+    }
+  },
+  {
+    "id": 14,
+    "name": "해운대맛집 하숙집 본점 부산애견동반식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-784-8034",
+    "price": null,
+    "location": {
+      "lat": 35.17516670226535,
+      "lng": 129.12623575608154
+    }
+  },
+  {
+    "id": 15,
+    "name": "장돌뱅이 부산오뎅",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-784-8034",
+    "price": null,
+    "location": {
+      "lat": 35.1751972069294,
+      "lng": 129.126294719302
+    }
+  },
+  {
+    "id": 16,
+    "name": "만랩커피 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "070-4266-6010",
+    "price": null,
+    "location": {
+      "lat": 35.1747471906242,
+      "lng": 129.125339133821
+    }
+  },
+  {
+    "id": 17,
+    "name": "광안리맛집 부산오뎅& 을지로통골뱅이 애견동반식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-784-8034",
+    "price": null,
+    "location": {
+      "lat": 35.17520016431269,
+      "lng": 129.12622894508306
+    }
+  },
+  {
+    "id": 18,
+    "name": "슈마우스만찬",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-923-6008",
+    "price": null,
+    "location": {
+      "lat": 35.17460151113435,
+      "lng": 129.1252190043222
+    }
+  },
+  {
+    "id": 19,
+    "name": "맘스터치 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-783-8259",
+    "price": null,
+    "location": {
+      "lat": 35.17525820652995,
+      "lng": 129.1265158126592
+    }
+  },
+  {
+    "id": 20,
+    "name": "부산곱창",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17528255501861,
+      "lng": 129.1262069457799
+    }
+  },
+  {
+    "id": 21,
+    "name": "쿠킹마더스",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-783-9123",
+    "price": null,
+    "location": {
+      "lat": 35.1753146974809,
+      "lng": 129.12658313573
+    }
+  },
+  {
+    "id": 22,
+    "name": "존슨식당",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1753495131124,
+      "lng": 129.12644794995
+    }
+  },
+  {
+    "id": 23,
+    "name": "마녀김밥 센텀점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-783-1114",
+    "price": null,
+    "location": {
+      "lat": 35.1753509773742,
+      "lng": 129.126364576353
+    }
+  },
+  {
+    "id": 24,
+    "name": "부산맛집",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-8036",
+    "price": null,
+    "location": {
+      "lat": 35.1753759426918,
+      "lng": 129.126431078112
+    }
+  },
+  {
+    "id": 25,
+    "name": "재벌김밥 센텀점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-784-3082",
+    "price": null,
+    "location": {
+      "lat": 35.17450133876728,
+      "lng": 129.12497055360916
+    }
+  },
+  {
+    "id": 26,
+    "name": "다와푸드 큐비점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1754041543623,
+      "lng": 129.126620587132
+    }
+  },
+  {
+    "id": 27,
+    "name": "기네스블루문",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1754038460639,
+      "lng": 129.126638139478
+    }
+  },
+  {
+    "id": 28,
+    "name": "파스타루",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-8270",
+    "price": null,
+    "location": {
+      "lat": 35.17541499211344,
+      "lng": 129.12631136778595
+    }
+  },
+  {
+    "id": 29,
+    "name": "더블린데이 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-784-7755",
+    "price": null,
+    "location": {
+      "lat": 35.1754148090295,
+      "lng": 129.126629644917
+    }
+  },
+  {
+    "id": 30,
+    "name": "전주남문토종순대국 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-731-3337",
+    "price": null,
+    "location": {
+      "lat": 35.17542401872778,
+      "lng": 129.12631050540543
+    }
+  },
+  {
+    "id": 31,
+    "name": "영커피 큐비e센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "0507-0289-4838",
+    "price": null,
+    "location": {
+      "lat": 35.1754322361711,
+      "lng": 129.126355717956
+    }
+  },
+  {
+    "id": 32,
+    "name": "스페이스바",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-3346",
+    "price": null,
+    "location": {
+      "lat": 35.175431243872396,
+      "lng": 129.12630959609646
+    }
+  },
+  {
+    "id": 33,
+    "name": "왓더버거 센텀점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-715-8533",
+    "price": null,
+    "location": {
+      "lat": 35.1754398948617,
+      "lng": 129.12643274416
+    }
+  },
+  {
+    "id": 34,
+    "name": "마라당 센텀점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-9666",
+    "price": null,
+    "location": {
+      "lat": 35.17544349775357,
+      "lng": 129.12643283800995
+    }
+  },
+  {
+    "id": 35,
+    "name": "이태리부대찌개 부산센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-3851",
+    "price": null,
+    "location": {
+      "lat": 35.1754434978009,
+      "lng": 129.126432838022
+    }
+  },
+  {
+    "id": 36,
+    "name": "착한까스",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-1006",
+    "price": null,
+    "location": {
+      "lat": 35.1754434978009,
+      "lng": 129.126432838022
+    }
+  },
+  {
+    "id": 37,
+    "name": "미스사이공 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-3878",
+    "price": null,
+    "location": {
+      "lat": 35.1754434978009,
+      "lng": 129.126432838022
+    }
+  },
+  {
+    "id": 38,
+    "name": "댄싱컵 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-2221",
+    "price": null,
+    "location": {
+      "lat": 35.1754434978009,
+      "lng": 129.126432838022
+    }
+  },
+  {
+    "id": 39,
+    "name": "리본레시피 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1754435362873,
+      "lng": 129.126430643965
+    }
+  },
+  {
+    "id": 40,
+    "name": "로이파이 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "0507-2085-0270",
+    "price": null,
+    "location": {
+      "lat": 35.1754435362873,
+      "lng": 129.126430643965
+    }
+  },
+  {
+    "id": 41,
+    "name": "불백고수락 센텀본점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-7574",
+    "price": null,
+    "location": {
+      "lat": 35.1754435363346,
+      "lng": 129.126430643978
+    }
+  },
+  {
+    "id": 42,
+    "name": "엄마손식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-9113",
+    "price": null,
+    "location": {
+      "lat": 35.1754435363346,
+      "lng": 129.126430643978
+    }
+  },
+  {
+    "id": 43,
+    "name": "안주가 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1754435363346,
+      "lng": 129.126430643978
+    }
+  },
+  {
+    "id": 44,
+    "name": "BHC치킨 센텀중앙점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-781-9922",
+    "price": null,
+    "location": {
+      "lat": 35.17544382047723,
+      "lng": 129.12646577214312
+    }
+  },
+  {
+    "id": 45,
+    "name": "카페051 센텀큐비점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "010-6296-0851",
+    "price": null,
+    "location": {
+      "lat": 35.17543642175758,
+      "lng": 129.1266817916434
+    }
+  },
+  {
+    "id": 46,
+    "name": "고택남",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.175455390321,
+      "lng": 129.126320102831
+    }
+  },
+  {
+    "id": 47,
+    "name": "금오유비끼",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-782-7824",
+    "price": null,
+    "location": {
+      "lat": 35.175473930113746,
+      "lng": 129.12644460607711
+    }
+  },
+  {
+    "id": 48,
+    "name": "텐퍼센트커피 큐비E센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "010-7400-8498",
+    "price": null,
+    "location": {
+      "lat": 35.17548847658436,
+      "lng": 129.12664253949592
+    }
+  },
+  {
+    "id": 49,
+    "name": "정담생고기",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 71",
+    "description": "",
+    "phone": "051-731-6355",
+    "price": null,
+    "location": {
+      "lat": 35.1746537415723,
+      "lng": 129.127991585811
+    }
+  },
+  {
+    "id": 50,
+    "name": "운커피 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "0507-872-3850",
+    "price": null,
+    "location": {
+      "lat": 35.17554978918861,
+      "lng": 129.1265892606555
+    }
+  },
+  {
+    "id": 51,
+    "name": "컴포즈커피 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "070-4152-9543",
+    "price": null,
+    "location": {
+      "lat": 35.1756100226779,
+      "lng": 129.126186940234
+    }
+  },
+  {
+    "id": 52,
+    "name": "레브",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-710-7001",
+    "price": null,
+    "location": {
+      "lat": 35.17562027771289,
+      "lng": 129.12657792681628
+    }
+  },
+  {
+    "id": 53,
+    "name": "파티박스",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 55",
+    "description": "",
+    "phone": "02-1800-5276",
+    "price": null,
+    "location": {
+      "lat": 35.1730465940456,
+      "lng": 129.127655561596
+    }
+  },
+  {
+    "id": 54,
+    "name": "오슬로우 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.175584252085,
+      "lng": 129.125909692348
+    }
+  },
+  {
+    "id": 55,
+    "name": "국민식육식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "051-783-4404",
+    "price": null,
+    "location": {
+      "lat": 35.17559551860706,
+      "lng": 129.12593522889358
+    }
+  },
+  {
+    "id": 56,
+    "name": "뚜레쥬르 부산센텀점",
+    "category": "bakery",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 55",
+    "description": "",
+    "phone": "051-747-6100",
+    "price": null,
+    "location": {
+      "lat": 35.17310699746001,
+      "lng": 129.1277822501013
+    }
+  },
+  {
+    "id": 57,
+    "name": "동네짬뽕",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 71",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1745577789548,
+      "lng": 129.128221756587
+    }
+  },
+  {
+    "id": 58,
+    "name": "해성막창집 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17544800251167,
+      "lng": 129.12740755680738
+    }
+  },
+  {
+    "id": 59,
+    "name": "버닝팜치킨",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.175613884612304,
+      "lng": 129.12586436801703
+    }
+  },
+  {
+    "id": 60,
+    "name": "정담식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-714-7010",
+    "price": null,
+    "location": {
+      "lat": 35.1749236463091,
+      "lng": 129.1247839943491
+    }
+  },
+  {
+    "id": 61,
+    "name": "카페피노키오",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 55",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1730147738943,
+      "lng": 129.127722776684
+    }
+  },
+  {
+    "id": 62,
+    "name": "청춘식당 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-782-2030",
+    "price": null,
+    "location": {
+      "lat": 35.1754881745338,
+      "lng": 129.127377873144
+    }
+  },
+  {
+    "id": 63,
+    "name": "집밥&기장곰장어",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1753731626751,
+      "lng": 129.127615233114
+    }
+  },
+  {
+    "id": 64,
+    "name": "투썸플레이스 센텀스카이비즈점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-782-6282",
+    "price": null,
+    "location": {
+      "lat": 35.17493150679549,
+      "lng": 129.12474688337332
+    }
+  },
+  {
+    "id": 65,
+    "name": "때깔 센텀직영점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 71",
+    "description": "",
+    "phone": "051-746-8892",
+    "price": null,
+    "location": {
+      "lat": 35.1746201691737,
+      "lng": 129.1283122818017
+    }
+  },
+  {
+    "id": 66,
+    "name": "곤조커피",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "0503-7150-1364",
+    "price": null,
+    "location": {
+      "lat": 35.17503714315632,
+      "lng": 129.12473536538388
+    }
+  },
+  {
+    "id": 67,
+    "name": "장박사양곱창전문점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 66",
+    "description": "",
+    "phone": "051-782-0092",
+    "price": null,
+    "location": {
+      "lat": 35.1740172199254,
+      "lng": 129.12841948138
+    }
+  },
+  {
+    "id": 68,
+    "name": "전국5대교동짬뽕",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 66",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.173999128112,
+      "lng": 129.128423399662
+    }
+  },
+  {
+    "id": 69,
+    "name": "미식가의우동 센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-781-6362",
+    "price": null,
+    "location": {
+      "lat": 35.17570411184664,
+      "lng": 129.12708936381006
+    }
+  },
+  {
+    "id": 70,
+    "name": "마린비어",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-784-5556",
+    "price": null,
+    "location": {
+      "lat": 35.1756980136077,
+      "lng": 129.127128715879
+    }
+  },
+  {
+    "id": 71,
+    "name": "가야포차선지국밥 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-781-1202",
+    "price": null,
+    "location": {
+      "lat": 35.1757229257945,
+      "lng": 129.127146925543
+    }
+  },
+  {
+    "id": 72,
+    "name": "일취월장 관리형스터디카페 센텀점",
+    "category": "other",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "010-8671-1782",
+    "price": null,
+    "location": {
+      "lat": 35.1757218412596,
+      "lng": 129.127259942627
+    }
+  },
+  {
+    "id": 73,
+    "name": "바로바로횟집",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1757218412596,
+      "lng": 129.127259942627
+    }
+  },
+  {
+    "id": 74,
+    "name": "스시마이우 센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-784-3444",
+    "price": null,
+    "location": {
+      "lat": 35.1757218413069,
+      "lng": 129.12725994264
+    }
+  },
+  {
+    "id": 75,
+    "name": "생활맥주 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-782-7778",
+    "price": null,
+    "location": {
+      "lat": 35.1757226842176,
+      "lng": 129.127263257191
+    }
+  },
+  {
+    "id": 76,
+    "name": "커피스미스 부산센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 55",
+    "description": "",
+    "phone": "051-741-3141",
+    "price": null,
+    "location": {
+      "lat": 35.1728877929026,
+      "lng": 129.12787201797
+    }
+  },
+  {
+    "id": 77,
+    "name": "화이트펜슬스터디카페 센텀점",
+    "category": "other",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "010-2788-8002",
+    "price": null,
+    "location": {
+      "lat": 35.1757243700387,
+      "lng": 129.127269886293
+    }
+  },
+  {
+    "id": 78,
+    "name": "하도족발",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1757243700387,
+      "lng": 129.127269886293
+    }
+  },
+  {
+    "id": 79,
+    "name": "손가네정육식당 본점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-784-2324",
+    "price": null,
+    "location": {
+      "lat": 35.1758077449933,
+      "lng": 129.1269867017
+    }
+  },
+  {
+    "id": 80,
+    "name": "양정명동찌개마을",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1757261907345,
+      "lng": 129.127268836205
+    }
+  },
+  {
+    "id": 81,
+    "name": "유가네한우곰탕 재송센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1757261907345,
+      "lng": 129.127268836205
+    }
+  },
+  {
+    "id": 82,
+    "name": "유가네닭갈비 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-783-2154",
+    "price": null,
+    "location": {
+      "lat": 35.1757261907818,
+      "lng": 129.127268836218
+    }
+  },
+  {
+    "id": 83,
+    "name": "싸와디식당 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-784-0161",
+    "price": null,
+    "location": {
+      "lat": 35.1751324945157,
+      "lng": 129.124642363139
+    }
+  },
+  {
+    "id": 84,
+    "name": "모리모리덮밥 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17513184805751,
+      "lng": 129.12457649508625
+    }
+  },
+  {
+    "id": 85,
+    "name": "개미집 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "051-782-3335",
+    "price": null,
+    "location": {
+      "lat": 35.17589040561382,
+      "lng": 129.12694934464727
+    }
+  },
+  {
+    "id": 86,
+    "name": "올드머그 센텀스카이비즈점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "070-4759-3691",
+    "price": null,
+    "location": {
+      "lat": 35.1751165010472,
+      "lng": 129.124526707217
+    }
+  },
+  {
+    "id": 87,
+    "name": "보돌미역 센텀스카이비즈점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-782-0011",
+    "price": null,
+    "location": {
+      "lat": 35.1751420873922,
+      "lng": 129.124506520283
+    }
+  },
+  {
+    "id": 88,
+    "name": "일공일일공이 센텀점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1751583391379,
+      "lng": 129.124504748236
+    }
+  },
+  {
+    "id": 89,
+    "name": "미니코미 센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1751583391379,
+      "lng": 129.124504748236
+    }
+  },
+  {
+    "id": 90,
+    "name": "더레시피",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-513-1679",
+    "price": null,
+    "location": {
+      "lat": 35.175163705055,
+      "lng": 129.1245070829393
+    }
+  },
+  {
+    "id": 91,
+    "name": "커피프로젝트",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-783-5655",
+    "price": null,
+    "location": {
+      "lat": 35.175163705055,
+      "lng": 129.124507082939
+    }
+  },
+  {
+    "id": 92,
+    "name": "영커피 센텀스카이비즈점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-783-0197",
+    "price": null,
+    "location": {
+      "lat": 35.175163705055,
+      "lng": 129.124507082939
+    }
+  },
+  {
+    "id": 93,
+    "name": "매머드익스프레스 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.175163705055,
+      "lng": 129.124507082939
+    }
+  },
+  {
+    "id": 94,
+    "name": "포앤스마일",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-715-7772",
+    "price": null,
+    "location": {
+      "lat": 35.175163705055,
+      "lng": 129.124507082939
+    }
+  },
+  {
+    "id": 95,
+    "name": "제이앤제이 스카이비즈점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1751628235684,
+      "lng": 129.124505962475
+    }
+  },
+  {
+    "id": 96,
+    "name": "바푸리포 부산센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 97",
+    "description": "",
+    "phone": "051-783-5655",
+    "price": null,
+    "location": {
+      "lat": 35.1751567301584,
+      "lng": 129.12449373115
+    }
+  },
+  {
+    "id": 97,
+    "name": "몽불",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 90",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1760363245867,
+      "lng": 129.12695314706
+    }
+  },
+  {
+    "id": 98,
+    "name": "샤브 애작",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 67",
+    "description": "",
+    "phone": "051-743-1114",
+    "price": null,
+    "location": {
+      "lat": 35.1744700560863,
+      "lng": 129.128803345058
+    }
+  },
+  {
+    "id": 99,
+    "name": "밥이요 센텀본점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 67",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1744682353786,
+      "lng": 129.128804395096
+    }
+  },
+  {
+    "id": 100,
+    "name": "엘리스도넛 센텀본점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 67",
+    "description": "",
+    "phone": "051-731-5838",
+    "price": null,
+    "location": {
+      "lat": 35.1744682353786,
+      "lng": 129.128804395096
+    }
+  },
+  {
+    "id": 101,
+    "name": "간지츠 센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 67",
+    "description": "",
+    "phone": "051-747-3035",
+    "price": null,
+    "location": {
+      "lat": 35.1744682353786,
+      "lng": 129.128804395096
+    }
+  },
+  {
+    "id": 102,
+    "name": "더벤티 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 60",
+    "description": "",
+    "phone": "070-7537-1128",
+    "price": null,
+    "location": {
+      "lat": 35.1738292430037,
+      "lng": 129.128860165779
+    }
+  },
+  {
+    "id": 103,
+    "name": "미진축산 해운대센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 60",
+    "description": "",
+    "phone": "051-926-0500",
+    "price": null,
+    "location": {
+      "lat": 35.1738292430037,
+      "lng": 129.128860165779
+    }
+  },
+  {
+    "id": 104,
+    "name": "노스커피 리마스터 센텀클래스원점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.176154624626854,
+      "lng": 129.1259640592703
+    }
+  },
+  {
+    "id": 105,
+    "name": "얼루어커피",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1761681888049,
+      "lng": 129.126012704068
+    }
+  },
+  {
+    "id": 106,
+    "name": "라잇커피",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1761736556385,
+      "lng": 129.125957969756
+    }
+  },
+  {
+    "id": 107,
+    "name": "모리야",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "0507-2085-0369",
+    "price": null,
+    "location": {
+      "lat": 35.1761557849266,
+      "lng": 129.125846653353
+    }
+  },
+  {
+    "id": 108,
+    "name": "인생냉면&인생김치찌개 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1761557849738,
+      "lng": 129.125846653365
+    }
+  },
+  {
+    "id": 109,
+    "name": "멘제이텐",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1761557849738,
+      "lng": 129.125846653365
+    }
+  },
+  {
+    "id": 110,
+    "name": "모스멕시칸그릴",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "070-8691-0265",
+    "price": null,
+    "location": {
+      "lat": 35.1761567049708,
+      "lng": 129.125845579792
+    }
+  },
+  {
+    "id": 111,
+    "name": "언양닭칼국수 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "051-781-9030",
+    "price": null,
+    "location": {
+      "lat": 35.1761567049708,
+      "lng": 129.125845579792
+    }
+  },
+  {
+    "id": 112,
+    "name": "대왕전통육개장",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1762134566642,
+      "lng": 129.12600071273727
+    }
+  },
+  {
+    "id": 113,
+    "name": "만나",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1762398623264,
+      "lng": 129.126036521657
+    }
+  },
+  {
+    "id": 114,
+    "name": "진소문난칼국수",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-747-5008",
+    "price": null,
+    "location": {
+      "lat": 35.1762517164812,
+      "lng": 129.126746935626
+    }
+  },
+  {
+    "id": 115,
+    "name": "우미남 본인미트",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "010-8055-1352",
+    "price": null,
+    "location": {
+      "lat": 35.176319185055526,
+      "lng": 129.1266510128928
+    }
+  },
+  {
+    "id": 116,
+    "name": "사대천왕시텐노우 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-784-1117",
+    "price": null,
+    "location": {
+      "lat": 35.176383315585646,
+      "lng": 129.12659122176996
+    }
+  },
+  {
+    "id": 117,
+    "name": "쪽지 해운대센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "1899-8835",
+    "price": null,
+    "location": {
+      "lat": 35.1736159906335,
+      "lng": 129.129098249017
+    }
+  },
+  {
+    "id": 118,
+    "name": "노스커피리마스터 센텀인텔리움점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "070-7797-7460",
+    "price": null,
+    "location": {
+      "lat": 35.17346840536893,
+      "lng": 129.12908671716866
+    }
+  },
+  {
+    "id": 119,
+    "name": "로드워크",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1735211049732,
+      "lng": 129.129113334136
+    }
+  },
+  {
+    "id": 120,
+    "name": "짚신매운갈비찜 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-784-0727",
+    "price": null,
+    "location": {
+      "lat": 35.1764390504056,
+      "lng": 129.12654767486794
+    }
+  },
+  {
+    "id": 121,
+    "name": "대궐면옥 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "051-747-0526",
+    "price": null,
+    "location": {
+      "lat": 35.17342790503573,
+      "lng": 129.1291350481721
+    }
+  },
+  {
+    "id": 122,
+    "name": "고더커피 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "0507-1425-7718",
+    "price": null,
+    "location": {
+      "lat": 35.173422423473056,
+      "lng": 129.12913929518342
+    }
+  },
+  {
+    "id": 123,
+    "name": "센텀스터디카페 해운대센텀시티점",
+    "category": "other",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "051-746-1303",
+    "price": null,
+    "location": {
+      "lat": 35.1735886867024,
+      "lng": 129.129216066709
+    }
+  },
+  {
+    "id": 124,
+    "name": "예스예스커피",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 99",
+    "description": "",
+    "phone": "010-2562-6909",
+    "price": null,
+    "location": {
+      "lat": 35.1764673575872,
+      "lng": 129.125910742777
+    }
+  },
+  {
+    "id": 125,
+    "name": "투마미",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 57",
+    "description": "",
+    "phone": "051-746-8113",
+    "price": null,
+    "location": {
+      "lat": 35.1740185693343,
+      "lng": 129.129367760377
+    }
+  },
+  {
+    "id": 126,
+    "name": "샐러바웃 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1765764149349,
+      "lng": 129.126422841648
+    }
+  },
+  {
+    "id": 127,
+    "name": "스포독",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-783-1976",
+    "price": null,
+    "location": {
+      "lat": 35.1765834425599,
+      "lng": 129.126484486949
+    }
+  },
+  {
+    "id": 128,
+    "name": "하루엔소쿠 부산센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-782-1008",
+    "price": null,
+    "location": {
+      "lat": 35.1765851669574,
+      "lng": 129.126488922033
+    }
+  },
+  {
+    "id": 129,
+    "name": "교촌치킨 센텀파크점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-781-7999",
+    "price": null,
+    "location": {
+      "lat": 35.1765851669574,
+      "lng": 129.126488922033
+    }
+  },
+  {
+    "id": 130,
+    "name": "역 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "010-6618-3682",
+    "price": null,
+    "location": {
+      "lat": 35.1765869491113,
+      "lng": 129.126490065993
+    }
+  },
+  {
+    "id": 131,
+    "name": "느린마을양조장 부산해운대센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "010-5033-8008",
+    "price": null,
+    "location": {
+      "lat": 35.1765869491113,
+      "lng": 129.126490065993
+    }
+  },
+  {
+    "id": 132,
+    "name": "제주숯놈",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1765998869965,
+      "lng": 129.126471744903
+    }
+  },
+  {
+    "id": 133,
+    "name": "차이밍",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-744-7719",
+    "price": null,
+    "location": {
+      "lat": 35.1765998869965,
+      "lng": 129.126471744903
+    }
+  },
+  {
+    "id": 134,
+    "name": "홍콩반점0410 부산센텀인텔리움점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀6로 21",
+    "description": "",
+    "phone": "051-746-8968",
+    "price": null,
+    "location": {
+      "lat": 35.17358141825929,
+      "lng": 129.12942440181996
+    }
+  },
+  {
+    "id": 135,
+    "name": "띵크커피 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀서로 30",
+    "description": "",
+    "phone": "051-664-6860",
+    "price": null,
+    "location": {
+      "lat": 35.172267559126055,
+      "lng": 129.1285011696058
+    }
+  },
+  {
+    "id": 136,
+    "name": "도야족발 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-783-8452",
+    "price": null,
+    "location": {
+      "lat": 35.1767120116207,
+      "lng": 129.12634735132002
+    }
+  },
+  {
+    "id": 137,
+    "name": "모래성키즈카페",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "051-905-3690",
+    "price": null,
+    "location": {
+      "lat": 35.1766261246085,
+      "lng": 129.125388058723
+    }
+  },
+  {
+    "id": 138,
+    "name": "탕화쿵푸마라탕 센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1766385423211,
+      "lng": 129.125399357484
+    }
+  },
+  {
+    "id": 139,
+    "name": "빠리당",
+    "category": "bakery",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1766472030257,
+      "lng": 129.12541933874
+    }
+  },
+  {
+    "id": 140,
+    "name": "멘토즈스터디카페 부산센텀점",
+    "category": "other",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "051-781-0982",
+    "price": null,
+    "location": {
+      "lat": 35.1766438311835,
+      "lng": 129.12540608045
+    }
+  },
+  {
+    "id": 141,
+    "name": "던킨 센텀KNN점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀서로 30",
+    "description": "",
+    "phone": "051-664-7770",
+    "price": null,
+    "location": {
+      "lat": 35.1720596687106,
+      "lng": 129.128434290363
+    }
+  },
+  {
+    "id": 142,
+    "name": "르꽁비브",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "051-783-3693",
+    "price": null,
+    "location": {
+      "lat": 35.176745248352475,
+      "lng": 129.12542957466624
+    }
+  },
+  {
+    "id": 143,
+    "name": "라무진 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "051-784-8986",
+    "price": null,
+    "location": {
+      "lat": 35.1767764466886,
+      "lng": 129.125449045307
+    }
+  },
+  {
+    "id": 144,
+    "name": "더차이나",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀서로 30",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17195021147435,
+      "lng": 129.1285093573584
+    }
+  },
+  {
+    "id": 145,
+    "name": "샐픽",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1767334257781,
+      "lng": 129.125179027263
+    }
+  },
+  {
+    "id": 146,
+    "name": "오니기리와이규동 부산센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀북대로 60",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.176826830081254,
+      "lng": 129.1254536499592
+    }
+  },
+  {
+    "id": 147,
+    "name": "공차 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 48",
+    "description": "",
+    "phone": "051-747-0113",
+    "price": null,
+    "location": {
+      "lat": 35.173067744438804,
+      "lng": 129.1296305003792
+    }
+  },
+  {
+    "id": 148,
+    "name": "쌀통닭 센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-782-5235",
+    "price": null,
+    "location": {
+      "lat": 35.1770105831135,
+      "lng": 129.126074158066
+    }
+  },
+  {
+    "id": 149,
+    "name": "스타벅스 센텀KNN점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀서로 30",
+    "description": "",
+    "phone": "1522-3232",
+    "price": null,
+    "location": {
+      "lat": 35.17186556410305,
+      "lng": 129.1286596993956
+    }
+  },
+  {
+    "id": 150,
+    "name": "동경규동 센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 102",
+    "description": "",
+    "phone": "051-781-1333",
+    "price": null,
+    "location": {
+      "lat": 35.177058403793026,
+      "lng": 129.12601942888375
+    }
+  },
+  {
+    "id": 151,
+    "name": "동백커피 센텀직영점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 48",
+    "description": "",
+    "phone": "070-7543-1580",
+    "price": null,
+    "location": {
+      "lat": 35.17294990976675,
+      "lng": 129.12972071290224
+    }
+  },
+  {
+    "id": 152,
+    "name": "만수르가야밀면",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀서로 30",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1716644087872,
+      "lng": 129.12851727012477
+    }
+  },
+  {
+    "id": 153,
+    "name": "케이디씨",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀서로 30",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17170717556974,
+      "lng": 129.1285963058119
+    }
+  },
+  {
+    "id": 154,
+    "name": "소미돈까스 센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 48",
+    "description": "",
+    "phone": "051-743-7787",
+    "price": null,
+    "location": {
+      "lat": 35.1730510048777,
+      "lng": 129.129864926783
+    }
+  },
+  {
+    "id": 155,
+    "name": "뤼미에르 카페",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 수영강변대로 120",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17116956200712,
+      "lng": 129.12719070076358
+    }
+  },
+  {
+    "id": 156,
+    "name": "버커피",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 수영강변대로 120",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1710362632487,
+      "lng": 129.127084065772
+    }
+  },
+  {
+    "id": 157,
+    "name": "키즈 리퍼블릭 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 49",
+    "description": "",
+    "phone": "051-746-2626",
+    "price": null,
+    "location": {
+      "lat": 35.173353755076,
+      "lng": 129.13027670421
+    }
+  },
+  {
+    "id": 158,
+    "name": "상무초밥 해운대센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀5로 41",
+    "description": "",
+    "phone": "051-746-3008",
+    "price": null,
+    "location": {
+      "lat": 35.17223974797827,
+      "lng": 129.1303387240257
+    }
+  },
+  {
+    "id": 159,
+    "name": "메가MGC커피 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "051-781-0656",
+    "price": null,
+    "location": {
+      "lat": 35.17758876771226,
+      "lng": 129.12414325703787
+    }
+  },
+  {
+    "id": 160,
+    "name": "식당3선 센텀1관",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 해운대로 230",
+    "description": "",
+    "phone": "051-781-0808",
+    "price": null,
+    "location": {
+      "lat": 35.178099653378645,
+      "lng": 129.12625179579572
+    }
+  },
+  {
+    "id": 161,
+    "name": "고봉민김밥인 부산센텀점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-731-1195",
+    "price": null,
+    "location": {
+      "lat": 35.177381951242005,
+      "lng": 129.12350129502406
+    }
+  },
+  {
+    "id": 162,
+    "name": "아덴블랑제리 센텀SH밸리점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "070-4833-3504",
+    "price": null,
+    "location": {
+      "lat": 35.17261362135938,
+      "lng": 129.13101026432685
+    }
+  },
+  {
+    "id": 163,
+    "name": "백소정 센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1724797018147,
+      "lng": 129.130990306133
+    }
+  },
+  {
+    "id": 164,
+    "name": "스시잇센",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1724797018147,
+      "lng": 129.130990306133
+    }
+  },
+  {
+    "id": 165,
+    "name": "신전떡볶이 센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "051-731-1629",
+    "price": null,
+    "location": {
+      "lat": 35.1724796825079,
+      "lng": 129.130991403112
+    }
+  },
+  {
+    "id": 166,
+    "name": "빽다방 센텀SH밸리점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "051-746-5011",
+    "price": null,
+    "location": {
+      "lat": 35.1725803647794,
+      "lng": 129.13105658800242
+    }
+  },
+  {
+    "id": 167,
+    "name": "홉스",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "051-746-2223",
+    "price": null,
+    "location": {
+      "lat": 35.17246423490702,
+      "lng": 129.13099868224054
+    }
+  },
+  {
+    "id": 168,
+    "name": "고품격커피공장 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1724579490386,
+      "lng": 129.130997420656
+    }
+  },
+  {
+    "id": 169,
+    "name": "프랭크버거 부산센텀시티점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "070-4895-2972",
+    "price": null,
+    "location": {
+      "lat": 35.172502020358856,
+      "lng": 129.1310534453069
+    }
+  },
+  {
+    "id": 170,
+    "name": "야시장",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1778132664676,
+      "lng": 129.12408544147073
+    }
+  },
+  {
+    "id": 171,
+    "name": "정성순대 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "051-912-4592",
+    "price": null,
+    "location": {
+      "lat": 35.17231862509099,
+      "lng": 129.13097732145738
+    }
+  },
+  {
+    "id": 172,
+    "name": "아이럽블럭앤아트플레이 센텀본점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17788151072,
+      "lng": 129.124099290677
+    }
+  },
+  {
+    "id": 173,
+    "name": "대독장 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "051-744-8188",
+    "price": null,
+    "location": {
+      "lat": 35.17234233970727,
+      "lng": 129.13106354406423
+    }
+  },
+  {
+    "id": 174,
+    "name": "프루쉬 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "010-5689-7609",
+    "price": null,
+    "location": {
+      "lat": 35.172459942731855,
+      "lng": 129.13114014547807
+    }
+  },
+  {
+    "id": 175,
+    "name": "밥심 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 35",
+    "description": "",
+    "phone": "0507-966-0437",
+    "price": null,
+    "location": {
+      "lat": 35.172343755023256,
+      "lng": 129.13108553063822
+    }
+  },
+  {
+    "id": 176,
+    "name": "올레",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "070-8861-4305",
+    "price": null,
+    "location": {
+      "lat": 35.1779265167138,
+      "lng": 129.123999486617
+    }
+  },
+  {
+    "id": 177,
+    "name": "커피필립",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1776275166334,
+      "lng": 129.123372684867
+    }
+  },
+  {
+    "id": 178,
+    "name": "팔선생",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀5로 55",
+    "description": "",
+    "phone": "051-741-8081",
+    "price": null,
+    "location": {
+      "lat": 35.1729719936893,
+      "lng": 129.131487150321
+    }
+  },
+  {
+    "id": 179,
+    "name": "고민석불오뎅가마솥떡볶이 센텀점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-714-6688",
+    "price": null,
+    "location": {
+      "lat": 35.17764222055144,
+      "lng": 129.1233050190245
+    }
+  },
+  {
+    "id": 180,
+    "name": "김호권의청년어부 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-675-4016",
+    "price": null,
+    "location": {
+      "lat": 35.17764867962195,
+      "lng": 129.12329640662207
+    }
+  },
+  {
+    "id": 181,
+    "name": "본전",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1779364938788,
+      "lng": 129.123841697848
+    }
+  },
+  {
+    "id": 182,
+    "name": "현풍닭칼국수 센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "051-917-5757",
+    "price": null,
+    "location": {
+      "lat": 35.171800099377954,
+      "lng": 129.13089574254167
+    }
+  },
+  {
+    "id": 183,
+    "name": "냉삼스타",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17794132476251,
+      "lng": 129.1238231650758
+    }
+  },
+  {
+    "id": 184,
+    "name": "담스시",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀5로 55",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1729812575241,
+      "lng": 129.131575191395
+    }
+  },
+  {
+    "id": 185,
+    "name": "메가MGC커피 부산월드마크센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "051-731-1114",
+    "price": null,
+    "location": {
+      "lat": 35.17171932296786,
+      "lng": 129.1308771719563
+    }
+  },
+  {
+    "id": 186,
+    "name": "나의한잔",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀5로 55",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1729576067405,
+      "lng": 129.131587743695
+    }
+  },
+  {
+    "id": 187,
+    "name": "피자연합 부산센텀점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀5로 55",
+    "description": "",
+    "phone": "051-731-4777",
+    "price": null,
+    "location": {
+      "lat": 35.173143587806,
+      "lng": 129.131670522045
+    }
+  },
+  {
+    "id": 188,
+    "name": "고민석원조불오뎅가마솥떡볶이",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1776674901223,
+      "lng": 129.123148726068
+    }
+  },
+  {
+    "id": 189,
+    "name": "블루샥 부산센텀스타점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "070-8844-1050",
+    "price": null,
+    "location": {
+      "lat": 35.178009515019895,
+      "lng": 129.12378872006218
+    }
+  },
+  {
+    "id": 190,
+    "name": "구슬함박 부산센텀시티점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1979",
+    "price": null,
+    "location": {
+      "lat": 35.16996240941131,
+      "lng": 129.12824572290705
+    }
+  },
+  {
+    "id": 191,
+    "name": "아라치 센텀스타점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 123",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1780262478086,
+      "lng": 129.12375952135542
+    }
+  },
+  {
+    "id": 192,
+    "name": "폴바셋 신세계센텀시티몰점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-2323",
+    "price": null,
+    "location": {
+      "lat": 35.1699291207947,
+      "lng": 129.128242660226
+    }
+  },
+  {
+    "id": 193,
+    "name": "피에프창 신세계센텀시티몰점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1699",
+    "price": null,
+    "location": {
+      "lat": 35.169894771681335,
+      "lng": 129.1282999295898
+    }
+  },
+  {
+    "id": 194,
+    "name": "로코스 비비큐 신세계센텀직영점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1925",
+    "price": null,
+    "location": {
+      "lat": 35.1698916260558,
+      "lng": 129.128325088924
+    }
+  },
+  {
+    "id": 195,
+    "name": "빌라드스파이시 신세계센텀시티몰점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1991",
+    "price": null,
+    "location": {
+      "lat": 35.1698916260558,
+      "lng": 129.128325088924
+    }
+  },
+  {
+    "id": 196,
+    "name": "젤라띠젤라띠 신세계센텀시티몰점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1257",
+    "price": null,
+    "location": {
+      "lat": 35.1698916260558,
+      "lng": 129.128325088924
+    }
+  },
+  {
+    "id": 197,
+    "name": "콘타이 신세계센텀시티몰점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1698916260558,
+      "lng": 129.128325088924
+    }
+  },
+  {
+    "id": 198,
+    "name": "버거킹 부산센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "070-7462-8510",
+    "price": null,
+    "location": {
+      "lat": 35.17149967269329,
+      "lng": 129.13091533738654
+    }
+  },
+  {
+    "id": 199,
+    "name": "백미당 신세계센텀시티몰점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1543",
+    "price": null,
+    "location": {
+      "lat": 35.1698700910305,
+      "lng": 129.128268557637
+    }
+  },
+  {
+    "id": 200,
+    "name": "속초코다리냉면 신세계센텀시티몰점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.169860356478,
+      "lng": 129.128258426833
+    }
+  },
+  {
+    "id": 201,
+    "name": "알마튜나 센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "051-747-6787",
+    "price": null,
+    "location": {
+      "lat": 35.1720195347137,
+      "lng": 129.131330583923
+    }
+  },
+  {
+    "id": 202,
+    "name": "태양커피 센텀시티몰점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1698615988004,
+      "lng": 129.128290285228
+    }
+  },
+  {
+    "id": 203,
+    "name": "카멜커피 12호점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1335",
+    "price": null,
+    "location": {
+      "lat": 35.1698615988004,
+      "lng": 129.128290285228
+    }
+  },
+  {
+    "id": 204,
+    "name": "모모유부 키자니아부산점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.169861598753,
+      "lng": 129.128290285215
+    }
+  },
+  {
+    "id": 205,
+    "name": "요거트아이스크림의정석 부산신세계센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.169861598753,
+      "lng": 129.128290285215
+    }
+  },
+  {
+    "id": 206,
+    "name": "JVL부대찌개 센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1677",
+    "price": null,
+    "location": {
+      "lat": 35.1698598166124,
+      "lng": 129.128289141319
+    }
+  },
+  {
+    "id": 207,
+    "name": "아웃백스테이크하우스 부산신세계센텀시티점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1595",
+    "price": null,
+    "location": {
+      "lat": 35.1698598166124,
+      "lng": 129.128289141319
+    }
+  },
+  {
+    "id": 208,
+    "name": "C27 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1351",
+    "price": null,
+    "location": {
+      "lat": 35.1698598166124,
+      "lng": 129.128289141319
+    }
+  },
+  {
+    "id": 209,
+    "name": "스타벅스 센텀몰1F점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "1522-3232",
+    "price": null,
+    "location": {
+      "lat": 35.1698598166124,
+      "lng": 129.128289141319
+    }
+  },
+  {
+    "id": 210,
+    "name": "크리스탈제이드 신세계센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1962",
+    "price": null,
+    "location": {
+      "lat": 35.16985629079843,
+      "lng": 129.12828465961135
+    }
+  },
+  {
+    "id": 211,
+    "name": "남산왕돈까스 신세계센텀몰점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-2622",
+    "price": null,
+    "location": {
+      "lat": 35.1698454819841,
+      "lng": 129.128284377838
+    }
+  },
+  {
+    "id": 212,
+    "name": "아그라 센텀시티몰점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-2328",
+    "price": null,
+    "location": {
+      "lat": 35.1697999329385,
+      "lng": 129.128414884161
+    }
+  },
+  {
+    "id": 213,
+    "name": "올차 신세계센텀시티몰점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1884",
+    "price": null,
+    "location": {
+      "lat": 35.1697402310092,
+      "lng": 129.12827395195
+    }
+  },
+  {
+    "id": 214,
+    "name": "동동국밥 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "0507-142-2048",
+    "price": null,
+    "location": {
+      "lat": 35.1719167988721,
+      "lng": 129.131433259314
+    }
+  },
+  {
+    "id": 215,
+    "name": "정직유부 센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "051-746-2003",
+    "price": null,
+    "location": {
+      "lat": 35.1719095930605,
+      "lng": 129.131433071185
+    }
+  },
+  {
+    "id": 216,
+    "name": "효성어묵당",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1719095350816,
+      "lng": 129.131436362087
+    }
+  },
+  {
+    "id": 217,
+    "name": "정월당치킨 센텀월드마크점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1713696449752,
+      "lng": 129.131032664835
+    }
+  },
+  {
+    "id": 218,
+    "name": "파미에스테이션",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1697289539638,
+      "lng": 129.128351576696
+    }
+  },
+  {
+    "id": 219,
+    "name": "토끼정 신세계센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1964",
+    "price": null,
+    "location": {
+      "lat": 35.169781873333704,
+      "lng": 129.12882705357796
+    }
+  },
+  {
+    "id": 220,
+    "name": "쉐이크쉑 부산센텀점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀4로 15",
+    "description": "",
+    "phone": "051-745-1341",
+    "price": null,
+    "location": {
+      "lat": 35.169796240747246,
+      "lng": 129.1288812031342
+    }
+  },
+  {
+    "id": 221,
+    "name": "스타벅스 월드마크센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "1522-3232",
+    "price": null,
+    "location": {
+      "lat": 35.1711969352291,
+      "lng": 129.131168632088
+    }
+  },
+  {
+    "id": 222,
+    "name": "카페051 센텀파크점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-746-5101",
+    "price": null,
+    "location": {
+      "lat": 35.1782039387321,
+      "lng": 129.122979388225
+    }
+  },
+  {
+    "id": 223,
+    "name": "타이거분식",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1783244584434,
+      "lng": 129.1227871568
+    }
+  },
+  {
+    "id": 224,
+    "name": "엄스커피",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 수영구 좌수영로 97",
+    "description": "",
+    "phone": "051-612-1000",
+    "price": null,
+    "location": {
+      "lat": 35.1731443864763,
+      "lng": 129.120231369712
+    }
+  },
+  {
+    "id": 225,
+    "name": "배스킨라빈스 부산센텀파크점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-743-4000",
+    "price": null,
+    "location": {
+      "lat": 35.17837036089156,
+      "lng": 129.1227389603155
+    }
+  },
+  {
+    "id": 226,
+    "name": "하삼동커피 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "051-731-0925",
+    "price": null,
+    "location": {
+      "lat": 35.170943138916165,
+      "lng": 129.13145722404775
+    }
+  },
+  {
+    "id": 227,
+    "name": "파파존스 센텀시티점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 25",
+    "description": "",
+    "phone": "051-747-1084",
+    "price": null,
+    "location": {
+      "lat": 35.17096701455494,
+      "lng": 129.1314830890539
+    }
+  },
+  {
+    "id": 228,
+    "name": "덤피",
+    "category": "western",
+    "rating": null,
+    "address": "부산 수영구 좌수영로83번길 14",
+    "description": "",
+    "phone": "010-4900-2898",
+    "price": null,
+    "location": {
+      "lat": 35.1718693626193,
+      "lng": 129.120637245238
+    }
+  },
+  {
+    "id": 229,
+    "name": "굽네치킨 부산수영점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 수영구 수영로741번길 80",
+    "description": "",
+    "phone": "051-754-9291",
+    "price": null,
+    "location": {
+      "lat": 35.17166161405571,
+      "lng": 129.120716354129
+    }
+  },
+  {
+    "id": 230,
+    "name": "베이커리토끼굴 센텀파크점",
+    "category": "bakery",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 142",
+    "description": "",
+    "phone": "0502-5552-7657",
+    "price": null,
+    "location": {
+      "lat": 35.1787061737328,
+      "lng": 129.123168063476
+    }
+  },
+  {
+    "id": 231,
+    "name": "세프길",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-744-0774",
+    "price": null,
+    "location": {
+      "lat": 35.1783542247313,
+      "lng": 129.1224257348
+    }
+  },
+  {
+    "id": 232,
+    "name": "영광기사식당",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 수영구 수영로741번길 80",
+    "description": "",
+    "phone": "051-751-7624",
+    "price": null,
+    "location": {
+      "lat": 35.1715315426299,
+      "lng": 129.120733827159
+    }
+  },
+  {
+    "id": 233,
+    "name": "초록나비",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 수영구 좌수영로83번길 12-1",
+    "description": "",
+    "phone": "051-755-5120",
+    "price": null,
+    "location": {
+      "lat": 35.1719848411037,
+      "lng": 129.120372460143
+    }
+  },
+  {
+    "id": 234,
+    "name": "스타벅스 센텀파크점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "1522-3232",
+    "price": null,
+    "location": {
+      "lat": 35.1786623856731,
+      "lng": 129.122530334676
+    }
+  },
+  {
+    "id": 235,
+    "name": "주와리소바",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 수영구 좌수영로83번길 20",
+    "description": "",
+    "phone": "051-759-5006",
+    "price": null,
+    "location": {
+      "lat": 35.1716713071379,
+      "lng": 129.120368706416
+    }
+  },
+  {
+    "id": 236,
+    "name": "도르리충무김밥 롯데백화점 센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "051-730-3002",
+    "price": null,
+    "location": {
+      "lat": 35.1699815898199,
+      "lng": 129.131049109907
+    }
+  },
+  {
+    "id": 237,
+    "name": "항아리수제면가 롯데백화점 센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "051-730-3002",
+    "price": null,
+    "location": {
+      "lat": 35.17000168887548,
+      "lng": 129.13108475294345
+    }
+  },
+  {
+    "id": 238,
+    "name": "스타벅스 센텀신세계B1점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1688317007302,
+      "lng": 129.128745211434
+    }
+  },
+  {
+    "id": 239,
+    "name": "호두방정 롯데백화점센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1699018559526,
+      "lng": 129.130971304686
+    }
+  },
+  {
+    "id": 240,
+    "name": "제주오전복 롯데백화점센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "051-730-3002",
+    "price": null,
+    "location": {
+      "lat": 35.1699724020195,
+      "lng": 129.131110327235
+    }
+  },
+  {
+    "id": 241,
+    "name": "미스카츠 롯데백화점센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1698953318277,
+      "lng": 129.131034786402
+    }
+  },
+  {
+    "id": 242,
+    "name": "상궁전 롯데백화점센텀시티점",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "051-730-3002",
+    "price": null,
+    "location": {
+      "lat": 35.1700141312924,
+      "lng": 129.131197017627
+    }
+  },
+  {
+    "id": 243,
+    "name": "아딸 롯데백화점센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "051-730-3002",
+    "price": null,
+    "location": {
+      "lat": 35.169906629261554,
+      "lng": 129.13110970779383
+    }
+  },
+  {
+    "id": 244,
+    "name": "요거투유",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 수영구 좌수영로83번길 26",
+    "description": "",
+    "phone": "051-757-6696",
+    "price": null,
+    "location": {
+      "lat": 35.1715002690457,
+      "lng": 129.120204032965
+    }
+  },
+  {
+    "id": 245,
+    "name": "개성만두",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1698542003588,
+      "lng": 129.131067733648
+    }
+  },
+  {
+    "id": 246,
+    "name": "반베",
+    "category": "korean",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1698542003588,
+      "lng": 129.131067733648
+    }
+  },
+  {
+    "id": 247,
+    "name": "히노아지 롯데백화점센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "055-362-9411",
+    "price": null,
+    "location": {
+      "lat": 35.169874620943304,
+      "lng": 129.13113630846743
+    }
+  },
+  {
+    "id": 248,
+    "name": "쉐프예환 신세계백화점센텀시티점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2029",
+    "price": null,
+    "location": {
+      "lat": 35.1687869769186,
+      "lng": 129.129033767902
+    }
+  },
+  {
+    "id": 249,
+    "name": "교자연 신세계백화점센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2188",
+    "price": null,
+    "location": {
+      "lat": 35.1687869769186,
+      "lng": 129.129033767902
+    }
+  },
+  {
+    "id": 250,
+    "name": "우오가시 신세계백화점센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1145",
+    "price": null,
+    "location": {
+      "lat": 35.1687869769186,
+      "lng": 129.129033767902
+    }
+  },
+  {
+    "id": 251,
+    "name": "팔선생 신세계백화점센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2196",
+    "price": null,
+    "location": {
+      "lat": 35.1687869769186,
+      "lng": 129.129033767902
+    }
+  },
+  {
+    "id": 252,
+    "name": "고에스프레소 신세계백화점센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2620",
+    "price": null,
+    "location": {
+      "lat": 35.1687869769186,
+      "lng": 129.129033767902
+    }
+  },
+  {
+    "id": 253,
+    "name": "맛있담",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 수영구 수영로741번길 93",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.17200552279147,
+      "lng": 129.1198088929011
+    }
+  },
+  {
+    "id": 254,
+    "name": "리오네레스토랑",
+    "category": "western",
+    "rating": null,
+    "address": "부산 수영구 구락로 36",
+    "description": "",
+    "phone": "051-753-0202",
+    "price": null,
+    "location": {
+      "lat": 35.1715980351923,
+      "lng": 129.120024391427
+    }
+  },
+  {
+    "id": 255,
+    "name": "스시츠카무 센텀",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 59",
+    "description": "",
+    "phone": "051-730-3481",
+    "price": null,
+    "location": {
+      "lat": 35.169804434311935,
+      "lng": 129.13118166655968
+    }
+  },
+  {
+    "id": 256,
+    "name": "동대문엽기떡볶이 해운대센텀점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 9",
+    "description": "",
+    "phone": "051-746-8598",
+    "price": null,
+    "location": {
+      "lat": 35.1705646896804,
+      "lng": 129.132069601541
+    }
+  },
+  {
+    "id": 257,
+    "name": "하삼동커피 센텀파크점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 142",
+    "description": "",
+    "phone": "051-747-5623",
+    "price": null,
+    "location": {
+      "lat": 35.17920081731309,
+      "lng": 129.12281324378003
+    }
+  },
+  {
+    "id": 258,
+    "name": "돈카츠렌 신세계백화점센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2144",
+    "price": null,
+    "location": {
+      "lat": 35.1686787345097,
+      "lng": 129.129039724736
+    }
+  },
+  {
+    "id": 259,
+    "name": "상국이네분식 신세계백화점 센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2102",
+    "price": null,
+    "location": {
+      "lat": 35.1686678485493,
+      "lng": 129.129043830593
+    }
+  },
+  {
+    "id": 260,
+    "name": "돈키호테 신세계백화점 센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2617",
+    "price": null,
+    "location": {
+      "lat": 35.16866650420412,
+      "lng": 129.12906903647945
+    }
+  },
+  {
+    "id": 261,
+    "name": "스몰굿커피 센텀파크점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 142",
+    "description": "",
+    "phone": "051-744-1077",
+    "price": null,
+    "location": {
+      "lat": 35.1792171493194,
+      "lng": 129.122755497066
+    }
+  },
+  {
+    "id": 262,
+    "name": "삼진어묵 센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1457",
+    "price": null,
+    "location": {
+      "lat": 35.1686568854394,
+      "lng": 129.129052324165
+    }
+  },
+  {
+    "id": 263,
+    "name": "카페조조",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 수영구 수미로 80-1",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1729453174106,
+      "lng": 129.119351498008
+    }
+  },
+  {
+    "id": 264,
+    "name": "진순자김밥 신세계백화점 센텀시티점",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1496",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 265,
+    "name": "오규당 신세계센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2070",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 266,
+    "name": "왕푸징마라탕",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1147",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 267,
+    "name": "크레미뇽",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 268,
+    "name": "그레트힐란 신세계백화점 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2530",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 269,
+    "name": "폴바셋 신세계백화점센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2059",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 270,
+    "name": "스타벅스 센텀신세계 3F",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "1522-3232",
+    "price": null,
+    "location": {
+      "lat": 35.1688180446803,
+      "lng": 129.129521838888
+    }
+  },
+  {
+    "id": 271,
+    "name": "차이797 신세계센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2085",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253886,
+      "lng": 129.129522935819
+    }
+  },
+  {
+    "id": 272,
+    "name": "아르켓 카페 신세계센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "070-4166-7244",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253886,
+      "lng": 129.129522935819
+    }
+  },
+  {
+    "id": 273,
+    "name": "메종키츠네 카페 신세계백화점 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2569",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253886,
+      "lng": 129.129522935819
+    }
+  },
+  {
+    "id": 274,
+    "name": "하라커피 신세계백화점 센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2072",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253886,
+      "lng": 129.129522935819
+    }
+  },
+  {
+    "id": 275,
+    "name": "예픔 커피 신세계센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "010-6893-6863",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253886,
+      "lng": 129.129522935819
+    }
+  },
+  {
+    "id": 276,
+    "name": "노티드 부산신세계센텀시티",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "010-7283-9377",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253886,
+      "lng": 129.129522935819
+    }
+  },
+  {
+    "id": 277,
+    "name": "스파랜드 센텀",
+    "category": "other",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "1668-2850",
+    "price": null,
+    "location": {
+      "lat": 35.16881802534118,
+      "lng": 129.1295229358065
+    }
+  },
+  {
+    "id": 278,
+    "name": "더타코부스 신세계백화점 센텀시티",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1208",
+    "price": null,
+    "location": {
+      "lat": 35.16881802534118,
+      "lng": 129.1295229358065
+    }
+  },
+  {
+    "id": 279,
+    "name": "신룽푸마라탕 마라로신세계백화점센템시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253412,
+      "lng": 129.129522935807
+    }
+  },
+  {
+    "id": 280,
+    "name": "커피빈 신세계센텀시티점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1821",
+    "price": null,
+    "location": {
+      "lat": 35.1688180253412,
+      "lng": 129.129522935807
+    }
+  },
+  {
+    "id": 281,
+    "name": "더키친일뽀르노 신세계 센텀시티점",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2073",
+    "price": null,
+    "location": {
+      "lat": 35.1688162817958,
+      "lng": 129.129519598038
+    }
+  },
+  {
+    "id": 282,
+    "name": "하프커피 센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2777",
+    "price": null,
+    "location": {
+      "lat": 35.1688162817958,
+      "lng": 129.129519598038
+    }
+  },
+  {
+    "id": 283,
+    "name": "슈퍼말차 센텀시티",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2550",
+    "price": null,
+    "location": {
+      "lat": 35.1688162817958,
+      "lng": 129.129519598038
+    }
+  },
+  {
+    "id": 284,
+    "name": "카페 레이어드 부산센텀점",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1688162817958,
+      "lng": 129.129519598038
+    }
+  },
+  {
+    "id": 285,
+    "name": "김씨마구로 신세계백화점센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1145",
+    "price": null,
+    "location": {
+      "lat": 35.16881628179583,
+      "lng": 129.12951959803814
+    }
+  },
+  {
+    "id": 286,
+    "name": "미쓰꾸냥",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2636",
+    "price": null,
+    "location": {
+      "lat": 35.1686564225391,
+      "lng": 129.129078650467
+    }
+  },
+  {
+    "id": 287,
+    "name": "도제 센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1686487209689,
+      "lng": 129.129055403556
+    }
+  },
+  {
+    "id": 288,
+    "name": "투쉐프",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2619",
+    "price": null,
+    "location": {
+      "lat": 35.1686318191788,
+      "lng": 129.129042891056
+    }
+  },
+  {
+    "id": 289,
+    "name": "싱카이 신세계 센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2032",
+    "price": null,
+    "location": {
+      "lat": 35.1686211646656,
+      "lng": 129.129033833766
+    }
+  },
+  {
+    "id": 290,
+    "name": "보드랑",
+    "category": "cafe",
+    "rating": null,
+    "address": "부산 해운대구 재반로12번길 16",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1799782587611,
+      "lng": 129.12765296414
+    }
+  },
+  {
+    "id": 291,
+    "name": "호우섬 신세계백화점 센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2128",
+    "price": null,
+    "location": {
+      "lat": 35.1686358348732,
+      "lng": 129.12912201087
+    }
+  },
+  {
+    "id": 292,
+    "name": "파리바게뜨 해운대센텀점",
+    "category": "bakery",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 142",
+    "description": "",
+    "phone": "051-747-8482",
+    "price": null,
+    "location": {
+      "lat": 35.17950178598368,
+      "lng": 129.12327656781093
+    }
+  },
+  {
+    "id": 293,
+    "name": "온기정 신세계백화점 센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2037",
+    "price": null,
+    "location": {
+      "lat": 35.168586556779,
+      "lng": 129.12900330066
+    }
+  },
+  {
+    "id": 294,
+    "name": "긴자료코 부산센텀점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 9",
+    "description": "",
+    "phone": "051-746-4799",
+    "price": null,
+    "location": {
+      "lat": 35.17082818683142,
+      "lng": 129.13245839935786
+    }
+  },
+  {
+    "id": 295,
+    "name": "충무김밥이랑수제비",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀동로 9",
+    "description": "",
+    "phone": "051-741-3108",
+    "price": null,
+    "location": {
+      "lat": 35.1707175006545,
+      "lng": 129.132398440266
+    }
+  },
+  {
+    "id": 296,
+    "name": "텐테이블",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.16864880756115,
+      "lng": 129.12930671775456
+    }
+  },
+  {
+    "id": 297,
+    "name": "엄마부엌",
+    "category": "snack",
+    "rating": null,
+    "address": "부산 해운대구 센텀중앙로 145",
+    "description": "",
+    "phone": "051-746-2717",
+    "price": null,
+    "location": {
+      "lat": 35.1790813433156,
+      "lng": 129.122226226747
+    }
+  },
+  {
+    "id": 298,
+    "name": "마라로 신세계백화점 센텀시티점",
+    "category": "chinese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-1147",
+    "price": null,
+    "location": {
+      "lat": 35.1685187124023,
+      "lng": 129.129017992981
+    }
+  },
+  {
+    "id": 299,
+    "name": "트리니티레스토랑 신세계센텀시티",
+    "category": "western",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "",
+    "price": null,
+    "location": {
+      "lat": 35.1685008790416,
+      "lng": 129.129109712077
+    }
+  },
+  {
+    "id": 300,
+    "name": "문스시 신세계백화점 센텀시티점",
+    "category": "japanese",
+    "rating": null,
+    "address": "부산 해운대구 센텀남대로 35",
+    "description": "",
+    "phone": "051-745-2049",
+    "price": null,
+    "location": {
+      "lat": 35.1687443411976,
+      "lng": 129.129818418321
+    }
   }
 ];

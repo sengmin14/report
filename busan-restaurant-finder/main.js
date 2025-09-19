@@ -33,16 +33,39 @@ document.addEventListener('DOMContentLoaded', function() {
   // 지도 초기화 함수 - Leaflet.js 사용
   function initMap() {
     try {
-      // 지도 중심 좌표 (부산시청)
-      const busanCenter = [35.1798, 129.0750];
+      // 지도 중심 좌표 (한국청소년상담복지개발원)
+      const busanCenter = [35.17414164719, 129.12641555476];
       
-      // 지도 생성 
-      map = L.map('map').setView(busanCenter, 13);
+      // 지도 생성 - 줌 레벨을 13에서 15로 증가
+      map = L.map('map').setView(busanCenter, 18);
       
       // 타일 레이어 추가 (OpenStreetMap)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
+      
+      // 한국청소년상담복지개발원 작은 빨간색 마커 추가
+      const redIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        iconSize: [18, 29],     // 기존 [25, 41]에서 작게 조정
+        iconAnchor: [9, 29],    // 기존 [12, 41]에서 조정
+        popupAnchor: [1, -25],  // 기존 [1, -34]에서 조정
+        shadowSize: [29, 29]    // 기존 [41, 41]에서 작게 조정
+      });
+      
+      // 한국청소년상담복지개발원 마커 생성 및 팝업 추가
+      const kyciMarker = L.marker(busanCenter, {
+        icon: redIcon,
+        zIndexOffset: 1000 // 다른 마커보다 위에 표시
+      }).addTo(map);
+      
+      kyciMarker.bindPopup(`
+        <div>
+          <h3>한국청소년상담복지개발원</h3>
+          <p>센텀시티 내 위치</p>
+        </div>
+      `);
       
       // 맛집 마커 표시
       displayMarkers(restaurants);
@@ -72,11 +95,21 @@ document.addEventListener('DOMContentLoaded', function() {
     markers.forEach(marker => marker.remove());
     markers = [];
     
+    // 작은 크기의 기본 마커 아이콘 정의
+    const smallIcon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+      iconSize: [18, 29],     // 작게 조정
+      iconAnchor: [9, 29],
+      popupAnchor: [1, -25],
+      shadowSize: [29, 29]
+    });
+    
     // 새 마커 생성
     restaurantsToShow.forEach(restaurant => {
       // 마커 생성
       const marker = L.marker([restaurant.location.lat, restaurant.location.lng], {
-        title: restaurant.name
+        icon: smallIcon
       }).addTo(map);
       
       // 팝업 설정
@@ -188,15 +221,13 @@ document.addEventListener('DOMContentLoaded', function() {
   function getCategoryName(category) {
     const categories = {
       korean: '한식',
-      seafood: '해산물',
-      snack: '분식',
-      chinese: '중식',
       japanese: '일식',
+      chinese: '중식',
       western: '양식',
-      dessert: '디저트',
       cafe: '카페',
+      snack: '분식',
       bakery: '베이커리',
-      chicken: '치킨'
+      other: '기타'
     };
     return categories[category] || category;
   }
