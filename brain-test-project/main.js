@@ -1,21 +1,38 @@
 (function initNumGrid() {
-  // 페이지 전용 클래스 + 스크롤 제어
+  // 전체 문서(<html>)에 숫자 격자 전용 클래스 추가 -> 다른 페이지와 구분
   document.documentElement.classList.add('numgrid-root');
+
+  // <body>에도 페이지 구분을 위한 전용 클래스 부여 -> 스타일 관리 용이
   document.body.classList.add('numgrid-page');
+
+  // 스크롤 허용 여부를 제어하는 헬퍼 함수
+  // allow가 true면 클래스를 추가, false면 제거하여 스크롤 가능/불가 상태를 전환
   const setScroll = (allow) => document.documentElement.classList.toggle('ng-scroll', !!allow);
-  setScroll(false); // 기본은 숨김
+
+  // 페이지 진입 직후에는 스크롤을 숨김 -> 숫자 격자 초기 연출에 집중하도록 설정
+  setScroll(false);
+
+  // 숫자 격자를 렌더링할 루트 DOM 요소를 미리 찾아 저장 -> 반복 접근 비용 절약
   const root = document.getElementById('ngRoot');
+
+  // 최고 기록을 로컬 스토리지에 저장할 때 사용할 키 값을 상수로 선언 -> 오타 방지 및 재사용 용이
   const BEST_KEY = 'numgrid:best:1to20';
 
-// 입력 방식/디바이스 보정
+// 입력 방식/디바이스 보정 ----------------------------------------------
+// 최근 입력 타입(마우스/터치 등)을 기억해 이후 게임 결과 보정에 활용
 let lastInputType = null;
+
+// 실제 기록(ms)을 장치 특성에 따라 가감해 보다 공정한 비교가 되도록 조정
 function adjustSecondsForDevice(seconds, inputType) {
+  // 다양한 포인팅 디바이스별 평균적인 입력 지연값(초)을 사전 정의
   const OFFSETS = {
-    mouse: -0.35,
-    pen:   -0.15,
-    touch:  0.00,
-    defaultDesktop: -0.30,
+    mouse: -0.35,          // 정밀 포인터(마우스)는 평균적으로 빠른 반응 → 약간 빼줌
+    pen:   -0.15,          // 펜 입력은 마우스보다 조금 느리지만 터치보다는 빠름
+    touch:  0.00,          // 손가락 터치는 별도 보정 없음
+    defaultDesktop: -0.30, // 명시적 타입이 없지만 데스크톱 정밀 입력이라 추정되는 경우
   };
+
+  // 현재 장치가 정밀 포인터(fine)인지, 손가락 위주(coarse)인지 파악
   const fine = window.matchMedia?.('(any-pointer: fine)').matches;
   const coarse = window.matchMedia?.('(any-pointer: coarse)').matches;
 
@@ -23,17 +40,21 @@ function adjustSecondsForDevice(seconds, inputType) {
   if (inputType === 'mouse') offset = OFFSETS.mouse;
   else if (inputType === 'pen') offset = OFFSETS.pen;
   else if (inputType === 'touch') offset = OFFSETS.touch;
-  else if (fine && !coarse) offset = OFFSETS.defaultDesktop;
+  else if (fine && !coarse) offset = OFFSETS.defaultDesktop; // 마우스로 추정될 때 적용
 
+  // 최종 초 단위 기록과 적용된 보정값을 반환
   return { seconds: Math.max(0, seconds + offset), offset };
 }
 
   function renderIntro() {
+    // 최고 기록(ms)이 저장되어 있으면 불러와 인트로 카드에 표시
     const bestMs = localStorage.getItem(BEST_KEY);
+
+    // 최고 기록이 있을 때만 칩(chip)을 만들어 보여주기
     const bestChip = (() => {
       if (!bestMs) return '';
       const s = (+bestMs) / 1000;
-      const age = secondsToAge(s); // 최고기록 시간 → 나이 환산
+      const age = secondsToAge(s); // 최고 기록을 뇌 나이로 환산
       return `<div class="ng-chip">최고 기록: <b>${s.toFixed(2)}s</b> <span style="color:var(--soft)">(${age}세)</span></div>`;
     })();
 
@@ -56,12 +77,15 @@ function adjustSecondsForDevice(seconds, inputType) {
   }
 
   function startGame() {
-    setScroll(false); // 게임 중에도 숨김
+    setScroll(false); // 게임 중 스크롤 방지
+
+    // 다음에 눌러야 할 숫자, 스톱워치 시작 시각 등 핵심 상태 변수 초기화
     let next = 1;
     let t0 = 0;
     let finished = false;
-    let locked = true; // 카운트다운 동안 입력 잠금
+    let locked = true; // 카운트다운 중에는 입력 막기
 
+    // 1~20 숫자를 셔플(Fisher-Yates)하여 무작위 배치
     const nums = Array.from({ length: 20 }, (_, i) => i + 1);
     for (let i = nums.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -99,54 +123,58 @@ function adjustSecondsForDevice(seconds, inputType) {
       grid.appendChild(btn);
     });
 
-    // 타이머
+    // 타이머 루프: requestAnimationFrame으로 매 프레임마다 UI 갱신
     let rafId = 0;
     function tick() {
-      if (finished) return;
-      const ms = performance.now() - t0;
-      timeEl.textContent = (ms / 1000).toFixed(2);
-      rafId = requestAnimationFrame(tick);
+      if (finished) return;                   // 게임이 끝나면 중단
+      const ms = performance.now() - t0;      // 경과 시간 계산
+      timeEl.textContent = (ms / 1000).toFixed(2); // 소수 2자리까지 표시
+      rafId = requestAnimationFrame(tick);    // 다음 프레임 예약
     }
 
-    // 3-2-1 카운트다운 후 시작
+    // 3→2→1 카운트다운 UI를 보여준 뒤 실제 게임 시작
     function startCountdown() {
       let c = 3;
       cdEl.textContent = c;
       const timer = setInterval(() => {
         c -= 1;
         if (c > 0) {
-          cdEl.textContent = c;
+          cdEl.textContent = c;               // 카운트다운 숫자 갱신
         } else {
           clearInterval(timer);
-          cdEl.textContent = '시작!';
+          cdEl.textContent = '시작!';         // 0이 되면 "시작!" 안내
           setTimeout(() => {
-            locked = false;
-            t0 = performance.now();            // 여기서부터 카운트 시작
-            grid.style.pointerEvents = 'auto'; // 입력 허용
-            cdEl.style.display = 'none';
+            locked = false;                   // 입력 허용
+            t0 = performance.now();           // 스톱워치 시작
+            grid.style.pointerEvents = 'auto';
+            cdEl.style.display = 'none';      // 카운트다운 오버레이 숨김
             rafId = requestAnimationFrame(tick);
-          }, 500);
+          }, 500);                            // 0.5초 후 본게임 시작
         }
       }, 1000);
     }
     startCountdown();
 
+    // 숫자 셀을 누를 때 호출되는 공통 핸들러
     function onCell(e) {
-      if (locked) return;
-      // 사용한 입력 방식 기록
+      if (locked) return;                     // 카운트다운 중이면 무시
+
+      // 첫 입력 시 어떤 기기로 눌렀는지 저장 → 결과 보정에 사용
       if (!lastInputType) {
         lastInputType = e.pointerType || (e.type === 'mousedown' ? 'mouse' : e.type === 'touchstart' ? 'touch' : null);
       }
+
       const n = +e.currentTarget.dataset.n;
-      if (finished || n !== next) return;
-      e.currentTarget.classList.add('hit');
+      if (finished || n !== next) return;     // 순서가 아니면 무시
+      e.currentTarget.classList.add('hit');   // 맞춘 숫자 시각적 표시
       next += 1;
       nextEl.textContent = String(Math.min(next, 20));
+
       if (next > 20) {
         finished = true;
-        cancelAnimationFrame(rafId);
+        cancelAnimationFrame(rafId);          // 타이머 정지
         const ms = performance.now() - t0;
-        showResult(ms);
+        showResult(ms);                       // 결과 화면으로 이동
       }
     }
 
@@ -194,17 +222,17 @@ function adjustSecondsForDevice(seconds, inputType) {
 
   // 결과 계산부에 적용
   function showResult(ms) {
-    const sRaw = ms / 1000;
-    const adj = adjustSecondsForDevice(sRaw, lastInputType); // 보정 적용
+    const sRaw = ms / 1000;                   // ms → 초 변환
+    const adj = adjustSecondsForDevice(sRaw, lastInputType); // 입력 방식 보정
     const s = adj.seconds;
 
-    const age = secondsToAge(s);
+    const age = secondsToAge(s);              // 보정된 초를 뇌 나이로 환산
 
     const prevBest = localStorage.getItem(BEST_KEY);
-    const isBest = !prevBest || ms < +prevBest;
-    if (isBest) localStorage.setItem(BEST_KEY, String(ms));
+    const isBest = !prevBest || ms < +prevBest; // 기존 최고 기록과 비교
+    if (isBest) localStorage.setItem(BEST_KEY, String(ms)); // 최고 기록 갱신 시 저장
 
-    // 갱신 후 기준으로 최고기록 표기(시간 + 나이)
+    // 갱신 이후 값을 다시 읽어와 최종 최고 기록 정보 구성
     const bestMsAfter = +localStorage.getItem(BEST_KEY);
     const bestSecAfter = bestMsAfter / 1000;
     const bestAgeAfter = secondsToAge(bestSecAfter);
